@@ -108,20 +108,20 @@ export function FileUpload({ profileId, threadId, onDataProcessed, onThreadCreat
         type="button"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading || disabled}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center justify-center gap-1 sm:gap-2 px-3 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-12 sm:w-auto"
         title="Upload CSV file (Excel files need to be saved as CSV first)"
       >
         {isUploading ? (
           <>
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-            <span className="text-sm">Processing...</span>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 flex-shrink-0"></div>
+            <span className="text-sm hidden sm:inline whitespace-nowrap">Processing</span>
           </>
         ) : (
           <>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
             </svg>
-            <span className="text-sm">CSV</span>
+            <span className="text-sm hidden sm:inline whitespace-nowrap">CSV</span>
           </>
         )}
       </button>

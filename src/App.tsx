@@ -39,7 +39,7 @@ function Content() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)]">
+    <div className="h-[calc(100vh-4rem)] overflow-hidden">
       <Authenticated>
         <FinancialCopilot />
       </Authenticated>

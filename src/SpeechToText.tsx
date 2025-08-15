@@ -94,7 +94,7 @@ export function SpeechToText({ onTranscript, disabled }: SpeechToTextProps) {
       type="button"
       onClick={handleClick}
       disabled={disabled || isProcessing}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+      className={`flex items-center justify-center gap-1 sm:gap-2 px-3 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-12 sm:w-auto ${
         isRecording 
           ? 'bg-red-600 hover:bg-red-700 text-white animate-pulse' 
           : 'bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white'
@@ -103,22 +103,22 @@ export function SpeechToText({ onTranscript, disabled }: SpeechToTextProps) {
     >
       {isProcessing ? (
         <>
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-          <span className="text-sm">Processing...</span>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 flex-shrink-0"></div>
+          <span className="text-sm hidden sm:inline whitespace-nowrap">Processing</span>
         </>
       ) : isRecording ? (
         <>
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 6h12v12H6z"/>
           </svg>
-          <span className="text-sm">Stop</span>
+          <span className="text-sm hidden sm:inline whitespace-nowrap">Stop</span>
         </>
       ) : (
         <>
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
           </svg>
-          <span className="text-sm">Record</span>
+          <span className="text-sm hidden sm:inline whitespace-nowrap">Record</span>
         </>
       )}
     </button>

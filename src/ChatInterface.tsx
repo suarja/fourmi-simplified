@@ -281,39 +281,42 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-700 bg-gray-800">
-        <form onSubmit={handleSubmit} className="flex gap-3">
+      <div className="flex-shrink-0 p-4 border-t border-gray-700 bg-gray-800">
+        <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Tell me about your finances..."
-            className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
+            className="flex-1 min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors text-sm sm:text-base"
             disabled={isProcessing}
           />
           
-          {/* Voice Recording Button */}
-          <SpeechToText 
-            onTranscript={handleVoiceTranscript}
-            disabled={isProcessing}
-          />
-          
-          {/* File Upload Button */}
-          <FileUpload 
-            profileId={profileId}
-            threadId={threadId}
-            onDataProcessed={handleFileProcessed}
-            onThreadCreated={onThreadCreated}
-            disabled={false}
-          />
-          
-          <button
-            type="submit"
-            disabled={!input.trim() || isProcessing}
-            className="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isProcessing ? "..." : "Send"}
-          </button>
+          {/* Action Buttons Container */}
+          <div className="flex gap-2 sm:gap-3">
+            {/* Voice Recording Button */}
+            <SpeechToText 
+              onTranscript={handleVoiceTranscript}
+              disabled={isProcessing}
+            />
+            
+            {/* File Upload Button */}
+            <FileUpload 
+              profileId={profileId}
+              threadId={threadId}
+              onDataProcessed={handleFileProcessed}
+              onThreadCreated={onThreadCreated}
+              disabled={false}
+            />
+            
+            <button
+              type="submit"
+              disabled={!input.trim() || isProcessing}
+              className="px-4 sm:px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
+            >
+              {isProcessing ? "..." : "Send"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

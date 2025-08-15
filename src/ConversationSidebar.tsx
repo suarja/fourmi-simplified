@@ -18,7 +18,6 @@ export function ConversationSidebar({
   onNewConversation,
   refreshTrigger
 }: ConversationSidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [deletingThreadId, setDeletingThreadId] = useState<string | null>(null);
   const [threads, setThreads] = useState<any[]>([]);
   const [loadingThreads, setLoadingThreads] = useState(true);
@@ -76,30 +75,12 @@ export function ConversationSidebar({
   };
 
   return (
-    <div className={`${isCollapsed ? 'w-12' : 'w-64'} bg-gray-800 border-r border-gray-700 transition-all duration-200`}>
-      <div className="p-4">
+    <div className="h-full bg-gray-900 flex flex-col">
+      <div className="p-4 flex-1 overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          {!isCollapsed && (
-            <h3 className="text-lg font-semibold text-white">Chats</h3>
-          )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded hover:bg-gray-700 text-gray-400 hover:text-white"
-          >
-            <svg 
-              className={`w-5 h-5 transition-transform ${isCollapsed ? 'rotate-180' : ''}`} 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-white">Chats</h3>
         </div>
-
-        {!isCollapsed && (
-          <>
             {/* New Conversation Button */}
             <button
               onClick={onNewConversation}
@@ -172,8 +153,6 @@ export function ConversationSidebar({
                 </div>
               )}
             </div>
-          </>
-        )}
       </div>
     </div>
   );

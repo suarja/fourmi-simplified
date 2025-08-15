@@ -27,8 +27,8 @@ export function FinancialCopilot() {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-      // Auto-collapse sidebar on tablet
-      if (window.innerWidth < 1024) {
+      // Auto-collapse sidebar on smaller screens, but allow manual control on larger screens
+      if (window.innerWidth < 768) {
         setSidebarCollapsed(true);
       }
     };
@@ -76,142 +76,137 @@ export function FinancialCopilot() {
   // Mobile Layout
   if (isMobile) {
     return (
-      <div className="h-[calc(100vh-4rem-3.5rem)]"> {/* Account for mobile nav */}
-        {mobileView === 'chat' && (
-          <ChatInterface 
-            profileId={profile._id} 
-            threadId={currentThreadId}
-            threadTitle={currentThreadTitle}
-            onThreadCreated={handleThreadCreated}
-          />
-        )}
-        {mobileView === 'dashboard' && (
-          <div className="h-full overflow-y-auto">
-            <FinancialDashboard profileId={profile._id} />
-          </div>
-        )}
-        {mobileView === 'history' && (
-          <ConversationSidebar
-            profileId={profile._id}
-            currentThreadId={currentThreadId}
-            onThreadSelect={(threadId, title) => {
-              handleThreadSelect(threadId, title);
-              setMobileView('chat');
-            }}
-            onNewConversation={() => {
-              handleNewConversation();
-              setMobileView('chat');
-            }}
-            refreshTrigger={refreshTrigger}
-          />
-        )}
-        <MobileNavigation 
-          activeView={mobileView}
-          onViewChange={setMobileView}
-          pendingCount={pendingFacts?.length || 0}
-        />
-      </div>
-    );
-  }
-
-  // Tablet Layout - Two columns with collapsible sidebar
-  if (isTablet) {
-    return (
-      <div className="flex h-[calc(100vh-4rem)]">
-        {/* Collapsible Sidebar Overlay */}
-        {!sidebarCollapsed && (
-          <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setSidebarCollapsed(true)}
-          />
-        )}
-        
-        {/* Sidebar */}
-        <div className={`${
-          sidebarCollapsed ? 'w-0' : 'w-64'
-        } transition-all duration-300 ${
-          !sidebarCollapsed ? 'fixed left-0 top-16 bottom-0 z-50 bg-gray-900' : ''
-        }`}>
-          {!sidebarCollapsed && (
-            <ConversationSidebar
-              profileId={profile._id}
-              currentThreadId={currentThreadId}
-              onThreadSelect={(threadId, title) => {
-                handleThreadSelect(threadId, title);
-                setSidebarCollapsed(true);
-              }}
-              onNewConversation={() => {
-                handleNewConversation();
-                setSidebarCollapsed(true);
-              }}
-              refreshTrigger={refreshTrigger}
-            />
-          )}
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 flex">
-          {/* Hamburger Menu */}
-          <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="absolute left-4 top-20 z-30 p-2 bg-gray-800 rounded-lg hover:bg-gray-700"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                d="M4 6h16M4 12h16M4 18h16" 
-              />
-            </svg>
-          </button>
-
-          <div className="flex-1 border-r border-gray-700">
+      <div className="h-full flex flex-col"> {/* Use flex layout for proper mobile height */}
+        <div className="flex-1 overflow-hidden pb-16"> {/* Add padding bottom for mobile nav */}
+          {mobileView === 'chat' && (
             <ChatInterface 
               profileId={profile._id} 
               threadId={currentThreadId}
               threadTitle={currentThreadTitle}
               onThreadCreated={handleThreadCreated}
             />
-          </div>
-          
-          <div className="w-80">
-            <FinancialDashboard profileId={profile._id} />
-          </div>
+          )}
+          {mobileView === 'dashboard' && (
+            <div className="h-full overflow-y-auto">
+              <FinancialDashboard profileId={profile._id} />
+            </div>
+          )}
+          {mobileView === 'history' && (
+            <ConversationSidebar
+              profileId={profile._id}
+              currentThreadId={currentThreadId}
+              onThreadSelect={(threadId, title) => {
+                handleThreadSelect(threadId, title);
+                setMobileView('chat');
+              }}
+              onNewConversation={() => {
+                handleNewConversation();
+                setMobileView('chat');
+              }}
+              refreshTrigger={refreshTrigger}
+            />
+          )}
+        </div>
+        <div className="flex-shrink-0">
+          <MobileNavigation 
+            activeView={mobileView}
+            onViewChange={setMobileView}
+            pendingCount={pendingFacts?.length || 0}
+          />
         </div>
       </div>
     );
   }
 
-  // Desktop Layout - Resizable panels
+  // Tablet and Desktop Layout - True overlay sidebar
   return (
-    <PanelGroup direction="horizontal" className="h-[calc(100vh-4rem)]">
-      {/* Conversation Sidebar */}
-      <Panel defaultSize={15} minSize={10} maxSize={25}>
+    <div className="relative h-full">
+      {/* Sidebar Overlay */}
+      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 border-r border-gray-700 transform transition-transform duration-300 ${
+        sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
+      }`}>
         <ConversationSidebar
           profileId={profile._id}
           currentThreadId={currentThreadId}
-          onThreadSelect={handleThreadSelect}
-          onNewConversation={handleNewConversation}
+          onThreadSelect={(threadId, title) => {
+            handleThreadSelect(threadId, title);
+            // Auto-collapse on tablet, stay open on desktop
+            if (isTablet) {
+              setSidebarCollapsed(true);
+            }
+          }}
+          onNewConversation={() => {
+            handleNewConversation();
+            // Auto-collapse on tablet, stay open on desktop
+            if (isTablet) {
+              setSidebarCollapsed(true);
+            }
+          }}
           refreshTrigger={refreshTrigger}
         />
-      </Panel>
-      
-      <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
-      
-      {/* Chat Interface */}
-      <Panel defaultSize={50} minSize={30}>
-        <ChatInterface 
-          profileId={profile._id} 
-          threadId={currentThreadId}
-          threadTitle={currentThreadTitle}
-          onThreadCreated={handleThreadCreated}
+      </div>
+
+      {/* Backdrop */}
+      {!sidebarCollapsed && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setSidebarCollapsed(true)}
         />
-      </Panel>
-      
-      <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
-      
-      {/* Financial Dashboard */}
-      <Panel defaultSize={35} minSize={25} maxSize={50}>
-        <FinancialDashboard profileId={profile._id} />
-      </Panel>
-    </PanelGroup>
+      )}
+
+      {/* Hamburger Menu - Always show when sidebar is collapsed */}
+      {sidebarCollapsed && (
+        <button
+          onClick={() => setSidebarCollapsed(false)}
+          className="fixed left-4 top-20 z-50 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 shadow-lg"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+              d="M4 6h16M4 12h16M4 18h16" 
+            />
+          </svg>
+        </button>
+      )}
+
+      {/* Main Content Area - Always full width, resizable panels */}
+      <div className="h-full">
+        {isTablet ? (
+          // Tablet: Fixed layout
+          <div className="h-full flex">
+            <div className="flex-1 border-r border-gray-700">
+              <ChatInterface 
+                profileId={profile._id} 
+                threadId={currentThreadId}
+                threadTitle={currentThreadTitle}
+                onThreadCreated={handleThreadCreated}
+              />
+            </div>
+            <div className="w-80">
+              <FinancialDashboard profileId={profile._id} />
+            </div>
+          </div>
+        ) : (
+          // Desktop: Resizable panels
+          <PanelGroup direction="horizontal" className="h-full">
+            {/* Chat Interface */}
+            <Panel defaultSize={60} minSize={40}>
+              <ChatInterface 
+                profileId={profile._id} 
+                threadId={currentThreadId}
+                threadTitle={currentThreadTitle}
+                onThreadCreated={handleThreadCreated}
+              />
+            </Panel>
+            
+            <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
+            
+            {/* Financial Dashboard */}
+            <Panel defaultSize={40} minSize={30} maxSize={60}>
+              <FinancialDashboard profileId={profile._id} />
+            </Panel>
+          </PanelGroup>
+        )}
+      </div>
+    </div>
   );
 }
