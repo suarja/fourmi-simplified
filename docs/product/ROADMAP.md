@@ -1,327 +1,306 @@
-# Development Roadmap
+# Development Roadmap (Simplified Approach)
 ## Fourmi Financial Copilot
 
 ### Development Philosophy
 
-**80/20 Pareto Approach**
-- Focus on the 20% of features that deliver 80% of user value
-- Iterate rapidly with user feedback loops
-- Start with desktop-first, responsive design
-- Test-driven development, especially for financial calculations
+**Make it Work → Make it Right → Make it Fast**
+- Rapid MVP development with Convex + Chef
+- Focus on core user value: escape debt traps
+- Simplified architecture for faster iteration
+- Real-time by default, no complex state management
 
-**Lean Architecture with Clean Patterns**
-- Implement Clean Architecture principles incrementally
-- Domain-Driven Design for financial concepts
-- Comprehensive testing for critical financial logic
-- AI-first interface design from day one
+**Three-Tier Business Model**
+- **FREE**: Basic budget tracking (current focus)
+- **PAID**: Real estate projects (next phase)
+- **PREMIUM**: Advanced simulations (future)
 
-### Phase 0: Foundation (Week 1)
-**Goal**: Core infrastructure and financial calculation engine
+### Phase 0: Foundation ✅ COMPLETED
+**Goal**: Core infrastructure with Convex + Vite
 
-#### Backend Foundation
-- [ ] **Project Setup**
-  - Next.js 14 with App Router
-  - TypeScript configuration with strict mode
-  - Supabase project setup with local development
-  - Drizzle ORM configuration and schema setup
-  - Vitest testing framework
-  - Schematic integration for feature management
+#### Backend Foundation ✅
+- ✅ **Project Setup**
+  - Vite + React with TypeScript
+  - Convex backend with real-time database
+  - Anonymous authentication (Convex Auth)
+  - AI SDK integration with OpenAI
   
-- [ ] **Domain Models** 
-  - Zod schemas for all financial entities (Profile, Project, Simulation)
-  - Value objects (Money, Percentage, Currency)
-  - Domain events system (ProfileUpdated, SimulationStale)
+- ✅ **Database Schema (Convex)** 
+  - Core tables: profiles, incomes, expenses, loans
+  - Chat system: conversations, messages
+  - Fact validation: pendingFacts table
+  - Real-time subscriptions built-in
   
-- [ ] **Calculation Engine**
-  - Core financial formulas (PMT, cashflow, projections)
-  - Assumption tier system (Low/Median/High)
-  - Input hash generation for staleness detection
-  - Comprehensive test suite with property-based testing
+- ✅ **Business Logic**
+  - Financial calculation library (PMT formula)
+  - Input validation with duplicate prevention
+  - Fact extraction helpers for AI processing
+  - Edit/delete operations for all financial data
 
-- [ ] **Database Schema (Drizzle + Supabase)**
-  - Core tables: users, profiles, projects, simulations
-  - Fact storage for AI-extracted information  
-  - Message history for chat conversations
-  - Real-time subscriptions setup
-  - Row-level security policies
-
-#### Frontend Foundation
-- [ ] **UI Infrastructure**
+#### Frontend Foundation ✅
+- ✅ **UI Infrastructure**
+  - Vite + React with hot reload
   - ShadCN/ui component library setup
-  - Selected ecosystem libraries integration (Assistant UI, AutoForm, Tremor)
-  - Dark theme configuration
-  - Tailwind CSS with design tokens
-  - Storybook for component development
+  - Dark theme with Tailwind CSS
+  - TypeScript with strict mode
 
-- [ ] **Basic Layout**
-  - App shell with navigation
-  - Chat interface structure
-  - Responsive grid layouts
-  - Error boundary implementation
+- ✅ **Core Features**
+  - Chat interface with file upload
+  - Real-time financial dashboard
+  - CSV processing for bulk data import
+  - Voice recording for hands-free input
 
-**Success Criteria:**
-- All financial formulas pass property-based tests
-- Basic UI components render correctly in Storybook
-- Database schema supports core MVP features
-- API endpoints return properly validated data
+**Success Criteria: ✅ MET**
+- Convex functions handle all CRUD operations
+- Real-time UI updates work automatically
+- AI extracts facts from natural language
+- Financial calculations are accurate
 
 ---
 
-### Phase 1: Chat + Basic AI (Weeks 2-3)
-**Goal**: Functional chat interface with fact extraction
+### Phase 1: FREE Tier Polish 🚧 IN PROGRESS
+**Goal**: Complete fact validation system and user experience
 
-#### AI Integration
-- [ ] **Vercel AI SDK Setup**
-  - OpenAI/Claude integration
-  - Agent architecture with tools
-  - Streaming responses for chat
+#### Current Issues to Fix 🚧
+- [ ] **Fact Validation UI**
+  - Review pending facts before saving
+  - Confirm/reject/edit extracted information
+  - Show confidence scores and duplicate warnings
+  - ShadCN Dialog components for fact review
   
-- [ ] **Extractor Agent**
-  - Extract facts from natural language
-  - Human-in-the-loop validation
-  - Structured output with confidence scores
-  - Integration with fact storage
+- [ ] **Testing Infrastructure**
+  - Vitest setup for financial calculations
+  - Property-based testing for PMT formula
+  - Mock Convex functions for component testing
+  - Test duplicate prevention logic
 
-- [ ] **Chat Interface (Assistant UI + TRPC)**
-  - Message display with user/AI distinction using Assistant UI components
-  - Typing indicators and loading states
-  - AutoForm integration for fact validation components
-  - Message history persistence with Supabase
+- [ ] **User Experience Polish**
+  - Error handling for invalid inputs
+  - Loading states for AI processing
+  - Better feedback for successful operations
+  - Undo functionality for accidental deletions
 
-#### Core Features
-- [ ] **Profile Management**
-  - Create/edit personal profiles
-  - Income, savings, existing loans
-  - Multi-person household support
-  
-- [ ] **Project Creation**  
-  - Property details input
-  - Location-based assumptions
-  - Purpose-driven configurations (main residence, rental, secondary)
+#### Completed in Phase 1 ✅
+- ✅ **AI Integration**
+  - OpenAI integration with structured outputs
+  - Fact extraction from natural language
+  - Confidence scoring for extracted data
+  - Human-in-the-loop validation backend
 
-- [ ] **Simulation Creation**
-  - Link profiles to projects
-  - Apply assumption tiers
-  - Generate basic financial projections
-  - Status management (FRESH/STALE/LOCKED)
+- ✅ **Profile Management**
+  - Create/edit financial profiles
+  - Income, expenses, loans tracking
+  - Real-time balance calculations
+  - CSV import functionality
+
+- ✅ **Data Management**
+  - Duplicate prevention system
+  - Edit/delete operations
+  - Input validation
+  - Semantic similarity checking
 
 **Success Criteria:**
-- Users can extract facts through natural conversation
-- Basic profiles and projects can be created/edited
-- Simple simulations generate accurate financial projections
-- Chat history persists across sessions
+- Users can review facts before saving
+- Financial calculations have comprehensive tests
+- Error handling provides clear feedback
+- System prevents duplicate entries reliably
 
 ---
 
-### Phase 2: Advanced Calculations & Comparisons (Weeks 4-5)
-**Goal**: Comprehensive financial analysis and comparison tools
+### Phase 2: PAID Tier - Real Estate Projects 📋 PLANNED
+**Goal**: Rent vs buy analysis for property decisions
 
-#### Enhanced Calculator
-- [ ] **Advanced Projections**
-  - Year-by-year detailed calculations
-  - Break-even analysis
-  - Multiple assumption scenarios
-  - Sensitivity analysis for key parameters
+#### Real Estate Schema
+- [ ] **Project System**
+  - Property projects (rent vs buy scenarios)
+  - Location-based market data
+  - Affordability analysis based on user profile
+  - PMT calculations for mortgage scenarios
 
-- [ ] **KPI Dashboard (Tremor Components)**
-  - Monthly cashflow cards with Tremor metrics
-  - Savings effort visualization with charts
-  - Total cost over horizon projections
-  - Break-even timeline with AreaChart components
+- [ ] **Market Data Integration**
+  - Average property prices by location
+  - Rental market rates
+  - Property tax information
+  - Interest rate assumptions
 
-#### Comparison Engine
-- [ ] **Multi-Scenario Analysis**
-  - Side-by-side simulation comparison
-  - Rent vs buy analysis
-  - Location comparison features
-  - Assumption sensitivity comparison
+#### Advanced Calculations
+- [ ] **Mortgage Analysis**
+  - Monthly payment calculations (PMT formula)
+  - Total cost over time horizon
+  - Down payment vs monthly payment trade-offs
+  - Break-even point analysis
 
-- [ ] **Composer Agent**
-  - Transform calculations into UI blocks
-  - Generate narrative explanations
-  - Contextual insights and recommendations
-  - Progressive disclosure of complex data
+- [ ] **Rent vs Buy Comparison**
+  - Side-by-side scenario comparison
+  - Opportunity cost calculations
+  - Long-term wealth implications
+  - Clear recommendation based on user profile
 
-#### UI Block System
-- [ ] **Interactive Components**
-  - Metric cards with tooltips
-  - Comparison tables
-  - Timeline visualizations
-  - Alert and status indicators
+#### Billing Integration
+- [ ] **Schematic Setup**
+  - Feature flags for PAID tier
+  - Subscription management
+  - Usage tracking for AI operations
+  - Free trial period
 
 **Success Criteria:**
-- Complex financial projections render clearly in UI blocks
-- Comparison tables highlight key differences effectively
-- Users can understand financial trade-offs without expertise
-- Assumption changes trigger appropriate simulation updates
+- Users can analyze real estate decisions confidently
+- Calculations are accurate and well-explained
+- Billing system works smoothly
+- Clear value proposition over FREE tier
 
 ---
 
-### Phase 3: Advanced Features & Polish (Weeks 6-7)
-**Goal**: Production-ready application with advanced functionality
+### Phase 3: PREMIUM Tier - Advanced Simulations 🔮 FUTURE
+**Goal**: Multiple scenarios and complex analysis
 
-#### State Management
-- [ ] **Staleness Detection**
-  - Automatic simulation invalidation
-  - Input hash comparison system
-  - User notifications for outdated data
-  - Batch update workflows
+#### Multi-Scenario System
+- [ ] **Simulation Engine**
+  - Multiple property comparison
+  - Low/Medium/High assumption scenarios
+  - Time-horizon analysis (5, 10, 20 years)
+  - Sensitivity analysis for key variables
 
-- [ ] **Advanced AI Agents**
-  - Modeler agent for simulation creation
-  - Comparator agent for scenario analysis
-  - Internet search integration (market data)
-  - Multi-agent workflow orchestration
-
-#### User Experience Polish
-- [ ] **Responsive Design**
-  - Mobile-optimized chat interface
-  - Tablet-friendly comparison views
-  - Desktop power-user features
-  - Progressive web app capabilities
-
-- [ ] **Performance Optimization**
-  - React Server Components
-  - Optimistic UI updates
-  - Calculation caching
-  - Image and asset optimization
+- [ ] **Comparison Dashboard**
+  - Side-by-side scenario tables
+  - Interactive charts and visualizations
+  - Scenario ranking and recommendations
+  - Export to PDF/Excel functionality
 
 #### Advanced Features
-- [ ] **Export Capabilities**
-  - PDF report generation
-  - Excel export for power users
-  - Shareable simulation links
-  - Data import/export
+- [ ] **Portfolio Analysis**
+  - Multiple property investments
+  - Cash flow optimization
+  - Risk assessment
+  - Tax implications
+
+- [ ] **AI Insights**
+  - Market trend analysis
+  - Personalized recommendations
+  - Risk warnings and opportunities
+  - Investment strategy guidance
 
 **Success Criteria:**
-- Application performs smoothly across devices
-- Advanced users can efficiently manage multiple scenarios
-- Financial reports are professional and comprehensive
-- Performance metrics meet production standards
+- Power users can model complex scenarios
+- Visualizations are clear and actionable
+- Export functionality works reliably
+- Strong value proposition for premium pricing
 
 ---
 
-### Phase 4: Production & Scaling (Weeks 8+)
-**Goal**: Production deployment with monitoring and optimization
+### Phase 4: Production & Scaling 🚀 ONGOING
+**Goal**: Production deployment and business optimization
 
 #### Production Infrastructure
-- [ ] **Deployment Pipeline**
-  - Vercel deployment with Supabase integration
-  - Supabase production database setup
-  - Edge functions deployment
-  - CDN for static assets
-  - Schematic production configuration
+- [ ] **Deployment**
+  - Convex production deployment
+  - Frontend deployment (Vercel/Netlify)
+  - Custom domain setup
+  - Performance monitoring
 
-- [ ] **Monitoring & Observability** 
-  - Application performance monitoring
-  - Financial calculation accuracy tracking
-  - AI agent performance metrics
-  - User behavior analytics
+- [ ] **Business Operations**
+  - User analytics and conversion tracking
+  - Customer support system
+  - Billing and subscription management
+  - Legal compliance (GDPR, terms of service)
 
-#### Business Features (Schematic Integration)
-- [ ] **Freemium Model**
-  - Basic tier (income/expense tracking) with feature flags
-  - Paid tier (advanced simulations) with Schematic entitlements
-  - Usage-based AI limits with Schematic tracking
-  - Stripe payment integration through Schematic
+#### Scale Optimization
+- [ ] **Performance**
+  - Convex function optimization
+  - Frontend bundle size optimization
+  - Real-time subscription efficiency
+  - AI operation cost management
 
-- [ ] **Multi-Currency Support**
-  - EUR/DOP conversion system
-  - Localized number formatting
-  - Regional assumption defaults
-  - Currency preference management
+- [ ] **User Experience**
+  - Onboarding flow optimization
+  - Help documentation
+  - Feature discovery
+  - Mobile responsiveness
 
 **Success Criteria:**
-- Application handles production traffic reliably
-- Financial calculations maintain accuracy at scale
-- User onboarding and conversion funnels work effectively
-- Support system handles user questions
+- Sustainable user acquisition and retention
+- Positive unit economics on paid tiers
+- Reliable uptime and performance
+- Strong user satisfaction scores
 
 ---
 
-### Continuous Improvement Backlog
+## Future Architecture Considerations
 
-#### Enhanced AI Capabilities
-- [ ] Voice input for chat interface
-- [ ] Advanced market data integration
-- [ ] Personalized assumption learning
-- [ ] Multi-language support (French/Spanish)
+### When to Consider Next.js Migration
+- **Landing page SEO** needs become critical
+- **Complex routing** requirements emerge
+- **Server-side rendering** for performance
+- **Larger team** needs more structure
 
-#### Advanced Financial Features  
-- [ ] Investment property portfolio analysis
-- [ ] Tax optimization recommendations
-- [ ] Mortgage refinancing analysis
-- [ ] International property comparison
+### Migration Strategy (If Needed)
+1. **Components are portable** - React components work in Next.js
+2. **Gradual migration** - Start with marketing pages
+3. **API compatibility** - Convex functions can be called from Next.js
+4. **Progressive enhancement** - Add Next.js features incrementally
 
-#### User Experience Enhancements
-- [ ] Collaborative household planning
-- [ ] Financial goal tracking
-- [ ] Educational content integration
-- [ ] Community features and benchmarking
+The current Vite + Convex approach optimizes for rapid MVP development and should serve us well through significant user growth.
 
 ---
 
-### Technical Debt & Quality Gates
+## Current Priority Focus
 
-#### Code Quality Standards
-- **Test Coverage**: >80% for financial calculations, >60% overall
-- **Type Coverage**: >90% TypeScript coverage
-- **Performance**: <2s initial load, <500ms calculation responses
-- **Accessibility**: WCAG 2.1 AA compliance
+### Immediate Next Steps (This Week)
+1. **Complete fact validation UI** - Users must review extracted facts
+2. **Add comprehensive testing** - Financial calculations need tests
+3. **Polish user experience** - Error handling and feedback
 
-#### Regular Quality Reviews
-- **Weekly**: Code review checklist compliance
-- **Sprint End**: Architecture decision documentation
-- **Monthly**: Performance benchmark review
-- **Quarterly**: Security audit and dependency updates
+### Key Success Metrics
 
-#### Refactoring Priorities
-1. **Financial Formula Library**: Extract to separate package
-2. **Agent Framework**: Standardize agent interfaces
-3. **Component Architecture**: Optimize bundle size
-4. **Database Optimization**: Query performance and indexing
+#### FREE Tier (Current)
+- Users can track monthly budget accurately
+- AI extracts facts reliably with user validation
+- System prevents duplicate entries
+- Financial calculations are accurate
 
----
+#### PAID Tier (Phase 2)
+- Users confidently make rent vs buy decisions
+- Mortgage calculations help with property planning
+- Clear value over free tier drives conversions
 
-### Success Metrics by Phase
-
-#### Phase 0-1: Foundation
-- All core calculations pass comprehensive test suite
-- Basic chat workflow completes successfully
-- User can create profile and first simulation
-
-#### Phase 2: Features
-- Time to first projection <3 minutes
-- Users successfully compare rent vs buy scenarios
-- 90% of extracted facts validated correctly
-
-#### Phase 3: Polish
-- Mobile user experience equivalent to desktop
-- Advanced users manage multiple scenarios efficiently
-- Performance benchmarks consistently met
-
-#### Phase 4: Production
-- Production uptime >99.9%
-- User onboarding completion rate >70%
-- Financial calculation accuracy >99.95%
+#### PREMIUM Tier (Phase 3)
+- Power users model complex scenarios
+- Advanced features justify premium pricing
+- Export functionality supports professional use
 
 ---
 
-### Risk Mitigation
+## Quality Standards
 
-#### Technical Risks
-- **AI API Reliability**: Implement fallback UI for agent failures
-- **Calculation Accuracy**: Extensive test coverage with edge cases
-- **Performance**: Load testing before production launch
-- **Security**: Regular penetration testing and code audits
+### Financial Accuracy
+- **>99.9% accuracy** for core calculations (PMT, balance, etc.)
+- **Property-based testing** for financial formulas
+- **Input validation** prevents calculation errors
+- **User confirmation** for all AI-extracted facts
 
-#### Product Risks  
-- **User Adoption**: Early user testing and feedback integration
-- **Financial Accuracy**: Professional financial review of formulas
-- **Regulatory Compliance**: Legal review of financial advice disclaimers
-- **Market Fit**: Continuous user interview and usage analytics
+### Performance Targets
+- **<2s initial load** time for chat interface
+- **<500ms response** for balance calculations
+- **<3s AI processing** for fact extraction
+- **Real-time updates** for collaborative features
 
-#### Resource Risks
-- **Development Velocity**: Maintain 80/20 focus and feature prioritization  
-- **Quality vs Speed**: Automated testing and CI/CD pipeline
-- **Knowledge Transfer**: Comprehensive documentation and code comments
+### User Experience
+- **Sub-3-minute** time to first meaningful projection
+- **Clear explanations** for all financial concepts
+- **Mobile-responsive** design for accessibility
+- **Error recovery** when things go wrong
+
+---
+
+## Risk Management
+
+### Technical Risks
+- **Convex vendor lock-in**: Mitigated by React component portability
+- **AI accuracy**: Addressed by human validation workflow
+- **Financial errors**: Prevented by comprehensive testing
+
+### Business Risks
+- **User adoption**: Solved by genuine value in FREE tier
+- **Competition**: Differentiated by superior UX and AI integration
+- **Market fit**: Validated through rapid iteration and feedback
+
+The simplified approach minimizes technical risk while maximizing development velocity.

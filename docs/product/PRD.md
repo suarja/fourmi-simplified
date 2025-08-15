@@ -98,30 +98,30 @@ A **chat-first financial copilot** that helps households make life decisions (re
 - Probabilistic/Monte Carlo simulations
 - Investment portfolio management
 
-### Technology Stack
+### Technology Stack (Simplified for MVP)
 
 **Frontend:**
-- Next.js 14+ with App Router
-- ShadCN/ui components with dark mode
+- Vite + React for fast development
+- ShadCN/ui components with dark theme
 - Tailwind CSS for styling
 - TypeScript with strict mode
 
-**AI Integration:**
-- Vercel AI SDK for agent orchestration
-- OpenAI/Claude for natural language processing
-- Perplexity-style internet search tools
-- Function calling for structured data extraction
+**Backend (Convex):**
+- Convex for real-time database, functions, and file storage
+- Convex Auth for authentication (anonymous initially)
+- Direct function calls (no API layer needed)
+- Built-in real-time subscriptions
 
-**Backend:**
-- Clean Architecture + DDD principles
-- Prisma ORM (SQLite → PostgreSQL)
-- Zod for runtime validation
-- TRPC for type-safe APIs
+**AI Integration:**
+- AI SDK with OpenAI GPT-4 for fact extraction
+- Structured outputs using Zod schemas
+- Human-in-the-loop validation workflow
+- Function calling for financial data extraction
 
 **Testing:**
-- Vitest for unit/integration tests
-- Playwright for E2E testing
-- Property-based testing for calculations
+- Vitest for unit/integration tests (planned)
+- Property-based testing for financial calculations
+- Mock Convex functions for testing
 
 ### Success Criteria
 
