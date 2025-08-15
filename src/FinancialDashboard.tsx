@@ -113,12 +113,12 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
   return (
     <div className="h-full overflow-y-auto bg-gray-900">
       {/* Dashboard Header */}
-      <div className="p-6 border-b border-gray-700 bg-gray-800">
-        <h3 className="text-xl font-bold text-white mb-2">Financial Dashboard</h3>
-        <p className="text-gray-400">Real-time view of your budget</p>
+      <div className="p-4 sm:p-6 border-b border-gray-700 bg-gray-800">
+        <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">Financial Dashboard</h3>
+        <p className="text-sm sm:text-base text-gray-400">Real-time view of your budget</p>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Pending Facts Card */}
         {pendingFacts && pendingFacts.length > 0 && (
           <PendingFactsCard 
@@ -127,23 +127,23 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
           />
         )}
         {/* Monthly Balance Card */}
-        <div className={`rounded-lg p-6 border ${
+        <div className={`rounded-lg p-4 sm:p-6 border ${
           monthlyBalance.isPositive 
             ? 'bg-green-900/20 border-green-700' 
             : 'bg-red-900/20 border-red-700'
         }`}>
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-semibold text-white">Monthly Balance</h4>
-            <span className={`text-2xl ${monthlyBalance.isPositive ? 'text-green-400' : 'text-red-400'}`}>
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h4 className="text-base sm:text-lg font-semibold text-white">Monthly Balance</h4>
+            <span className={`text-xl sm:text-2xl ${monthlyBalance.isPositive ? 'text-green-400' : 'text-red-400'}`}>
               {monthlyBalance.isPositive ? '📈' : '📉'}
             </span>
           </div>
-          <div className={`text-3xl font-bold mb-2 ${
+          <div className={`text-2xl sm:text-3xl font-bold mb-2 ${
             monthlyBalance.isPositive ? 'text-green-400' : 'text-red-400'
           }`}>
             {formatCurrency(monthlyBalance.balance)}
           </div>
-          <div className="grid grid-cols-3 gap-4 text-sm">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
             <div>
               <div className="text-gray-400">Income</div>
               <div className="text-green-400 font-semibold">
@@ -167,11 +167,11 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
 
         {/* AI Insights */}
         {(financialData.incomes.length > 0 || financialData.expenses.length > 0) && (
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
               <div className="flex items-center gap-2">
-                <span className="text-xl">🤖</span>
-                <h4 className="text-lg font-semibold text-white">AI Insights</h4>
+                <span className="text-lg sm:text-xl">🤖</span>
+                <h4 className="text-base sm:text-lg font-semibold text-white">AI Insights</h4>
               </div>
               
               {!loadingInsights && (
@@ -202,8 +202,8 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
 
         {/* Income Sources */}
         {financialData.incomes.length > 0 && (
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
               <span className="text-green-400">💰</span>
               Income Sources
             </h4>
@@ -230,8 +230,8 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
 
         {/* Expenses by Category */}
         {Object.keys(expensesByCategory).length > 0 && (
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
               <span className="text-red-400">💸</span>
               Monthly Expenses
             </h4>
@@ -260,16 +260,16 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
 
         {/* Loans */}
         {financialData.loans.length > 0 && (
-          <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
               <span className="text-orange-400">🏦</span>
               Loans & Debt
             </h4>
             <div className="space-y-4">
               {financialData.loans.map((loan) => (
-                <div key={loan._id} className="border border-gray-600 rounded-lg p-4">
+                <div key={loan._id} className="border border-gray-600 rounded-lg p-3 sm:p-4">
                   <div className="flex justify-between items-start mb-2">
-                    <h5 className="font-semibold text-white">{loan.name}</h5>
+                    <h5 className="font-semibold text-white text-sm sm:text-base">{loan.name}</h5>
                     <div className="flex items-center gap-2">
                       <span className="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">
                         {loan.type.replace('_', ' ').toUpperCase()}
@@ -281,7 +281,7 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
                     <div>
                       <div className="text-gray-400">Monthly Payment</div>
                       <div className="text-orange-400 font-semibold">
@@ -317,17 +317,17 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
         {financialData.incomes.length === 0 && 
          financialData.expenses.length === 0 && 
          financialData.loans.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">📊</div>
-            <h3 className="text-xl font-semibold text-white mb-2">
+          <div className="text-center py-8 sm:py-12">
+            <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">📊</div>
+            <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
               No Financial Data Yet
             </h3>
-            <p className="text-gray-400 mb-6">
+            <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6 px-4">
               Start chatting with Fourmi to add your income, expenses, and loans
             </p>
-            <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-left max-w-md mx-auto">
-              <h4 className="font-semibold text-white mb-2">Try saying:</h4>
-              <ul className="text-sm text-gray-300 space-y-1">
+            <div className="bg-gray-800 rounded-lg p-3 sm:p-4 border border-gray-700 text-left max-w-sm sm:max-w-md mx-auto">
+              <h4 className="font-semibold text-white mb-2 text-sm sm:text-base">Try saying:</h4>
+              <ul className="text-xs sm:text-sm text-gray-300 space-y-1">
                 <li>• "I earn 3000€ per month"</li>
                 <li>• "My rent is 800€ monthly"</li>
                 <li>• "I spend 300€ on groceries"</li>
@@ -582,42 +582,46 @@ function PendingFactsCard({ facts, profileId }: {
               </div>
             ) : (
               // Display Mode
-              <div className="flex items-center justify-between">
+              <div className="space-y-3">
                 <div className="flex-1">
-                  <div className="text-white font-medium">
+                  <div className="text-white font-medium text-sm sm:text-base">
                     {fact.type.charAt(0).toUpperCase() + fact.type.slice(1)}: {formatFactDisplay(fact)}
                   </div>
                   {fact.type === "loan" && (!fact.data.interestRate || !fact.data.remainingBalance || !fact.data.remainingMonths) && (
-                    <div className="text-orange-400 text-sm mt-1">⚠️ Incomplete data - click Edit to add details</div>
+                    <div className="text-orange-400 text-xs sm:text-sm mt-1">⚠️ Incomplete data - click Edit to add details</div>
                   )}
                   {fact.suggestedAction === "skip" && (
-                    <div className="text-yellow-400 text-sm mt-1">⚠️ Possible duplicate detected</div>
+                    <div className="text-yellow-400 text-xs sm:text-sm mt-1">⚠️ Possible duplicate detected</div>
                   )}
                   <div className="text-gray-400 text-xs mt-1">
                     Confidence: {Math.round(fact.confidence * 100)}%
                   </div>
                 </div>
-                <div className="flex gap-2 ml-4">
-                  <button
-                    onClick={() => handleEdit(fact)}
-                    className="px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm transition-colors"
-                  >
-                    ✏️ Edit
-                  </button>
+                
+                {/* Mobile: Vertical button layout */}
+                <div className="flex flex-col sm:flex-row gap-2">
                   <button
                     onClick={() => handleConfirm(fact._id)}
                     disabled={processingId === fact._id}
-                    className="px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-sm transition-colors disabled:opacity-50"
+                    className="flex-1 px-3 py-2 rounded bg-green-600 hover:bg-green-700 text-white text-sm transition-colors disabled:opacity-50 min-h-[44px]"
                   >
                     {processingId === fact._id ? "..." : "✓ Confirm"}
                   </button>
-                  <button
-                    onClick={() => handleReject(fact._id)}
-                    disabled={processingId === fact._id}
-                    className="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-sm transition-colors disabled:opacity-50"
-                  >
-                    {processingId === fact._id ? "..." : "✗ Reject"}
-                  </button>
+                  <div className="flex gap-2 flex-1">
+                    <button
+                      onClick={() => handleEdit(fact)}
+                      className="flex-1 px-3 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white text-sm transition-colors min-h-[44px]"
+                    >
+                      ✏️ <span className="hidden sm:inline">Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleReject(fact._id)}
+                      disabled={processingId === fact._id}
+                      className="flex-1 px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-sm transition-colors disabled:opacity-50 min-h-[44px]"
+                    >
+                      {processingId === fact._id ? "..." : "✗"} <span className="hidden sm:inline">Reject</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
