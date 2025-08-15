@@ -151,15 +151,15 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
   );
 
   return (
-    <div className="h-full overflow-y-auto bg-background-primary">
-      {/* Dashboard Header */}
-      <div className="p-4 sm:p-6 border-b border-glass-light/30 bg-glass-card backdrop-blur-xl">
+    <div className="h-full overflow-y-auto bg-transparent">
+      {/* Dashboard Header - Floating Island */}
+      <div className="m-4 p-4 sm:p-5 bg-white/5 backdrop-blur-2xl rounded-2xl">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">Financial Dashboard</h3>
-            <p className="text-sm sm:text-base text-secondary-light">Real-time view of your budget • Drag cards to reorder</p>
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-1">Financial Dashboard</h3>
+            <p className="text-sm text-white/60">Real-time view of your budget • Drag cards to reorder</p>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-financial">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/80 to-primary-light/80 flex items-center justify-center">
             <span className="text-2xl">⚡</span>
           </div>
         </div>

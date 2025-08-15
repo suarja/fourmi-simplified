@@ -89,8 +89,8 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
   }, [financialData, profileId]);
 
   return (
-    <div className="bg-glass-card backdrop-blur-xl rounded-bento p-4 sm:p-6 border border-glass-light/20 shadow-glass hover:shadow-glass-hover transition-all duration-300">
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
+    <div className="bg-white/[0.03] backdrop-blur-2xl rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:bg-white/[0.05]">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-lg sm:text-xl">🤖</span>
           <h4 className="text-base sm:text-lg font-semibold text-white">AI Insights</h4>

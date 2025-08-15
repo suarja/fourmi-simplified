@@ -37,34 +37,34 @@ export function LoansCard({ loans }: LoansCardProps) {
   };
 
   const renderLoanView = (loan: Loan, onEdit: () => void) => (
-    <div className="border border-glass-light/30 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-glass-hover transition-all duration-200 bg-glass-dark/30 backdrop-blur-sm" onClick={onEdit}>
+    <div className="rounded-2xl p-4 cursor-pointer hover:bg-white/[0.03] transition-all duration-200 bg-black/10 backdrop-blur" onClick={onEdit}>
       <div className="flex justify-between items-start mb-3">
         <h5 className="font-semibold text-white text-sm sm:text-base">{loan.name}</h5>
-        <span className="text-xs bg-background-tertiary/80 px-2 py-1 rounded-lg text-secondary-light border border-glass-light/20">
+        <span className="text-xs bg-white/10 px-3 py-1 rounded-full text-white/70">
           {loan.type.replace('_', ' ').toUpperCase()}
         </span>
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
-        <div className="p-2 rounded-lg bg-background-secondary/60 border border-glass-light/20">
-          <div className="text-secondary-light text-xs">Monthly Payment</div>
+      <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm">
+        <div className="p-2.5 rounded-xl bg-black/20">
+          <div className="text-white/50 text-xs">Monthly Payment</div>
           <div className="text-financial-warning font-semibold">
             {formatCurrency(loan.monthlyPayment / 100)}
           </div>
         </div>
-        <div className="p-2 rounded-lg bg-background-secondary/60 border border-glass-light/20">
-          <div className="text-secondary-light text-xs">Interest Rate</div>
+        <div className="p-2.5 rounded-xl bg-black/20">
+          <div className="text-white/50 text-xs">Interest Rate</div>
           <div className="text-white font-medium">
             {(loan.interestRate * 100).toFixed(1)}%
           </div>
         </div>
-        <div className="p-2 rounded-lg bg-background-secondary/60 border border-glass-light/20">
-          <div className="text-secondary-light text-xs">Remaining Balance</div>
+        <div className="p-2.5 rounded-xl bg-black/20">
+          <div className="text-white/50 text-xs">Remaining Balance</div>
           <div className="text-white font-medium">
             {formatCurrency(loan.remainingBalance / 100)}
           </div>
         </div>
-        <div className="p-2 rounded-lg bg-background-secondary/60 border border-glass-light/20">
-          <div className="text-secondary-light text-xs">Months Left</div>
+        <div className="p-2.5 rounded-xl bg-black/20">
+          <div className="text-white/50 text-xs">Months Left</div>
           <div className="text-white font-medium">
             {loan.remainingMonths}
           </div>
@@ -179,12 +179,12 @@ export function LoansCard({ loans }: LoansCardProps) {
   }
 
   return (
-    <div className="bg-glass-card backdrop-blur-xl rounded-bento p-4 sm:p-6 border border-glass-light/20 shadow-glass hover:shadow-glass-hover transition-all duration-300">
-      <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
+    <div className="bg-white/[0.03] backdrop-blur-2xl rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:bg-white/[0.05]">
+      <h4 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
         <span className="text-financial-warning">🏦</span>
         Loans & Debt
       </h4>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {loans.map((loan) => (
           <EditableItem
             key={loan._id}

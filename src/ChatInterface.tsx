@@ -163,14 +163,14 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
   // Always show the chat interface - agent threads are created automatically
 
   return (
-    <div className="flex flex-col h-full bg-background-primary">
-      {/* Chat Header */}
-      <div className="p-4 border-b border-glass-light/30 bg-glass-card backdrop-blur-xl">
+    <div className="flex flex-col h-full bg-transparent rounded-3xl overflow-hidden">
+      {/* Chat Header - Floating Island */}
+      <div className="m-4 p-4 bg-white/5 backdrop-blur-2xl rounded-2xl">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <span className="text-2xl">🐜</span>
           {threadTitle || "Chat with Fourmi"}
         </h3>
-        <p className="text-sm text-secondary-light mt-1">
+        <p className="text-sm text-white/60 mt-1">
           {threadId ? 
             "Continue your conversation with Fourmi" : 
             "Tell me about your finances using text, voice, or files"
@@ -280,15 +280,15 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="flex-shrink-0 p-4 border-t border-glass-light/30 bg-glass-card backdrop-blur-xl">
-        <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3">
+      {/* Input - Floating Island */}
+      <div className="flex-shrink-0 p-4">
+        <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3 bg-white/5 backdrop-blur-2xl rounded-2xl p-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Tell me about your finances..."
-            className="flex-1 min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-background-secondary/60 border border-glass-light/30 text-white placeholder-secondary-light focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors text-sm sm:text-base"
+            className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-black/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all text-sm sm:text-base"
             disabled={isProcessing}
           />
           

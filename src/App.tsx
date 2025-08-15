@@ -7,10 +7,10 @@ import { FinancialCopilot } from "./FinancialCopilot";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-background-primary text-white">
-      <header className="sticky top-0 z-50 bg-glass-card backdrop-blur-xl h-16 flex justify-between items-center border-b border-glass-light/30 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-background-primary to-background-primary/95 text-white">
+      <header className="fixed top-4 left-4 right-4 z-[100] bg-white/[0.03] backdrop-blur-2xl h-14 flex justify-between items-center rounded-2xl px-6 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center shadow-financial">
+          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-financial">
             <span className="text-white font-bold text-sm">F</span>
           </div>
           <h2 className="text-xl font-semibold text-white">Fourmi Financial</h2>
@@ -19,7 +19,7 @@ export default function App() {
           <SignOutButton />
         </Authenticated>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         <Content />
       </main>
       <Toaster theme="dark" />
