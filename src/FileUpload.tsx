@@ -6,16 +6,18 @@ import { toast } from "sonner";
 
 interface FileUploadProps {
   profileId: Id<"profiles">;
+  threadId?: string | null; // Current thread context
   onDataProcessed: (message: string) => void;
+  onThreadCreated?: (threadId: string, title: string) => void; // For new thread creation
   disabled?: boolean;
 }
 
-export function FileUpload({ profileId, onDataProcessed, disabled }: FileUploadProps) {
+export function FileUpload({ profileId, threadId, onDataProcessed, onThreadCreated, disabled }: FileUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const generateUploadUrl = useMutation(api.profiles.generateUploadUrl);
-  const processFinancialFile = useAction(api.ai.processFinancialFile);
+  const processFinancialFileWithThread = useAction(api.files.processFinancialFileWithThread);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -51,18 +53,26 @@ export function FileUpload({ profileId, onDataProcessed, disabled }: FileUploadP
       
       const { storageId } = json;
       
-      // Step 3: Process file with AI (this handles everything)
-      const processedData = await processFinancialFile({
+      // Step 3: Process file with AI within thread context
+      const processedData = await processFinancialFileWithThread({
         profileId,
         storageId,
         fileName: file.name,
+        threadId: threadId || undefined,
       });
       
       toast.success(`Successfully processed ${file.name}`, {
         description: `Found ${processedData.itemsProcessed.incomes} incomes, ${processedData.itemsProcessed.expenses} expenses, ${processedData.itemsProcessed.loans} loans`
       });
       
-      onDataProcessed(`I've uploaded my financial data from ${file.name}. ${processedData.message}`);
+      // Handle thread creation if a new thread was created
+      if (processedData.threadId && processedData.threadTitle && onThreadCreated) {
+        console.log("File upload created new thread:", { threadId: processedData.threadId, title: processedData.threadTitle });
+        onThreadCreated(processedData.threadId, processedData.threadTitle);
+      }
+      
+      // The agent has already generated a response, so pass that instead of creating a new message
+      onDataProcessed(processedData.response);
       
     } catch (error) {
       console.error("File upload error:", error);

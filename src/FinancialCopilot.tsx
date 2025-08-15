@@ -26,14 +26,17 @@ export function FinancialCopilot() {
 
   const handleNewConversation = () => {
     // Reset to null - new thread will be created automatically on first message
-    console.log("New conversation button clicked");
+    console.log("New conversation button clicked - clearing current thread");
     setCurrentThreadId(null);
     setCurrentThreadTitle("");
+    // Trigger a small refresh to ensure sidebar updates
+    setRefreshTrigger(prev => prev + 1);
   };
 
-  const handleThreadSelect = (threadId: string | null) => {
+  const handleThreadSelect = (threadId: string | null, title?: string) => {
+    console.log("Thread selected:", { threadId, title });
     setCurrentThreadId(threadId);
-    // Title will be updated when thread is loaded
+    setCurrentThreadTitle(title || "");
   };
 
   const handleThreadCreated = (threadId: string, title: string) => {

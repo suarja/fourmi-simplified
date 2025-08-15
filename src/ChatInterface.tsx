@@ -27,9 +27,13 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Debug: Log threadId changes
+  console.log("ChatInterface rendered with threadId:", threadId, "threadTitle:", threadTitle);
+
   // Use agent actions directly
   const startFinancialConversation = useAction(api.agents.startFinancialConversation);
   const continueFinancialConversation = useAction(api.agents.continueFinancialConversation);
+  const getThreadMessages = useAction(api.threads.getThreadMessages);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,8 +43,41 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
     scrollToBottom();
   }, [messages]);
 
+  // Load thread messages when threadId changes
+  useEffect(() => {
+    const loadThreadHistory = async () => {
+      if (threadId) {
+        try {
+          console.log("Loading thread history for:", threadId);
+          const threadMessages = await getThreadMessages({ threadId });
+          console.log("Loaded thread messages:", threadMessages);
+          
+          // Convert thread messages to our Message format
+          const convertedMessages: Message[] = threadMessages.map((msg: any) => ({
+            _id: msg.id,
+            type: msg.type,
+            content: msg.content,
+            timestamp: msg.timestamp,
+          }));
+          
+          setMessages(convertedMessages);
+        } catch (error) {
+          console.error("Error loading thread history:", error);
+          setMessages([]);
+        }
+      } else {
+        // Clear messages when starting new chat
+        console.log("Clearing messages for new chat");
+        setMessages([]);
+      }
+    };
+
+    loadThreadHistory();
+  }, [threadId]); // Remove getThreadMessages to avoid infinite loop
+
   const processMessage = async (messageText: string) => {
     setIsProcessing(true);
+    console.log("Processing message with threadId:", threadId);
 
     try {
       // Add user message to local state immediately for UI responsiveness
@@ -55,6 +92,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
       let result;
       
       if (!threadId) {
+        console.log("Creating new thread for message:", messageText);
         // Start new conversation with agent
         result = await startFinancialConversation({
           profileId,
@@ -67,6 +105,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
           onThreadCreated(result.threadId, result.threadTitle);
         }
       } else {
+        console.log("Continuing existing thread:", threadId);
         // Continue existing conversation
         result = await continueFinancialConversation({
           threadId,
@@ -113,8 +152,16 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
     await processMessage(transcript);
   };
 
-  const handleFileProcessed = async (message: string) => {
-    await processMessage(message);
+  const handleFileProcessed = async (agentResponse: string) => {
+    // File upload now generates agent responses directly within threads
+    // Just add the response to the chat without additional processing
+    const assistantMessage: Message = {
+      _id: `assistant-${Date.now()}`,
+      type: "assistant", 
+      content: agentResponse,
+      timestamp: Date.now(),
+    };
+    setMessages(prev => [...prev, assistantMessage]);
   };
 
   // Always show the chat interface - agent threads are created automatically
@@ -201,7 +248,9 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
           {/* File Upload Button */}
           <FileUpload 
             profileId={profileId}
+            threadId={threadId}
             onDataProcessed={handleFileProcessed}
+            onThreadCreated={onThreadCreated}
             disabled={false}
           />
           

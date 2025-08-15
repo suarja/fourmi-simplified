@@ -6,7 +6,7 @@ import { toast } from "sonner";
 interface ConversationSidebarProps {
   profileId: string;
   currentThreadId: string | null;
-  onThreadSelect: (threadId: string | null) => void;
+  onThreadSelect: (threadId: string | null, title?: string) => void;
   onNewConversation: () => void;
   refreshTrigger?: number; // Used to trigger refresh when new threads are created
 }
@@ -127,10 +127,12 @@ export function ConversationSidebar({
                 // Show actual threads
                 threads
                   .sort((a, b) => (b.lastUpdateTime || b.creationTime) - (a.lastUpdateTime || a.creationTime))
-                  .map((thread) => (
+                  .map((thread) => {
+                    console.log("Rendering individual thread:", thread);
+                    return (
                     <div key={thread.threadId} className="relative group">
                       <button
-                        onClick={() => onThreadSelect(thread.threadId)}
+                        onClick={() => onThreadSelect(thread.threadId, thread.title)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           currentThreadId === thread.threadId
                             ? 'bg-blue-600 text-white'
@@ -159,7 +161,8 @@ export function ConversationSidebar({
                         )}
                       </button>
                     </div>
-                  ))
+                    );
+                  })
               ) : (
                 // Empty state
                 <div className="text-center text-gray-400 py-8">

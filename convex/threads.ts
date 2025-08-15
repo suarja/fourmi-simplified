@@ -7,9 +7,9 @@ import { components } from "./_generated/api";
 import { financialAgent } from "./agents";
 
 // List all threads for the authenticated user
-export const listUserThreads: any = action({
+export const listUserThreads = action({
   args: {},
-  handler: async (ctx): Promise<any> => {
+  handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("User not authenticated");
@@ -25,14 +25,23 @@ export const listUserThreads: any = action({
         }
       );
 
+      console.log("Raw threads data:", JSON.stringify(threads, null, 2));
+      console.log("Threads page length:", threads.page?.length);
+
       // Transform thread data for frontend consumption
-      return threads.page.map((thread: any) => ({
-        threadId: thread.threadId,
-        title: thread.title || "Financial Chat",
-        summary: thread.summary || "",
-        creationTime: thread.creationTime,
-        lastUpdateTime: thread.lastUpdateTime,
-      }));
+      const transformedThreads = threads.page.map((thread: any) => {
+        console.log("Processing thread:", JSON.stringify(thread, null, 2));
+        return {
+          threadId: thread._id, // Convex uses _id for threadId
+          title: thread.title || "Financial Chat",
+          summary: thread.summary || "",
+          creationTime: thread._creationTime, // Convex uses _creationTime
+          lastUpdateTime: thread._creationTime, // Use creation time if no lastUpdate
+        };
+      });
+
+      console.log("Transformed threads:", JSON.stringify(transformedThreads, null, 2));
+      return transformedThreads;
     } catch (error) {
       console.error("Error listing user threads:", error);
       return []; // Return empty array on error to avoid breaking UI
@@ -40,12 +49,12 @@ export const listUserThreads: any = action({
   },
 });
 
-// Get recent messages for a thread (for preview in sidebar)
-export const getThreadMessages: any = action({
+// Get all messages for a thread (for chat interface)
+export const getThreadMessages = action({
   args: {
     threadId: v.string(),
   },
-  handler: async (ctx, { threadId }): Promise<any> => {
+  handler: async (ctx, { threadId }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("User not authenticated");
@@ -58,7 +67,7 @@ export const getThreadMessages: any = action({
       const messages = await listMessages(ctx, components.agent, {
         threadId: threadId,
         excludeToolMessages: true, // Only show user/assistant messages
-        paginationOpts: { cursor: null, numItems: 5 } // Get last 5 messages
+        paginationOpts: { cursor: null, numItems: 100 } // Get all messages for chat interface
       });
 
       return messages.page.map((message: any) => ({
@@ -75,13 +84,13 @@ export const getThreadMessages: any = action({
 });
 
 // Update thread metadata (title, summary)
-export const updateThreadMetadata: any = action({
+export const updateThreadMetadata = action({
   args: {
     threadId: v.string(),
     title: v.optional(v.string()),
     summary: v.optional(v.string()),
   },
-  handler: async (ctx, { threadId, title, summary }): Promise<any> => {
+  handler: async (ctx, { threadId, title, summary }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("User not authenticated");
@@ -107,11 +116,11 @@ export const updateThreadMetadata: any = action({
 });
 
 // Delete a specific thread
-export const deleteThread: any = action({
+export const deleteThread = action({
   args: {
     threadId: v.string(),
   },
-  handler: async (ctx, { threadId }): Promise<any> => {
+  handler: async (ctx, { threadId }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("User not authenticated");
@@ -129,12 +138,55 @@ export const deleteThread: any = action({
   },
 });
 
+// Test function to check thread creation (for debugging)
+export const testThreadCreation = action({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    // List existing threads
+    const existingThreads = await ctx.runQuery(
+      components.agent.threads.listThreadsByUserId,
+      { 
+        userId: userId,
+        paginationOpts: { cursor: null, numItems: 10 }
+      }
+    );
+
+    console.log("TESTING: Existing threads for user:", userId);
+    console.log("TESTING: Found", existingThreads.page.length, "threads");
+    
+    existingThreads.page.forEach((thread: any, index: number) => {
+      console.log(`TESTING: Thread ${index + 1}:`, {
+        threadId: thread.threadId,
+        title: thread.title,
+        summary: thread.summary,
+        creationTime: thread.creationTime,
+        lastUpdateTime: thread.lastUpdateTime
+      });
+    });
+
+    return {
+      userId,
+      threadCount: existingThreads.page.length,
+      threads: existingThreads.page.map((t: any) => ({
+        threadId: t.threadId,
+        title: t.title,
+        summary: t.summary
+      }))
+    };
+  },
+});
+
 // Generate a meaningful title from the first message
-export const generateThreadTitle: any = action({
+export const generateThreadTitle = action({
   args: {
     message: v.string(),
   },
-  handler: async (ctx, { message }): Promise<any> => {
+  handler: async (ctx, { message }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw new Error("User not authenticated");
