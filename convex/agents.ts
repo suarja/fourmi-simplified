@@ -2,7 +2,7 @@
 
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import { Agent, saveMessage } from "@convex-dev/agent";
+import { Agent } from "@convex-dev/agent";
 import { openai } from "@ai-sdk/openai";
 import { api, components } from "./_generated/api";
 import { getAuthUserId } from "@convex-dev/auth/server";
@@ -73,16 +73,14 @@ export const startFinancialConversation = action({
       summary: `Financial conversation started with: ${message.substring(0, 100)}...`,
     });
     
-    // Save user message using correct Convex API
-    const { messageId: userMessageId } = await saveMessage(ctx, components.agent, {
-      threadId: thread.threadId,
-      userId: userId,
-      prompt: message,
-    });
-    
+    // Add user message with explicit role first
+    console.log("🔍 DEBUG - Creating new thread with message:", { role: "user", content: message });
     const response = await thread.generateText({
-      prompt: message,
+      messages: [
+        { role: "user", content: message }
+      ],
     });
+    console.log("🔍 DEBUG - Generated response:", response.text);
     
     // The generateText should automatically save the assistant response
     // But let's ensure it's saved with correct format
@@ -120,16 +118,14 @@ export const continueFinancialConversation = action({
     // Use the existing agent - continue existing thread
     const { thread } = await financialAgent.continueThread(ctx, { threadId });
     
-    // Save user message using correct Convex API
-    const { messageId: userMessageId } = await saveMessage(ctx, components.agent, {
-      threadId: threadId,
-      userId: userId,
-      prompt: message,
-    });
-    
+    // Generate response using the agent thread with explicit user message
+    console.log("🔍 DEBUG - Continue thread with message:", { role: "user", content: message });
     const response = await thread.generateText({
-      prompt: message,
+      messages: [
+        { role: "user", content: message }
+      ],
     });
+    console.log("🔍 DEBUG - Generated response:", response.text);
     
     // The generateText should automatically save the assistant response
     console.log("Generated response:", response.text);

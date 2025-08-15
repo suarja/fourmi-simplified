@@ -195,33 +195,90 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
             </div>
           </div>
         ) : (
-          messages.sort((a, b) => a.timestamp - b.timestamp).map((message) => (
+          messages.sort((a, b) => a.timestamp - b.timestamp).map((message) => {
+            // Normalize message type to handle potential inconsistencies
+            const messageType = message.type === "user" ? "user" : "assistant";
+            
+            return (
             <div
               key={message._id}
-              className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex items-start gap-3 ${messageType === "user" ? "flex-row-reverse" : "flex-row"}`}
             >
-              <div
-                className={`max-w-[80%] rounded-lg px-4 py-3 ${
-                  message.type === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-700 text-gray-100"
-                }`}
-              >
-                <div className="whitespace-pre-wrap">{message.content}</div>
-                <div className="text-xs opacity-70 mt-2">
+              {/* Avatar */}
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                messageType === "user" 
+                  ? "bg-blue-600 text-white" 
+                  : "bg-gray-600 text-white"
+              }`}>
+                {messageType === "user" ? "👤" : "🐜"}
+              </div>
+              
+              {/* Message Bubble */}
+              <div className={`flex flex-col max-w-[75%] ${messageType === "user" ? "items-end" : "items-start"}`}>
+                {/* Role Label */}
+                <div className={`text-xs font-medium mb-1 ${
+                  messageType === "user" ? "text-blue-400" : "text-green-400"
+                }`}>
+                  {messageType === "user" ? "You" : "Fourmi"}
+                </div>
+                
+                {/* Message Content */}
+                <div
+                  className={`rounded-2xl px-4 py-3 shadow-sm ${
+                    messageType === "user"
+                      ? "bg-blue-600 text-white rounded-br-md"
+                      : "bg-gray-700 text-gray-100 rounded-bl-md border border-gray-600"
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                  
+                  {/* Copy button for assistant messages */}
+                  {messageType === "assistant" && (
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(message.content);
+                        // Could add toast notification here
+                      }}
+                      className="mt-2 text-xs text-gray-400 hover:text-gray-300 transition-colors"
+                      title="Copy message"
+                    >
+                      📋 Copy
+                    </button>
+                  )}
+                </div>
+                
+                {/* Timestamp */}
+                <div className={`text-xs text-gray-500 mt-1 ${
+                  messageType === "user" ? "text-right" : "text-left"
+                }`}>
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </div>
               </div>
             </div>
-          ))
-        )}
+            );
+          }))
+        }
         
         {isProcessing && (
-          <div className="flex justify-start">
-            <div className="bg-gray-700 text-gray-100 rounded-lg px-4 py-3">
-              <div className="flex items-center gap-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-                <span>Analyzing your message...</span>
+          <div className="flex items-start gap-3">
+            {/* Avatar */}
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-600 text-white flex items-center justify-center text-sm font-medium">
+              🐜
+            </div>
+            
+            {/* Message Bubble */}
+            <div className="flex flex-col max-w-[75%] items-start">
+              {/* Role Label */}
+              <div className="text-xs font-medium mb-1 text-green-400">
+                Fourmi
+              </div>
+              
+              {/* Message Content */}
+              <div className="rounded-2xl rounded-bl-md px-4 py-3 bg-gray-700 text-gray-100 border border-gray-600 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-500"></div>
+                  <span>Analyzing your message...</span>
+                </div>
               </div>
             </div>
           </div>

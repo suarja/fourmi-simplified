@@ -16,11 +16,17 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
   
   const [insights, setInsights] = useState<string>("");
   const [loadingInsights, setLoadingInsights] = useState(false);
+  const [hasGeneratedInsights, setHasGeneratedInsights] = useState(false);
 
-  useEffect(() => {
-    if (financialData && (financialData.incomes.length > 0 || financialData.expenses.length > 0)) {
-      setLoadingInsights(true);
-      generateBudgetInsights({
+  // Generate insights manually when user clicks the button
+  const handleGenerateInsights = async () => {
+    if (!financialData || (financialData.incomes.length === 0 && financialData.expenses.length === 0)) {
+      return;
+    }
+
+    setLoadingInsights(true);
+    try {
+      const newInsights = await generateBudgetInsights({
         incomes: financialData.incomes.map(income => ({
           label: income.label,
           amount: income.amount / 100, // Convert from cents
@@ -39,9 +45,50 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
           remainingBalance: loan.remainingBalance / 100, // Convert from cents
           remainingMonths: loan.remainingMonths,
         })),
-      }).then(setInsights).finally(() => setLoadingInsights(false));
+      });
+      setInsights(newInsights);
+      setHasGeneratedInsights(true);
+      
+      // Cache insights in localStorage
+      const cacheKey = `insights_${profileId}`;
+      const cacheData = {
+        insights: newInsights,
+        timestamp: Date.now(),
+        dataHash: JSON.stringify(financialData) // Simple hash for data changes
+      };
+      localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+    } catch (error) {
+      console.error("Error generating insights:", error);
+    } finally {
+      setLoadingInsights(false);
     }
-  }, [financialData, generateBudgetInsights]);
+  };
+
+  // Check for cached insights on component mount
+  useEffect(() => {
+    if (financialData) {
+      const cacheKey = `insights_${profileId}`;
+      const cached = localStorage.getItem(cacheKey);
+      
+      if (cached) {
+        try {
+          const cacheData = JSON.parse(cached);
+          const currentDataHash = JSON.stringify(financialData);
+          
+          // Use cached insights if data hasn't changed and cache is less than 24 hours old
+          const isRecentCache = Date.now() - cacheData.timestamp < 24 * 60 * 60 * 1000;
+          const isDataUnchanged = cacheData.dataHash === currentDataHash;
+          
+          if (isRecentCache && isDataUnchanged && cacheData.insights) {
+            setInsights(cacheData.insights);
+            setHasGeneratedInsights(true);
+          }
+        } catch (error) {
+          console.error("Error loading cached insights:", error);
+        }
+      }
+    }
+  }, [financialData, profileId]);
 
   if (!financialData || !monthlyBalance) {
     return (
@@ -119,19 +166,36 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
         </div>
 
         {/* AI Insights */}
-        {(insights || loadingInsights) && (
+        {(financialData.incomes.length > 0 || financialData.expenses.length > 0) && (
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xl">🤖</span>
-              <h4 className="text-lg font-semibold text-white">AI Insights</h4>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🤖</span>
+                <h4 className="text-lg font-semibold text-white">AI Insights</h4>
+              </div>
+              
+              {!loadingInsights && (
+                <button
+                  onClick={handleGenerateInsights}
+                  disabled={loadingInsights}
+                  className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {hasGeneratedInsights ? "🔄 Refresh" : "✨ Generate"}
+                </button>
+              )}
             </div>
+            
             {loadingInsights ? (
               <div className="flex items-center gap-2 text-gray-400">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
                 Analyzing your budget...
               </div>
-            ) : (
+            ) : insights ? (
               <div className="text-gray-300 whitespace-pre-line">{insights}</div>
+            ) : (
+              <div className="text-gray-400 text-center py-4">
+                Click "Generate" to get AI-powered insights about your budget
+              </div>
             )}
           </div>
         )}
