@@ -5,16 +5,16 @@ import { createTool } from "@convex-dev/agent";
 import { z } from "zod";
 import { api } from "../_generated/api";
 import { ExtractFinancialDataSchemaReturnType, FinancialDataSchema, GenerateFinancialAdviceSchemaReturnType, GetFinancialSummarySchemaReturnType } from "../domain/finance.type";
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { isDuplicateIncome, isDuplicateExpense, isDuplicateLoan } from "../lib/validation";
 
 
 
 // Tool to extract and process financial information from natural language
 export const extractFinancialDataTool = createTool({
-  description: "Extract financial information (income, expenses, loans) from user message and save to their profile",
+  description: "Extract financial information (income, expenses, loans) from user message and create pending facts for user confirmation via dashboard",
   args: z.object({
     message: z.string().describe("The user's message containing financial information"),
+    details: z.string().describe("Additional information about the user query. It's usefull when the user makes reference to some context so you can pass additional data to give the tool the necessary information")
   }),
   handler: async (ctx, { message }): Promise<ExtractFinancialDataSchemaReturnType> => {
     const userProfile = await ctx.runQuery(api.profiles.getUserProfile);
@@ -33,7 +33,7 @@ export const extractFinancialDataTool = createTool({
       const result = await generateObject({
         model: openai("gpt-4o"),
         mode: "json",
-        prompt: `You are a financial data extraction expert. Extract ALL financial information from this message and save it to the user's profile.
+        prompt: `You are a financial data extraction expert. Extract ALL financial information from this message and create pending facts for user validation.
 
 User message: "${message}"
 

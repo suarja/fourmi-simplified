@@ -2,15 +2,9 @@
 
 import { action } from "../_generated/server";
 import { v } from "convex/values";
-import { Agent } from "@convex-dev/agent";
-import { openai } from "@ai-sdk/openai";
-import { api, components } from "../_generated/api";
+import { api } from "../_generated/api";
 import { getAuthUserId } from "@convex-dev/auth/server";
-import { 
-  extractFinancialDataTool, 
-  getFinancialSummaryTool, 
-  generateFinancialAdviceTool 
-} from "../agents/financialTools";
+
 import { z } from "zod";
 import { titleAgent } from "../agents/title";
 import { financialAgent } from "../agents/finance";
@@ -62,17 +56,11 @@ export const startFinancialConversation = action({
     });
     
     // Add user message with explicit role first
-    console.log("🔍 DEBUG - Creating new thread with message:", { role: "user", content: message });
     const response = await thread.generateText({
       messages: [
         { role: "user", content: message }
       ],
     });
-    console.log("🔍 DEBUG - Generated response:", response.text);
-    
-    // The generateText should automatically save the assistant response
-    // But let's ensure it's saved with correct format
-    console.log("Generated response:", response.text);
 
     return {
       threadId: thread.threadId,
@@ -107,16 +95,11 @@ export const continueFinancialConversation = action({
     const { thread } = await financialAgent.continueThread(ctx, { threadId });
     
     // Generate response using the agent thread with explicit user message
-    console.log("🔍 DEBUG - Continue thread with message:", { role: "user", content: message });
     const response = await thread.generateText({
       messages: [
         { role: "user", content: message }
       ],
     });
-    console.log("🔍 DEBUG - Generated response:", response.text);
-    
-    // The generateText should automatically save the assistant response
-    console.log("Generated response:", response.text);
 
     return {
       response: response.text,

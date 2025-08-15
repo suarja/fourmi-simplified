@@ -74,11 +74,8 @@ export const getThreadMessages = action({
       console.log("Raw messages from thread:", JSON.stringify(messages, null, 2));
 
       return messages.page.map((message: any) => {
-        console.log("🔍 DEBUG - Processing individual message:", JSON.stringify(message, null, 2));
-        
         // The role is nested inside message.message.role for agent messages
         const role = message.message?.role || message.role;
-        console.log("🔍 DEBUG - Message role:", role, "Converting to:", role === "user" ? "user" : "assistant");
         
         // Content can be in different places depending on message type
         let content = "";
@@ -95,14 +92,12 @@ export const getThreadMessages = action({
           content = message.text || "";
         }
         
-        const convertedMessage = {
+        return {
           id: message._id,
           type: role === "user" ? "user" : "assistant", // Convert role to type
           content: content,
           timestamp: message._creationTime,
         };
-        console.log("🔍 DEBUG - Final converted message:", convertedMessage);
-        return convertedMessage;
       });
     } catch (error) {
       console.error("Error getting thread messages:", error);
