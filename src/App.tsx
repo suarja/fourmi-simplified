@@ -7,7 +7,7 @@ import { FinancialCopilot } from "./FinancialCopilot";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background-primary to-background-primary/95 text-white">
+    <div className="min-h-screen gradient-bg text-white">
       <header className="fixed top-4 left-4 right-4 z-[100] bg-white/[0.03] backdrop-blur-2xl h-14 flex justify-between items-center rounded-2xl px-6 shadow-xl">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-financial">

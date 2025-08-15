@@ -28,8 +28,23 @@ body {
     "Segoe UI Emoji",
     "Segoe UI Symbol",
     "Noto Color Emoji";
-  color: var(--color-dark);
-  background: var(--color-light);
+  color: var(--color-light);
+  background: var(--color-dark);
+}
+
+/* Override body background for app container */
+#root {
+  background: transparent !important;
+}
+
+/* Ensure gradient works */
+.gradient-bg {
+  background: linear-gradient(135deg, 
+    #020617 0%, 
+    rgba(15, 23, 42, 0.98) 25%, 
+    rgba(30, 41, 59, 0.9) 50%, 
+    rgba(51, 65, 85, 0.85) 75%, 
+    rgba(30, 41, 59, 0.95) 100%) !important;
 }
 
 /* only use this to update the style of the auth input fields. use a different class for all other input fields */
