@@ -11,6 +11,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **PAID**: Real estate projects (rent vs buy decisions)  
 3. **PREMIUM**: Multiple simulations and comparisons
 
+## Communication Protocol
+
+**COMMIT MESSAGE POLICY**: Do NOT add Claude Code attribution or co-authorship to git commit messages. Keep commits clean and professional without AI tool references.
+
 ## Technology Stack (Simplified with Convex)
 
 ### Core Framework
