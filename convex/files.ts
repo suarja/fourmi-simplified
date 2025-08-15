@@ -2,7 +2,7 @@
 
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { getAuthUserId } from "./lib/auth";
 import { api } from "./_generated/api";
 import { parseAmount, categorizeExpense, detectFrequency, detectLoanType, calculateConfidence } from "./lib/extraction";
 import { financialAgent } from "./agents/finance";

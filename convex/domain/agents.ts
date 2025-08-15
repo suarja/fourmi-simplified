@@ -3,7 +3,7 @@
 import { action } from "../_generated/server";
 import { v } from "convex/values";
 import { api } from "../_generated/api";
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { getAuthUserId } from "../lib/auth";
 
 import { z } from "zod";
 import { titleAgent } from "../agents/title";

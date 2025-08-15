@@ -4,6 +4,7 @@
 import { createTool } from "@convex-dev/agent";
 import { z } from "zod";
 import { api } from "../_generated/api";
+import { Id } from "../_generated/dataModel";
 import { ExtractFinancialDataSchemaReturnType, FinancialDataSchema, GenerateFinancialAdviceSchemaReturnType, GetFinancialSummarySchemaReturnType } from "../domain/finance.type";
 import { isDuplicateIncome, isDuplicateExpense, isDuplicateLoan } from "../lib/validation";
 
@@ -90,7 +91,7 @@ Provide a summary of what was extracted and processed.`,
 
       // Get existing data to check for duplicates
       const financialData = await ctx.runQuery(api.profiles.getFinancialData, {
-        profileId: userProfile._id,
+        profileId: userProfile._id as Id<"profiles">,
       });
 
       // Process incomes with duplicate checking
@@ -103,7 +104,7 @@ Provide a summary of what was extracted and processed.`,
           } else {
             // Create pending fact for validation
             await ctx.runMutation(api.domain.facts.createPendingFact, {
-              profileId: userProfile._id,
+              profileId: userProfile._id as Id<"profiles">,
               type: "income",
               data: income,
               extractedFrom: message,
@@ -129,7 +130,7 @@ Provide a summary of what was extracted and processed.`,
           } else {
             // Create pending fact for validation
             await ctx.runMutation(api.domain.facts.createPendingFact, {
-              profileId: userProfile._id,
+              profileId: userProfile._id as Id<"profiles">,
               type: "expense",
               data: expense,
               extractedFrom: message,
@@ -155,7 +156,7 @@ Provide a summary of what was extracted and processed.`,
           } else {
             // Create pending fact for validation
             await ctx.runMutation(api.domain.facts.createPendingFact, {
-              profileId: userProfile._id,
+              profileId: userProfile._id as Id<"profiles">,
               type: "loan",
               data: loan,
               extractedFrom: message,
@@ -231,7 +232,7 @@ export const getFinancialSummaryTool = createTool({
 
     try {
       const balance = await ctx.runQuery(api.profiles.getMonthlyBalance, {
-        profileId: userProfile._id,
+        profileId: userProfile._id as Id<"profiles">,
       });
 
       return {
@@ -277,7 +278,7 @@ export const generateFinancialAdviceTool = createTool({
       }
 
       const balance = await ctx.runQuery(api.profiles.getMonthlyBalance, {
-        profileId: userProfile._id,
+        profileId: userProfile._id as Id<"profiles">,
       });
 
       // Use the exact same advice generation as the original system

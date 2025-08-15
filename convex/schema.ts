@@ -1,10 +1,10 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { authTables } from "@convex-dev/auth/server";
+// Removed convex-auth dependency - no longer using authTables
 
 const applicationTables = {
   profiles: defineTable({
-    userId: v.id("users"),
+    userId: v.string(), // Clerk user ID
     name: v.string(),
     type: v.union(v.literal("solo"), v.literal("couple")),
     created: v.number(),
@@ -72,6 +72,7 @@ const applicationTables = {
 };
 
 export default defineSchema({
-  ...authTables,
+  // Note: With Clerk, users table is managed externally
+  // No need for authTables since we're using Clerk's user management
   ...applicationTables,
 });

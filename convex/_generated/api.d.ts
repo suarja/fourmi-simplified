@@ -18,6 +18,7 @@ import type * as domain_facts from "../domain/facts.js";
 import type * as domain_transactions from "../domain/transactions.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
+import type * as lib_auth from "../lib/auth.js";
 import type * as lib_extraction from "../lib/extraction.js";
 import type * as lib_financial from "../lib/financial.js";
 import type * as lib_validation from "../lib/validation.js";
@@ -51,6 +52,7 @@ declare const fullApi: ApiFromModules<{
   "domain/transactions": typeof domain_transactions;
   files: typeof files;
   http: typeof http;
+  "lib/auth": typeof lib_auth;
   "lib/extraction": typeof lib_extraction;
   "lib/financial": typeof lib_financial;
   "lib/validation": typeof lib_validation;
