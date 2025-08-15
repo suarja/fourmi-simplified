@@ -3,7 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { ProfileSetup } from "./ProfileSetup";
 import { ChatInterface } from "./ChatInterface";
-import { FinancialDashboard } from "./FinancialDashboard";
+import { FinancialDashboard } from "./components/financial-dashboard/FinancialDashboard";
 import { ConversationSidebar } from "./ConversationSidebar";
 import { MobileNavigation } from "./MobileNavigation";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
