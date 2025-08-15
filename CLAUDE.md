@@ -169,6 +169,15 @@ mcp__shadcn-ui__get_component_demo --componentName "form"
 - **Structured outputs** using Zod schemas
 - **User feedback** - Always show what was extracted
 
+### Convex Agents (CRITICAL RULES)
+- **⚠️ ALWAYS check documentation first** - Read `/docs/technical/CONVEX_AGENTS.md` and stored knowledge before implementing
+- **Agent Declaration** - Declare agents at MODULE LEVEL, NOT inside action handlers
+- **Export for Playground** - Always export agents (e.g., `export const financialAgent`) for playground integration
+- **Reuse Agents** - Never create `new Agent()` inside action handlers (inefficient, wrong pattern)
+- **Correct API Syntax** - Follow exact patterns from documentation for `generateText()`, `createThread()`, etc.
+- **Tool Integration** - Add tools to agent constructor, not action handlers
+- **Version Compatibility** - AI SDK v4, not v5 (see documentation for exact versions)
+
 ### Memory & Knowledge Management
 - **Always retrieve context** before starting complex tasks
 - **Store critical implementations** after successful completion

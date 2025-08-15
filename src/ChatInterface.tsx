@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useMutation, useAction, useQuery } from "convex/react";
+import { useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Id } from "../convex/_generated/dataModel";
 import { toast } from "sonner";
@@ -16,22 +16,20 @@ interface Message {
 
 interface ChatInterfaceProps {
   profileId: Id<"profiles">;
-  conversationId: Id<"conversations"> | null;
+  threadId: string | null; // Agent thread ID, not conversation ID
+  threadTitle?: string;
+  onThreadCreated?: (threadId: string, title: string) => void;
 }
 
-export function ChatInterface({ profileId, conversationId }: ChatInterfaceProps) {
+export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreated }: ChatInterfaceProps) {
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const messages = useQuery(
-    api.conversations.getMessages, 
-    conversationId ? { conversationId } : "skip"
-  );
-  const addMessage = useMutation(api.conversations.addMessage);
-  const processFinancialMessage = useAction(api.ai.processFinancialMessage);
-  const generateFinancialAdvice = useAction(api.ai.generateFinancialAdvice);
-  const getMonthlyBalance = useQuery(api.profiles.getMonthlyBalance, { profileId });
+  // Use agent actions directly
+  const startFinancialConversation = useAction(api.agents.startFinancialConversation);
+  const continueFinancialConversation = useAction(api.agents.continueFinancialConversation);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,62 +40,61 @@ export function ChatInterface({ profileId, conversationId }: ChatInterfaceProps)
   }, [messages]);
 
   const processMessage = async (messageText: string) => {
-    if (!conversationId) {
-      toast.error("Please start a new conversation first");
-      return;
-    }
-
     setIsProcessing(true);
 
     try {
-      // Add user message
-      await addMessage({
-        conversationId,
+      // Add user message to local state immediately for UI responsiveness
+      const userMessage: Message = {
+        _id: `user-${Date.now()}`,
         type: "user",
         content: messageText,
-      });
+        timestamp: Date.now(),
+      };
+      setMessages(prev => [...prev, userMessage]);
 
-      // Process the message with AI (this handles everything)
-      const result = await processFinancialMessage({
-        profileId,
-        message: messageText,
-      });
-
-      let assistantResponse = result.message;
-
-      // If data was added successfully, generate additional financial advice
-      if (result.success && result.itemsProcessed.incomes + result.itemsProcessed.expenses + result.itemsProcessed.loans > 0) {
-        try {
-          if (getMonthlyBalance) {
-            const advice = await generateFinancialAdvice({
-              monthlyIncome: getMonthlyBalance.monthlyIncome,
-              monthlyExpenses: getMonthlyBalance.monthlyExpenses,
-              monthlyLoanPayments: getMonthlyBalance.monthlyLoanPayments,
-              balance: getMonthlyBalance.balance,
-              context: messageText,
-            });
-            assistantResponse += "\n\n💡 " + advice;
-          }
-        } catch (error) {
-          console.error("Error generating advice:", error);
-          // Don't fail the whole process if advice generation fails
+      let result;
+      
+      if (!threadId) {
+        // Start new conversation with agent
+        result = await startFinancialConversation({
+          profileId,
+          message: messageText,
+        });
+        
+        // Notify parent component about new thread creation
+        if (result.threadId && result.threadTitle && onThreadCreated) {
+          console.log("Calling onThreadCreated with:", { threadId: result.threadId, title: result.threadTitle });
+          onThreadCreated(result.threadId, result.threadTitle);
         }
+      } else {
+        // Continue existing conversation
+        result = await continueFinancialConversation({
+          threadId,
+          message: messageText,
+          profileId,
+        });
       }
 
-      // Add assistant response
-      await addMessage({
-        conversationId,
+      // Add assistant response to local state
+      const assistantMessage: Message = {
+        _id: `assistant-${Date.now()}`,
         type: "assistant",
-        content: assistantResponse,
-      });
+        content: result.response,
+        timestamp: Date.now(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
       console.error("Error processing message:", error);
-      await addMessage({
-        conversationId,
+      
+      // Add error message to local state
+      const errorMessage: Message = {
+        _id: `error-${Date.now()}`,
         type: "assistant",
         content: "Sorry, I encountered an error processing your message. Please try again or use voice recording or file upload!",
-      });
+        timestamp: Date.now(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsProcessing(false);
     }
@@ -120,28 +117,7 @@ export function ChatInterface({ profileId, conversationId }: ChatInterfaceProps)
     await processMessage(message);
   };
 
-  if (!conversationId) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full bg-gray-900 text-center p-8">
-        <div className="text-6xl mb-4">🐜</div>
-        <h3 className="text-xl font-semibold text-white mb-2">
-          Welcome to Fourmi Financial
-        </h3>
-        <p className="text-gray-400 mb-6">
-          Start a new conversation to begin managing your finances
-        </p>
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-left max-w-md">
-          <h4 className="font-semibold text-white mb-2">You can:</h4>
-          <ul className="text-sm text-gray-300 space-y-1">
-            <li>• Chat about your income and expenses</li>
-            <li>• Upload CSV files with financial data</li>
-            <li>• Use voice recording for hands-free input</li>
-            <li>• Get AI-powered financial insights</li>
-          </ul>
-        </div>
-      </div>
-    );
-  }
+  // Always show the chat interface - agent threads are created automatically
 
   return (
     <div className="flex flex-col h-full bg-gray-900">
@@ -149,10 +125,13 @@ export function ChatInterface({ profileId, conversationId }: ChatInterfaceProps)
       <div className="p-4 border-b border-gray-700 bg-gray-800">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <span className="text-2xl">🐜</span>
-          Chat with Fourmi
+          {threadTitle || "Chat with Fourmi"}
         </h3>
         <p className="text-sm text-gray-400 mt-1">
-          Tell me about your finances using text, voice, or files
+          {threadId ? 
+            "Continue your conversation with Fourmi" : 
+            "Tell me about your finances using text, voice, or files"
+          }
         </p>
       </div>
 
@@ -210,25 +189,25 @@ export function ChatInterface({ profileId, conversationId }: ChatInterfaceProps)
             onChange={(e) => setInput(e.target.value)}
             placeholder="Tell me about your finances..."
             className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
-            disabled={isProcessing || !conversationId}
+            disabled={isProcessing}
           />
           
           {/* Voice Recording Button */}
           <SpeechToText 
             onTranscript={handleVoiceTranscript}
-            disabled={isProcessing || !conversationId}
+            disabled={isProcessing}
           />
           
           {/* File Upload Button */}
           <FileUpload 
             profileId={profileId}
             onDataProcessed={handleFileProcessed}
-            disabled={!conversationId}
+            disabled={false}
           />
           
           <button
             type="submit"
-            disabled={!input.trim() || isProcessing || !conversationId}
+            disabled={!input.trim() || isProcessing}
             className="px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isProcessing ? "..." : "Send"}

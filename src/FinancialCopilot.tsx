@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { Id } from "../convex/_generated/dataModel";
 import { ProfileSetup } from "./ProfileSetup";
 import { ChatInterface } from "./ChatInterface";
 import { FinancialDashboard } from "./FinancialDashboard";
@@ -9,9 +8,9 @@ import { ConversationSidebar } from "./ConversationSidebar";
 
 export function FinancialCopilot() {
   const profile = useQuery(api.profiles.getUserProfile);
-  const [currentConversationId, setCurrentConversationId] = useState<Id<"conversations"> | null>(null);
-  
-  const createConversation = useMutation(api.conversations.createConversation);
+  const [currentThreadId, setCurrentThreadId] = useState<string | null>(null);
+  const [currentThreadTitle, setCurrentThreadTitle] = useState<string>("");
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
   if (profile === undefined) {
     return (
@@ -25,20 +24,24 @@ export function FinancialCopilot() {
     return <ProfileSetup />;
   }
 
-  const handleNewConversation = async () => {
-    try {
-      const conversationId = await createConversation({
-        profileId: profile._id,
-        title: `Chat ${new Date().toLocaleDateString()}`,
-      });
-      setCurrentConversationId(conversationId);
-    } catch (error) {
-      console.error("Failed to create conversation:", error);
-    }
+  const handleNewConversation = () => {
+    // Reset to null - new thread will be created automatically on first message
+    console.log("New conversation button clicked");
+    setCurrentThreadId(null);
+    setCurrentThreadTitle("");
   };
 
-  const handleConversationSelect = (conversationId: Id<"conversations">) => {
-    setCurrentConversationId(conversationId);
+  const handleThreadSelect = (threadId: string | null) => {
+    setCurrentThreadId(threadId);
+    // Title will be updated when thread is loaded
+  };
+
+  const handleThreadCreated = (threadId: string, title: string) => {
+    console.log("Thread created:", { threadId, title });
+    setCurrentThreadId(threadId);
+    setCurrentThreadTitle(title);
+    // Trigger sidebar refresh to show new thread
+    setRefreshTrigger(prev => prev + 1);
   };
 
   return (
@@ -46,16 +49,19 @@ export function FinancialCopilot() {
       {/* Conversation Sidebar */}
       <ConversationSidebar
         profileId={profile._id}
-        currentConversationId={currentConversationId}
-        onConversationSelect={handleConversationSelect}
+        currentThreadId={currentThreadId}
+        onThreadSelect={handleThreadSelect}
         onNewConversation={handleNewConversation}
+        refreshTrigger={refreshTrigger}
       />
       
       {/* Chat Interface */}
       <div className="flex-1 border-r border-gray-700">
         <ChatInterface 
           profileId={profile._id} 
-          conversationId={currentConversationId}
+          threadId={currentThreadId}
+          threadTitle={currentThreadTitle}
+          onThreadCreated={handleThreadCreated}
         />
       </div>
       

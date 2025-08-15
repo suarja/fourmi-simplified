@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
@@ -24,6 +24,7 @@ export const createConversation = mutation({
       title: args.title,
       created: Date.now(),
       lastMessage: Date.now(),
+      // agentThreadId will be created when first message is sent
     });
 
     return conversationId;
@@ -121,3 +122,83 @@ export const getMessages = query({
       .collect();
   },
 });
+
+export const getConversation = query({
+  args: {
+    conversationId: v.id("conversations"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
+    const profile = await ctx.db.get(conversation.profileId);
+    if (!profile || profile.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    return conversation;
+  },
+});
+
+export const updateConversationThread = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+    agentThreadId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
+    const profile = await ctx.db.get(conversation.profileId);
+    if (!profile || profile.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    await ctx.db.patch(args.conversationId, {
+      agentThreadId: args.agentThreadId,
+    });
+  },
+});
+
+export const updateLastMessage = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
+    const profile = await ctx.db.get(conversation.profileId);
+    if (!profile || profile.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    await ctx.db.patch(args.conversationId, {
+      lastMessage: Date.now(),
+    });
+  },
+});
+
+// Legacy conversation system - now only used for organization
+// Agent threads handle the actual conversation flow

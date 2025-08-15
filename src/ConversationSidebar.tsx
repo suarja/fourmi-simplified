@@ -1,31 +1,79 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useState, useEffect } from "react";
+import { useQuery, useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { Id } from "../convex/_generated/dataModel";
+import { toast } from "sonner";
 
 interface ConversationSidebarProps {
-  profileId: Id<"profiles">;
-  currentConversationId: Id<"conversations"> | null;
-  onConversationSelect: (conversationId: Id<"conversations">) => void;
+  profileId: string;
+  currentThreadId: string | null;
+  onThreadSelect: (threadId: string | null) => void;
   onNewConversation: () => void;
+  refreshTrigger?: number; // Used to trigger refresh when new threads are created
 }
 
 export function ConversationSidebar({ 
   profileId, 
-  currentConversationId, 
-  onConversationSelect, 
-  onNewConversation 
+  currentThreadId, 
+  onThreadSelect, 
+  onNewConversation,
+  refreshTrigger
 }: ConversationSidebarProps) {
-  const conversations = useQuery(api.conversations.getConversations, { profileId });
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-  if (!conversations) {
-    return (
-      <div className="w-64 bg-gray-800 border-r border-gray-700 p-4">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  const [deletingThreadId, setDeletingThreadId] = useState<string | null>(null);
+  const [threads, setThreads] = useState<any[]>([]);
+  const [loadingThreads, setLoadingThreads] = useState(true);
+  
+  // Use action to get thread data
+  const listUserThreads = useAction(api.threads.listUserThreads);
+  const deleteThread = useAction(api.threads.deleteThread);
+  
+  // Load threads on component mount and when dependencies change
+  const loadThreads = async () => {
+    try {
+      setLoadingThreads(true);
+      console.log("Loading threads...");
+      const threadList = await listUserThreads();
+      console.log("Loaded threads:", threadList);
+      setThreads(threadList || []);
+    } catch (error) {
+      console.error("Error loading threads:", error);
+      setThreads([]);
+    } finally {
+      setLoadingThreads(false);
+    }
+  };
+  
+  // Load threads on mount and when refresh trigger changes
+  useEffect(() => {
+    loadThreads();
+  }, [refreshTrigger]); // Remove listUserThreads from deps to avoid infinite loop
+  
+  const handleDeleteThread = async (threadId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent thread selection
+    
+    if (!confirm("Are you sure you want to delete this conversation?")) {
+      return;
+    }
+    
+    setDeletingThreadId(threadId);
+    try {
+      await deleteThread({ threadId });
+      toast.success("Conversation deleted");
+      
+      // Refresh thread list
+      await loadThreads();
+      
+      // If we deleted the current thread, clear selection
+      if (threadId === currentThreadId) {
+        onThreadSelect(null);
+      }
+    } catch (error) {
+      console.error("Error deleting thread:", error);
+      toast.error("Failed to delete conversation");
+    } finally {
+      setDeletingThreadId(null);
+    }
+  };
 
   return (
     <div className={`${isCollapsed ? 'w-12' : 'w-64'} bg-gray-800 border-r border-gray-700 transition-all duration-200`}>
@@ -33,7 +81,7 @@ export function ConversationSidebar({
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           {!isCollapsed && (
-            <h3 className="text-lg font-semibold text-white">Conversations</h3>
+            <h3 className="text-lg font-semibold text-white">Chats</h3>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -63,33 +111,64 @@ export function ConversationSidebar({
               New Chat
             </button>
 
-            {/* Conversations List */}
+            {/* Threads List */}
             <div className="space-y-2">
-              {conversations.map((conversation) => (
-                <button
-                  key={conversation._id}
-                  onClick={() => onConversationSelect(conversation._id)}
-                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                    currentConversationId === conversation._id
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white'
-                  }`}
-                >
-                  <div className="font-medium truncate">{conversation.title}</div>
-                  <div className="text-xs opacity-70 mt-1">
-                    {new Date(conversation.lastMessage).toLocaleDateString()}
-                  </div>
-                </button>
-              ))}
+              {loadingThreads ? (
+                // Loading state
+                <div className="space-y-2">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="bg-gray-700 rounded-lg p-3">
+                      <div className="h-4 bg-gray-600 rounded animate-pulse mb-2"></div>
+                      <div className="h-3 bg-gray-600 rounded animate-pulse w-1/2"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : threads && threads.length > 0 ? (
+                // Show actual threads
+                threads
+                  .sort((a, b) => (b.lastUpdateTime || b.creationTime) - (a.lastUpdateTime || a.creationTime))
+                  .map((thread) => (
+                    <div key={thread.threadId} className="relative group">
+                      <button
+                        onClick={() => onThreadSelect(thread.threadId)}
+                        className={`w-full text-left p-3 rounded-lg transition-colors ${
+                          currentThreadId === thread.threadId
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white'
+                        }`}
+                      >
+                        <div className="font-medium truncate pr-6">{thread.title}</div>
+                        <div className="text-xs opacity-70 mt-1">
+                          {new Date(thread.lastUpdateTime || thread.creationTime).toLocaleDateString()}
+                        </div>
+                      </button>
+                      
+                      {/* Delete button */}
+                      <button
+                        onClick={(e) => handleDeleteThread(thread.threadId, e)}
+                        disabled={deletingThreadId === thread.threadId}
+                        className="absolute top-2 right-2 p-1 rounded hover:bg-red-600 text-gray-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+                        title="Delete conversation"
+                      >
+                        {deletingThreadId === thread.threadId ? (
+                          <div className="w-4 h-4 animate-spin border-2 border-white border-t-transparent rounded-full"></div>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  ))
+              ) : (
+                // Empty state
+                <div className="text-center text-gray-400 py-8">
+                  <div className="text-4xl mb-2">💬</div>
+                  <p className="text-sm">No conversations yet</p>
+                  <p className="text-xs mt-1">Start a new chat to begin</p>
+                </div>
+              )}
             </div>
-
-            {conversations.length === 0 && (
-              <div className="text-center text-gray-400 py-8">
-                <div className="text-4xl mb-2">💬</div>
-                <p className="text-sm">No conversations yet</p>
-                <p className="text-xs mt-1">Start a new chat to begin</p>
-              </div>
-            )}
           </>
         )}
       </div>

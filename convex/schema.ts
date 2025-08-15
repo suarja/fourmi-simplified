@@ -15,7 +15,10 @@ const applicationTables = {
     title: v.string(),
     created: v.number(),
     lastMessage: v.number(),
-  }).index("by_profile", ["profileId"]),
+    // Agent threads replace the need for manual message storage
+    agentThreadId: v.optional(v.string()), // Link to agent thread
+  }).index("by_profile", ["profileId"])
+    .index("by_agent_thread", ["agentThreadId"]),
 
   messages: defineTable({
     conversationId: v.id("conversations"),
