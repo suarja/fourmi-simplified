@@ -1,11 +1,12 @@
 // Financial tools for Convex Agents using correct createTool syntax
-// Ports the sophisticated parsing logic from convex/ai.ts
+// Integrates with validation layer for duplicate detection
 
 import { createTool } from "@convex-dev/agent";
 import { z } from "zod";
 import { api } from "../_generated/api";
 import { ExtractFinancialDataSchemaReturnType, FinancialDataSchema, GenerateFinancialAdviceSchemaReturnType, GetFinancialSummarySchemaReturnType } from "../domain/finance.type";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { isDuplicateIncome, isDuplicateExpense, isDuplicateLoan } from "../lib/validation";
 
 
 
@@ -78,66 +79,106 @@ Provide a summary of what was extracted and processed.`,
       const extractedData = result.object;
       const responses: string[] = [];
       let hasAddedData = false;
+      let pendingCount = 0;
+      let duplicateCount = 0;
 
-      // Add incomes to database (exact same logic)
+      // Get existing data to check for duplicates
+      const financialData = await ctx.runQuery(api.profiles.getFinancialData, {
+        profileId: userProfile._id,
+      });
+
+      // Process incomes with duplicate checking
       for (const income of extractedData.incomes) {
         try {
-          await ctx.runMutation(api.profiles.addIncome, {
-            profileId: userProfile._id,
-            label: income.label,
-            amount: income.amount,
-            isMonthly: income.isMonthly,
-          });
-          responses.push(`✅ Added income: ${income.label} - €${income.amount}${income.isMonthly ? '/month' : '/year'}`);
-          hasAddedData = true;
+          // Check for duplicates
+          if (isDuplicateIncome(income, financialData.incomes)) {
+            responses.push(`⚠️ Duplicate detected: ${income.label} - €${income.amount} (already exists)`);
+            duplicateCount++;
+          } else {
+            // Create pending fact for validation
+            await ctx.runMutation(api.domain.facts.createPendingFact, {
+              profileId: userProfile._id,
+              type: "income",
+              data: income,
+              extractedFrom: message,
+              confidence: 0.8,
+            });
+            responses.push(`⏳ Pending confirmation: ${income.label} - €${income.amount}${income.isMonthly ? '/month' : '/year'}`);
+            pendingCount++;
+            hasAddedData = true;
+          }
         } catch (error) {
-          console.error("Failed to add income:", error);
-          responses.push(`❌ Failed to add income: ${income.label}`);
+          console.error("Failed to process income:", error);
+          responses.push(`❌ Failed to process income: ${income.label}`);
         }
       }
 
-      // Add expenses to database (exact same logic)
+      // Process expenses with duplicate checking
       for (const expense of extractedData.expenses) {
         try {
-          await ctx.runMutation(api.profiles.addExpense, {
-            profileId: userProfile._id,
-            category: expense.category,
-            label: expense.label,
-            amount: expense.amount,
-          });
-          responses.push(`✅ Added expense: ${expense.label} (${expense.category}) - €${expense.amount}/month`);
-          hasAddedData = true;
+          // Check for duplicates
+          if (isDuplicateExpense(expense, financialData.expenses)) {
+            responses.push(`⚠️ Duplicate detected: ${expense.label} - €${expense.amount} (already exists)`);
+            duplicateCount++;
+          } else {
+            // Create pending fact for validation
+            await ctx.runMutation(api.domain.facts.createPendingFact, {
+              profileId: userProfile._id,
+              type: "expense",
+              data: expense,
+              extractedFrom: message,
+              confidence: 0.8,
+            });
+            responses.push(`⏳ Pending confirmation: ${expense.label} (${expense.category}) - €${expense.amount}/month`);
+            pendingCount++;
+            hasAddedData = true;
+          }
         } catch (error) {
-          console.error("Failed to add expense:", error);
-          responses.push(`❌ Failed to add expense: ${expense.label}`);
+          console.error("Failed to process expense:", error);
+          responses.push(`❌ Failed to process expense: ${expense.label}`);
         }
       }
 
-      // Add loans to database (exact same logic)
+      // Process loans with duplicate checking
       for (const loan of extractedData.loans) {
         try {
-          await ctx.runMutation(api.profiles.addLoan, {
-            profileId: userProfile._id,
-            type: loan.type,
-            name: loan.name,
-            monthlyPayment: loan.monthlyPayment,
-            interestRate: loan.interestRate,
-            remainingBalance: loan.remainingBalance,
-            remainingMonths: loan.remainingMonths,
-          });
-          responses.push(`✅ Added loan: ${loan.name} - €${loan.monthlyPayment}/month`);
-          hasAddedData = true;
+          // Check for duplicates
+          if (isDuplicateLoan(loan, financialData.loans)) {
+            responses.push(`⚠️ Duplicate detected: ${loan.name} - €${loan.monthlyPayment}/month (already exists)`);
+            duplicateCount++;
+          } else {
+            // Create pending fact for validation
+            await ctx.runMutation(api.domain.facts.createPendingFact, {
+              profileId: userProfile._id,
+              type: "loan",
+              data: loan,
+              extractedFrom: message,
+              confidence: 0.8,
+            });
+            responses.push(`⏳ Pending confirmation: ${loan.name} - €${loan.monthlyPayment}/month`);
+            pendingCount++;
+            hasAddedData = true;
+          }
         } catch (error) {
-          console.error("Failed to add loan:", error);
-          responses.push(`❌ Failed to add loan: ${loan.name}`);
+          console.error("Failed to process loan:", error);
+          responses.push(`❌ Failed to process loan: ${loan.name}`);
         }
       }
 
-      // Return the exact same response format
-      if (hasAddedData) {
+      // Return response with validation info
+      if (hasAddedData || duplicateCount > 0) {
+        let finalMessage = responses.join("\n");
+        if (pendingCount > 0) {
+          finalMessage += `\n\n📝 **${pendingCount} item${pendingCount > 1 ? 's' : ''} pending confirmation**\nPlease check your dashboard to confirm or reject.`;
+        }
+        if (duplicateCount > 0) {
+          finalMessage += `\n\n⚠️ **${duplicateCount} duplicate${duplicateCount > 1 ? 's' : ''} detected**\nThese items already exist in your profile.`;
+        }
+        finalMessage += "\n\n" + extractedData.summary;
+        
         return {
           success: true,
-          message: responses.join("\n") + "\n\n" + extractedData.summary,
+          message: finalMessage,
           itemsProcessed: {
             incomes: extractedData.incomes.length,
             expenses: extractedData.expenses.length,

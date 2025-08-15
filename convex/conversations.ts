@@ -1,4 +1,10 @@
- import { mutation, query } from "./_generated/server";
+ /**
+ * @deprecated This file is deprecated and will be removed.
+ * Use agent threads via convex/agents.ts instead.
+ * Migration in progress - see docs/technical/MIGRATION.md
+ */
+
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 

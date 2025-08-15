@@ -19,7 +19,6 @@ import { calculateConfidence } from "../lib/extraction";
 export const createPendingFact = mutation({
   args: {
     profileId: v.id("profiles"),
-    conversationId: v.id("conversations"),
     type: v.union(v.literal("income"), v.literal("expense"), v.literal("loan")),
     data: v.any(),
     extractedFrom: v.string(),
@@ -86,7 +85,6 @@ export const createPendingFact = mutation({
 
     return await ctx.db.insert("pendingFacts", {
       profileId: args.profileId,
-      conversationId: args.conversationId,
       type: args.type,
       data: args.data,
       confidence: finalConfidence,
@@ -105,7 +103,6 @@ export const createPendingFact = mutation({
 export const getPendingFacts = query({
   args: {
     profileId: v.id("profiles"),
-    conversationId: v.optional(v.id("conversations")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -117,17 +114,11 @@ export const getPendingFacts = query({
       throw new Error("Profile not found or access denied");
     }
 
-    let query = ctx.db
+    return await ctx.db
       .query("pendingFacts")
       .withIndex("by_profile", (q) => q.eq("profileId", args.profileId))
-      .filter((q) => q.eq(q.field("status"), "pending"));
-
-    if (args.conversationId) {
-      const facts = await query.collect();
-      return facts.filter(f => f.conversationId === args.conversationId);
-    }
-
-    return await query.collect();
+      .filter((q) => q.eq(q.field("status"), "pending"))
+      .collect();
   },
 });
 

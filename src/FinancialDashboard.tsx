@@ -1,7 +1,8 @@
-import { useQuery, useAction } from "convex/react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Id } from "../convex/_generated/dataModel";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 interface FinancialDashboardProps {
   profileId: Id<"profiles">;
@@ -10,6 +11,7 @@ interface FinancialDashboardProps {
 export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
   const financialData = useQuery(api.profiles.getFinancialData, { profileId });
   const monthlyBalance = useQuery(api.profiles.getMonthlyBalance, { profileId });
+  const pendingFacts = useQuery(api.domain.facts.getPendingFacts, { profileId });
   const generateBudgetInsights = useAction(api.ai.generateBudgetInsights);
   
   const [insights, setInsights] = useState<string>("");
@@ -70,6 +72,13 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
       </div>
 
       <div className="p-6 space-y-6">
+        {/* Pending Facts Card */}
+        {pendingFacts && pendingFacts.length > 0 && (
+          <PendingFactsCard 
+            facts={pendingFacts} 
+            profileId={profileId}
+          />
+        )}
         {/* Monthly Balance Card */}
         <div className={`rounded-lg p-6 border ${
           monthlyBalance.isPositive 
@@ -136,12 +145,19 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
             </h4>
             <div className="space-y-3">
               {financialData.incomes.map((income) => (
-                <div key={income._id} className="flex justify-between items-center">
+                <div key={income._id} className="flex justify-between items-center group">
                   <span className="text-gray-300">{income.label}</span>
-                  <span className="text-green-400 font-semibold">
-                    {formatCurrency(income.amount / 100)}
-                    {income.isMonthly ? '/month' : '/year'}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-400 font-semibold">
+                      {formatCurrency(income.amount / 100)}
+                      {income.isMonthly ? '/month' : '/year'}
+                    </span>
+                    <DeleteButton 
+                      itemId={income._id} 
+                      itemType="income" 
+                      itemLabel={income.label}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -156,12 +172,22 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
               Monthly Expenses
             </h4>
             <div className="space-y-3">
-              {Object.entries(expensesByCategory).map(([category, amount]) => (
-                <div key={category} className="flex justify-between items-center">
-                  <span className="text-gray-300">{category}</span>
-                  <span className="text-red-400 font-semibold">
-                    {formatCurrency(amount)}
-                  </span>
+              {financialData.expenses.map((expense) => (
+                <div key={expense._id} className="flex justify-between items-center group">
+                  <div>
+                    <span className="text-gray-300">{expense.label}</span>
+                    <span className="text-gray-500 text-sm ml-2">({expense.category})</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-400 font-semibold">
+                      {formatCurrency(expense.amount / 100)}
+                    </span>
+                    <DeleteButton 
+                      itemId={expense._id} 
+                      itemType="expense" 
+                      itemLabel={expense.label}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -180,9 +206,16 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
                 <div key={loan._id} className="border border-gray-600 rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h5 className="font-semibold text-white">{loan.name}</h5>
-                    <span className="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">
-                      {loan.type.replace('_', ' ').toUpperCase()}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">
+                        {loan.type.replace('_', ' ').toUpperCase()}
+                      </span>
+                      <DeleteButton 
+                        itemId={loan._id} 
+                        itemType="loan" 
+                        itemLabel={loan.name}
+                      />
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -241,5 +274,147 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
         )}
       </div>
     </div>
+  );
+}
+
+// Pending Facts Card Component
+function PendingFactsCard({ facts, profileId }: { 
+  facts: any[]; 
+  profileId: Id<"profiles">;
+}) {
+  const confirmFact = useMutation(api.domain.facts.confirmPendingFact);
+  const rejectFact = useMutation(api.domain.facts.rejectPendingFact);
+  const [processingId, setProcessingId] = useState<string | null>(null);
+
+  const handleConfirm = async (factId: string) => {
+    setProcessingId(factId);
+    try {
+      await confirmFact({ factId: factId as Id<"pendingFacts"> });
+      toast.success("Data confirmed and added");
+    } catch (error) {
+      console.error("Error confirming fact:", error);
+      toast.error("Failed to confirm data");
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const handleReject = async (factId: string) => {
+    setProcessingId(factId);
+    try {
+      await rejectFact({ factId: factId as Id<"pendingFacts"> });
+      toast.success("Data rejected");
+    } catch (error) {
+      console.error("Error rejecting fact:", error);
+      toast.error("Failed to reject data");
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const formatFactDisplay = (fact: any) => {
+    if (fact.type === "income") {
+      return `${fact.data.label}: €${fact.data.amount}${fact.data.isMonthly ? '/month' : '/year'}`;
+    } else if (fact.type === "expense") {
+      return `${fact.data.label} (${fact.data.category}): €${fact.data.amount}/month`;
+    } else if (fact.type === "loan") {
+      return `${fact.data.name}: €${fact.data.monthlyPayment}/month`;
+    }
+    return "Unknown data";
+  };
+
+  return (
+    <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xl">⏳</span>
+        <h4 className="text-lg font-semibold text-white">Pending Confirmation</h4>
+        <span className="text-sm text-yellow-400">({facts.length} item{facts.length > 1 ? 's' : ''})</span>
+      </div>
+      <div className="space-y-3">
+        {facts.map((fact) => (
+          <div key={fact._id} className="flex items-center justify-between bg-gray-800/50 rounded-lg p-3">
+            <div className="flex-1">
+              <div className="text-white font-medium">
+                {fact.type.charAt(0).toUpperCase() + fact.type.slice(1)}: {formatFactDisplay(fact)}
+              </div>
+              {fact.suggestedAction === "skip" && (
+                <div className="text-yellow-400 text-sm mt-1">⚠️ Possible duplicate detected</div>
+              )}
+              <div className="text-gray-400 text-xs mt-1">
+                Confidence: {Math.round(fact.confidence * 100)}%
+              </div>
+            </div>
+            <div className="flex gap-2 ml-4">
+              <button
+                onClick={() => handleConfirm(fact._id)}
+                disabled={processingId === fact._id}
+                className="px-3 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-sm transition-colors disabled:opacity-50"
+              >
+                {processingId === fact._id ? "..." : "✓ Confirm"}
+              </button>
+              <button
+                onClick={() => handleReject(fact._id)}
+                disabled={processingId === fact._id}
+                className="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-sm transition-colors disabled:opacity-50"
+              >
+                {processingId === fact._id ? "..." : "✗ Reject"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Delete button component
+function DeleteButton({ itemId, itemType, itemLabel }: { 
+  itemId: string; 
+  itemType: "income" | "expense" | "loan";
+  itemLabel: string;
+}) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deleteIncome = useMutation(api.domain.transactions.deleteIncome);
+  const deleteExpense = useMutation(api.domain.transactions.deleteExpense);
+  const deleteLoan = useMutation(api.domain.transactions.deleteLoan);
+
+  const handleDelete = async () => {
+    if (!confirm(`Delete ${itemType} "${itemLabel}"?`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      if (itemType === "income") {
+        await deleteIncome({ incomeId: itemId as Id<"incomes"> });
+      } else if (itemType === "expense") {
+        await deleteExpense({ expenseId: itemId as Id<"expenses"> });
+      } else if (itemType === "loan") {
+        await deleteLoan({ loanId: itemId as Id<"loans"> });
+      }
+      toast.success(`${itemType} deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting ${itemType}:`, error);
+      toast.error(`Failed to delete ${itemType}`);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      disabled={isDeleting}
+      className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-600/20 text-red-400 hover:text-red-300 transition-all"
+      title={`Delete ${itemType}`}
+    >
+      {isDeleting ? (
+        <div className="w-4 h-4 animate-spin border-2 border-red-400 border-t-transparent rounded-full" />
+      ) : (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      )}
+    </button>
   );
 }

@@ -58,7 +58,6 @@ const applicationTables = {
 
   pendingFacts: defineTable({
     profileId: v.id("profiles"),
-    conversationId: v.id("conversations"),
     type: v.union(v.literal("income"), v.literal("expense"), v.literal("loan")),
     data: v.any(), // Structured data based on type
     confidence: v.number(), // 0-1 confidence score
@@ -69,7 +68,6 @@ const applicationTables = {
     created: v.number(),
     reviewed: v.optional(v.number()),
   }).index("by_profile", ["profileId"])
-    .index("by_conversation", ["conversationId"])
     .index("by_status", ["status"]),
 };
 

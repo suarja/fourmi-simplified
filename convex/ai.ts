@@ -1,3 +1,9 @@
+/**
+ * @deprecated This file is deprecated and will be removed.
+ * Use convex/agents.ts and convex/agents/financialTools.ts instead.
+ * Migration in progress - see docs/technical/MIGRATION.md
+ */
+
 "use node";
 
 import { action } from "./_generated/server";
