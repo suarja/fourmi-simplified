@@ -5,6 +5,8 @@ import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { components } from "./_generated/api";
 import { financialAgent } from "./agents";
+import { Doc } from "./_generated/dataModel";
+
 
 // List all threads for the authenticated user
 export const listUserThreads = action({
@@ -17,7 +19,7 @@ export const listUserThreads = action({
 
     try {
       // Query threads using Convex Agents API
-      const threads: any = await ctx.runQuery(
+      const threads  = await ctx.runQuery(
         components.agent.threads.listThreadsByUserId,
         { 
           userId: userId,
@@ -70,12 +72,15 @@ export const getThreadMessages = action({
         paginationOpts: { cursor: null, numItems: 100 } // Get all messages for chat interface
       });
 
-      return messages.page.map((message: any) => ({
-        id: message._id,
-        type: message.type,
-        content: message.content,
-        timestamp: message._creationTime,
-      }));
+      return messages.page.map((message: any) => {
+        console.log("Raw message from thread:", JSON.stringify(message, null, 2));
+        return {
+          id: message._id,
+          type: message.role || message.type, // Agent messages use 'role'
+          content: message.content || message.text || "", // Handle different content fields
+          timestamp: message._creationTime,
+        };
+      });
     } catch (error) {
       console.error("Error getting thread messages:", error);
       return [];
@@ -101,11 +106,15 @@ export const updateThreadMetadata = action({
       const { thread } = await financialAgent.continueThread(ctx, { threadId });
       
       // Update metadata
-      const updateData: any = {};
+      const updateData: { title?: string; summary?: string; status?: string } = {};
       if (title !== undefined) updateData.title = title;
       if (summary !== undefined) updateData.summary = summary;
       
-      await thread.updateMetadata({ patch: updateData });
+      await thread.updateMetadata({
+        title: title,
+        summary: summary,
+        status: "active",
+      });
       
       return { success: true };
     } catch (error) {

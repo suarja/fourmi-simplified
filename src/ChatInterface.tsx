@@ -114,14 +114,34 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
         });
       }
 
-      // Add assistant response to local state
-      const assistantMessage: Message = {
-        _id: `assistant-${Date.now()}`,
-        type: "assistant",
-        content: result.response,
-        timestamp: Date.now(),
-      };
-      setMessages(prev => [...prev, assistantMessage]);
+      // Reload messages from thread to ensure persistence
+      if (result.threadId) {
+        // If a new thread was created, we'll get the threadId
+        // The parent will handle updating the threadId via onThreadCreated
+        // Messages will reload via useEffect when threadId changes
+      } else if (threadId) {
+        // For existing threads, reload messages immediately
+        try {
+          const updatedMessages = await getThreadMessages({ threadId });
+          const convertedMessages: Message[] = updatedMessages.map((msg: any) => ({
+            _id: msg.id,
+            type: msg.type,
+            content: msg.content,
+            timestamp: msg.timestamp,
+          }));
+          setMessages(convertedMessages);
+        } catch (error) {
+          console.error("Error reloading messages:", error);
+          // Fallback: add to local state if reload fails
+          const assistantMessage: Message = {
+            _id: `assistant-${Date.now()}`,
+            type: "assistant",
+            content: result.response,
+            timestamp: Date.now(),
+          };
+          setMessages(prev => [...prev, assistantMessage]);
+        }
+      }
 
     } catch (error) {
       console.error("Error processing message:", error);

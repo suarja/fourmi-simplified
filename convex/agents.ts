@@ -13,7 +13,7 @@ import {
 } from "./agents/financialTools";
 
 // DECLARE AGENT AT MODULE LEVEL - Exportable for playground integration
-export const financialAgent: any = new Agent(components.agent, {
+export const financialAgent = new Agent(components.agent, {
   name: "Fourmi Financial Copilot",
   chat: openai("gpt-4o"),
   tools: {
@@ -44,7 +44,7 @@ Your mission is to help users track their financial information and make informe
 });
 
 // Action to start a conversation - Uses the existing agent
-export const startFinancialConversation: any = action({
+export const startFinancialConversation = action({
   args: {
     profileId: v.id("profiles"),
     message: v.string(),
@@ -57,7 +57,7 @@ export const startFinancialConversation: any = action({
     }
 
     // Verify profile belongs to user
-    const profile: any = await ctx.runQuery(api.profiles.getUserProfile);
+    const profile = await ctx.runQuery(api.profiles.getUserProfile);
     if (!profile || profile.userId !== userId) {
       throw new Error("Profile not found or access denied");
     }
@@ -73,8 +73,20 @@ export const startFinancialConversation: any = action({
       summary: `Financial conversation started with: ${message.substring(0, 100)}...`,
     });
     
+    // Manually save user message to ensure persistence
+    await thread.saveMessage({
+      role: "user",
+      content: message,
+    });
+    
     const response = await thread.generateText({
       prompt: message,
+    });
+    
+    // Manually save assistant response to ensure persistence
+    await thread.saveMessage({
+      role: "assistant", 
+      content: response.text,
     });
 
     return {
@@ -109,8 +121,20 @@ export const continueFinancialConversation = action({
     // Use the existing agent - continue existing thread
     const { thread } = await financialAgent.continueThread(ctx, { threadId });
     
+    // Manually save user message to ensure persistence
+    await thread.saveMessage({
+      role: "user",
+      content: message,
+    });
+    
     const response = await thread.generateText({
       prompt: message,
+    });
+    
+    // Manually save assistant response to ensure persistence  
+    await thread.saveMessage({
+      role: "assistant",
+      content: response.text,
     });
 
     return {
