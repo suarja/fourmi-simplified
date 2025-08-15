@@ -41,6 +41,7 @@ export const processFinancialMessage = action({
       // Use AI to extract and process financial data
       const result = await generateObject({
         model: openai("gpt-4o"),
+        mode: "json",
         prompt: `You are a financial data extraction expert. Extract ALL financial information from this message and save it to the user's profile.
 
 User message: "${args.message}"
@@ -79,6 +80,7 @@ Examples:
 
 Provide a summary of what was extracted and processed.`,
         schema: FinancialDataSchema,
+        schemaName: "FinancialData",
       });
 
       console.log("✅ AI extracted data:", JSON.stringify(result.object, null, 2));
@@ -203,6 +205,7 @@ export const processFinancialFile = action({
       // Use AI to process the file content
       const result = await generateObject({
         model: openai("gpt-4o"),
+        mode: "json",
         prompt: `You are a financial data extraction expert. Parse this CSV/TSV file and extract ALL financial information.
 
 File name: ${args.fileName}
@@ -236,6 +239,7 @@ EXTRACT EVERYTHING - Don't be conservative! Every number that could be money sho
 
 Provide a detailed summary of what was processed from the file.`,
         schema: FinancialDataSchema,
+        schemaName: "FinancialData",
       });
 
       console.log("✅ AI processed file data:", JSON.stringify(result.object, null, 2));
