@@ -75,8 +75,8 @@ export function ConversationSidebar({
   };
 
   return (
-    <div className="h-full bg-gray-900 flex flex-col">
-      <div className="p-4 flex-1 overflow-y-auto">
+    <div className="h-full flex flex-col">
+      <div className="p-5 flex-1 overflow-y-auto">
         {/* Header */}
         <div className="mb-4">
           <h3 className="text-lg font-semibold text-white">Chats</h3>
@@ -84,7 +84,7 @@ export function ConversationSidebar({
             {/* New Conversation Button */}
             <button
               onClick={onNewConversation}
-              className="w-full mb-4 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors flex items-center gap-2"
+              className="w-full mb-4 px-4 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white font-medium transition-all flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -98,9 +98,9 @@ export function ConversationSidebar({
                 // Loading state
                 <div className="space-y-2">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-gray-700 rounded-lg p-3">
-                      <div className="h-4 bg-gray-600 rounded animate-pulse mb-2"></div>
-                      <div className="h-3 bg-gray-600 rounded animate-pulse w-1/2"></div>
+                    <div key={i} className="bg-black/20 rounded-xl p-3">
+                      <div className="h-4 bg-white/10 rounded animate-pulse mb-2"></div>
+                      <div className="h-3 bg-white/10 rounded animate-pulse w-1/2"></div>
                     </div>
                   ))}
                 </div>
@@ -114,14 +114,14 @@ export function ConversationSidebar({
                     <div key={thread.threadId} className="relative group">
                       <button
                         onClick={() => onThreadSelect(thread.threadId, thread.title)}
-                        className={`w-full text-left p-3 rounded-lg transition-colors ${
+                        className={`w-full text-left p-3 rounded-xl transition-all ${
                           currentThreadId === thread.threadId
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white'
+                            ? 'bg-primary text-white'
+                            : 'bg-black/20 hover:bg-white/[0.05] text-gray-300 hover:text-white'
                         }`}
                       >
                         <div className="font-medium truncate pr-6">{thread.title}</div>
-                        <div className="text-xs opacity-70 mt-1">
+                        <div className="text-xs opacity-60 mt-1">
                           {new Date(thread.lastUpdateTime || thread.creationTime).toLocaleDateString()}
                         </div>
                       </button>
@@ -130,7 +130,7 @@ export function ConversationSidebar({
                       <button
                         onClick={(e) => handleDeleteThread(thread.threadId, e)}
                         disabled={deletingThreadId === thread.threadId}
-                        className="absolute top-2 right-2 p-1 rounded hover:bg-red-600 text-gray-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+                        className="absolute top-2 right-2 p-1 rounded-lg hover:bg-financial-danger/20 text-white/40 hover:text-financial-danger transition-all opacity-0 group-hover:opacity-100"
                         title="Delete conversation"
                       >
                         {deletingThreadId === thread.threadId ? (

@@ -122,34 +122,36 @@ export function FinancialCopilot() {
   return (
     <div className="relative h-full">
       {/* Sidebar Overlay */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 border-r border-gray-700 transform transition-transform duration-300 ${
+      <div className={`fixed inset-y-0 left-0 z-[80] w-64 transform transition-transform duration-300 ${
         sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'
       }`}>
-        <ConversationSidebar
-          profileId={profile._id}
-          currentThreadId={currentThreadId}
-          onThreadSelect={(threadId, title) => {
-            handleThreadSelect(threadId, title);
-            // Auto-collapse on tablet, stay open on desktop
-            if (isTablet) {
-              setSidebarCollapsed(true);
-            }
-          }}
-          onNewConversation={() => {
-            handleNewConversation();
-            // Auto-collapse on tablet, stay open on desktop
-            if (isTablet) {
-              setSidebarCollapsed(true);
-            }
-          }}
-          refreshTrigger={refreshTrigger}
-        />
+        <div className="h-full bg-white/[0.03] backdrop-blur-2xl m-4 rounded-3xl overflow-hidden">
+          <ConversationSidebar
+            profileId={profile._id}
+            currentThreadId={currentThreadId}
+            onThreadSelect={(threadId, title) => {
+              handleThreadSelect(threadId, title);
+              // Auto-collapse on tablet, stay open on desktop
+              if (isTablet) {
+                setSidebarCollapsed(true);
+              }
+            }}
+            onNewConversation={() => {
+              handleNewConversation();
+              // Auto-collapse on tablet, stay open on desktop
+              if (isTablet) {
+                setSidebarCollapsed(true);
+              }
+            }}
+            refreshTrigger={refreshTrigger}
+          />
+        </div>
       </div>
 
       {/* Backdrop */}
       {!sidebarCollapsed && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[70]"
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
@@ -158,7 +160,7 @@ export function FinancialCopilot() {
       {sidebarCollapsed && (
         <button
           onClick={() => setSidebarCollapsed(false)}
-          className="fixed left-4 top-20 z-50 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 shadow-lg"
+          className="fixed left-4 top-20 z-[90] p-2 bg-white/[0.05] backdrop-blur-2xl rounded-xl hover:bg-white/[0.08] transition-all"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
