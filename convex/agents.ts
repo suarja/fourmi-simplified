@@ -11,6 +11,16 @@ import {
   getFinancialSummaryTool, 
   generateFinancialAdviceTool 
 } from "./agents/financialTools";
+import { z } from "zod";
+// import { generateTitle } from "./lib/title";
+
+const titleAgent = new Agent(components.agent, {
+  name: "Title Agent",
+  chat: openai("gpt-4o"),
+  instructions: `You are a title agent. You are given a message and you need to generate a title for a thread.`,
+
+});
+
 
 // DECLARE AGENT AT MODULE LEVEL - Exportable for playground integration
 export const financialAgent = new Agent(components.agent, {
@@ -62,14 +72,28 @@ export const startFinancialConversation = action({
       throw new Error("Profile not found or access denied");
     }
 
-    // Generate a simple title from first message (simplified approach)
-    const words = message.trim().split(/\s+/).slice(0, 3);
-    const title = words.length > 0 ? words.join(" ") + "..." : "Financial Chat";
+    // Ask AI to generate a title
+    const { thread: titleThread } = await titleAgent.createThread(ctx, {
+      userId: userId,
+      title: "Title",
+      summary: "Generate a title for a thread",
+    });
+    const titleObject = await titleThread.generateObject({
+      prompt: message,
+      schema: z.object({
+        title: z.string(),
+      }),
+    });
+
+    const title = titleObject.object.title;
+
+    await titleAgent.deleteThreadAsync(ctx, { threadId: titleThread.threadId });
+
     
     // Use the existing agent - create thread properly
     const { thread } = await financialAgent.createThread(ctx, {
       userId: userId,
-      title: title,
+      title,
       summary: `Financial conversation started with: ${message.substring(0, 100)}...`,
     });
     
@@ -90,7 +114,7 @@ export const startFinancialConversation = action({
       threadId: thread.threadId,
       response: response.text,
       profileId: profileId, // Include for frontend reference
-      threadTitle: title, // Return title for frontend
+        threadTitle: title, // Return title for frontend
     };
   },
 });
