@@ -16,8 +16,13 @@ import type {
 import type * as ai from "../ai.js";
 import type * as auth from "../auth.js";
 import type * as conversations from "../conversations.js";
+import type * as domain_facts from "../domain/facts.js";
+import type * as domain_transactions from "../domain/transactions.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
+import type * as lib_extraction from "../lib/extraction.js";
+import type * as lib_financial from "../lib/financial.js";
+import type * as lib_validation from "../lib/validation.js";
 import type * as profiles from "../profiles.js";
 import type * as router from "../router.js";
 
@@ -33,8 +38,13 @@ declare const fullApi: ApiFromModules<{
   ai: typeof ai;
   auth: typeof auth;
   conversations: typeof conversations;
+  "domain/facts": typeof domain_facts;
+  "domain/transactions": typeof domain_transactions;
   files: typeof files;
   http: typeof http;
+  "lib/extraction": typeof lib_extraction;
+  "lib/financial": typeof lib_financial;
+  "lib/validation": typeof lib_validation;
   profiles: typeof profiles;
   router: typeof router;
 }>;

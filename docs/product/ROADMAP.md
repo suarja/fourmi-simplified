@@ -84,7 +84,6 @@
 
 - [ ] **Chat Interface (Assistant UI + TRPC)**
   - Message display with user/AI distinction using Assistant UI components
-  - TRPC streaming subscriptions for real-time chat
   - Typing indicators and loading states
   - AutoForm integration for fact validation components
   - Message history persistence with Supabase
