@@ -4,8 +4,8 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { api } from "./_generated/api";
-import { financialAgent } from "./agents";
 import { parseAmount, categorizeExpense, detectFrequency, detectLoanType, calculateConfidence } from "./lib/extraction";
+import { financialAgent } from "./agents/finance";
 
 export const processFinancialFile = action({
   args: {

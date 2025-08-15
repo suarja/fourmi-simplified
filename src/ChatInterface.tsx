@@ -27,12 +27,10 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Debug: Log threadId changes
-  console.log("ChatInterface rendered with threadId:", threadId, "threadTitle:", threadTitle);
 
   // Use agent actions directly
-  const startFinancialConversation = useAction(api.agents.startFinancialConversation);
-  const continueFinancialConversation = useAction(api.agents.continueFinancialConversation);
+  const startFinancialConversation = useAction(api.domain.agents.startFinancialConversation);
+  const continueFinancialConversation = useAction(api.domain.agents.continueFinancialConversation);
   const getThreadMessages = useAction(api.threads.getThreadMessages);
 
   const scrollToBottom = () => {
@@ -48,9 +46,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
     const loadThreadHistory = async () => {
       if (threadId) {
         try {
-          console.log("Loading thread history for:", threadId);
           const threadMessages = await getThreadMessages({ threadId });
-          console.log("Loaded thread messages:", threadMessages);
           
           // Convert thread messages to our Message format
           const convertedMessages: Message[] = threadMessages.map((msg: any) => ({
@@ -67,7 +63,6 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
         }
       } else {
         // Clear messages when starting new chat
-        console.log("Clearing messages for new chat");
         setMessages([]);
       }
     };
@@ -77,7 +72,6 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
 
   const processMessage = async (messageText: string) => {
     setIsProcessing(true);
-    console.log("Processing message with threadId:", threadId);
 
     try {
       // Don't add messages locally - let the backend handle persistence
@@ -99,7 +93,6 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
           onThreadCreated(result.threadId, result.threadTitle);
         }
       } else {
-        console.log("Continuing existing thread:", threadId);
         // Continue existing conversation
         result = await continueFinancialConversation({
           threadId,

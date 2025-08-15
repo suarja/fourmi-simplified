@@ -4,9 +4,9 @@ import { action, query } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { components } from "./_generated/api";
-import { financialAgent } from "./agents";
 import { Doc } from "./_generated/dataModel";
 import { listMessages } from "@convex-dev/agent";
+import { financialAgent } from "./agents/finance";
 
 
 // List all threads for the authenticated user
