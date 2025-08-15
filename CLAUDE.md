@@ -13,7 +13,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Communication Protocol
 
-**COMMIT MESSAGE POLICY**: Do NOT add Claude Code attribution or co-authorship to git commit messages. Keep commits clean and professional without AI tool references.
+**COMMIT MESSAGE POLICY**: 
+- Do NOT add Claude Code attribution or co-authorship to git commit messages
+- Do NOT include "🤖 Generated with [Claude Code]" or "Co-Authored-By: Claude" 
+- Keep commits clean and professional without any AI tool references
+- Focus on technical changes and business impact only
 
 ## Technology Stack (Simplified with Convex)
 
