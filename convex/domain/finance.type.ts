@@ -16,9 +16,9 @@ export const FinancialDataSchema = z.object({
       type: z.enum(["credit_card", "personal", "mortgage", "auto"]),
       name: z.string(),
       monthlyPayment: z.number(),
-      interestRate: z.number(),
-      remainingBalance: z.number(),
-      remainingMonths: z.number(),
+      interestRate: z.number().optional(), // Optional - may not be known initially
+      remainingBalance: z.number().optional(), // Optional - may not be known initially
+      remainingMonths: z.number().optional(), // Optional - may not be known initially
     })),
     summary: z.string(),
   });

@@ -51,7 +51,11 @@ EXTRACTION RULES:
 3. LOAN DETECTION:
    - Keywords: loan, debt, credit, payment, prêt, crédit, dette
    - Types: credit_card, personal, mortgage, auto
-   - Extract: monthly payment, interest rate (default 5% if not mentioned), balance (estimate if not given)
+   - REQUIRED: monthly payment (must always be provided)
+   - OPTIONAL (only if explicitly mentioned):
+     * interestRate: Convert percentage to decimal (3.5% → 0.035), DO NOT GUESS if not mentioned
+     * remainingBalance: Only include if explicitly stated
+     * remainingMonths: Only include if explicitly stated
 
 4. AMOUNT EXTRACTION:
    - Look for: 1500, 1,500, 1.500, €1500, $1500, 1500€, 1500$
@@ -68,6 +72,8 @@ Examples:
 - "I earn 3000€ per month" → income: {label: "Monthly earnings", amount: 3000, isMonthly: true}
 - "My rent is 800€" → expense: {category: "Housing", label: "Rent", amount: 800}
 - "I spend 300 on groceries" → expense: {category: "Food", label: "Groceries", amount: 300}
+- "Car loan 250€/month" → loan: {type: "auto", name: "Car loan", monthlyPayment: 250}
+- "Mortgage 1000€ at 2.5%" → loan: {type: "mortgage", name: "Mortgage", monthlyPayment: 1000, interestRate: 0.025}
 
 Provide a summary of what was extracted and processed.`,
         schema: FinancialDataSchema,

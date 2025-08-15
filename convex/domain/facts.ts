@@ -171,20 +171,26 @@ export const confirmPendingFact = mutation({
       const amountValidation = validateAmount(finalData.monthlyPayment);
       if (!amountValidation.valid) throw new Error(amountValidation.error);
 
-      const rateValidation = validateInterestRate(finalData.interestRate);
-      if (!rateValidation.valid) throw new Error(rateValidation.error);
+      // Only validate interest rate if provided
+      if (finalData.interestRate !== undefined && finalData.interestRate !== null) {
+        const rateValidation = validateInterestRate(finalData.interestRate);
+        if (!rateValidation.valid) throw new Error(rateValidation.error);
+      }
 
-      const monthsValidation = validateLoanMonths(finalData.remainingMonths);
-      if (!monthsValidation.valid) throw new Error(monthsValidation.error);
+      // Only validate months if provided
+      if (finalData.remainingMonths !== undefined && finalData.remainingMonths !== null) {
+        const monthsValidation = validateLoanMonths(finalData.remainingMonths);
+        if (!monthsValidation.valid) throw new Error(monthsValidation.error);
+      }
 
       await ctx.db.insert("loans", {
         profileId: fact.profileId,
         type: finalData.type,
         name: finalData.name,
         monthlyPayment: Math.round(finalData.monthlyPayment * 100),
-        interestRate: finalData.interestRate,
-        remainingBalance: Math.round(finalData.remainingBalance * 100),
-        remainingMonths: finalData.remainingMonths,
+        interestRate: finalData.interestRate ?? 0, // Default to 0 if not provided
+        remainingBalance: finalData.remainingBalance ? Math.round(finalData.remainingBalance * 100) : 0, // Default to 0
+        remainingMonths: finalData.remainingMonths ?? 0, // Default to 0 if not provided
       });
     }
 
@@ -195,6 +201,62 @@ export const confirmPendingFact = mutation({
     });
 
     return { success: true, type: fact.type };
+  },
+});
+
+/**
+ * Update a pending fact's data before confirmation
+ */
+export const updatePendingFact = mutation({
+  args: {
+    factId: v.id("pendingFacts"),
+    data: v.any(), // Updated data for the fact
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    const fact = await ctx.db.get(args.factId);
+    if (!fact) throw new Error("Fact not found");
+
+    // Verify profile belongs to user
+    const profile = await ctx.db.get(fact.profileId);
+    if (!profile || profile.userId !== userId) {
+      throw new Error("Access denied");
+    }
+
+    // Validate the updated data based on type
+    if (fact.type === "loan") {
+      // Validate required fields
+      if (!args.data.monthlyPayment || args.data.monthlyPayment <= 0) {
+        throw new Error("Monthly payment is required and must be positive");
+      }
+      
+      // Validate optional fields if provided
+      if (args.data.interestRate !== undefined && args.data.interestRate !== null) {
+        const rateValidation = validateInterestRate(args.data.interestRate);
+        if (!rateValidation.valid) throw new Error(rateValidation.error);
+      }
+      
+      if (args.data.remainingMonths !== undefined && args.data.remainingMonths !== null) {
+        const monthsValidation = validateLoanMonths(args.data.remainingMonths);
+        if (!monthsValidation.valid) throw new Error(monthsValidation.error);
+      }
+    } else if (fact.type === "income") {
+      const validation = validateAmount(args.data.amount);
+      if (!validation.valid) throw new Error(validation.error);
+    } else if (fact.type === "expense") {
+      const validation = validateAmount(args.data.amount);
+      if (!validation.valid) throw new Error(validation.error);
+    }
+
+    // Update the pending fact with new data
+    await ctx.db.patch(args.factId, {
+      data: args.data,
+      confidence: 1.0, // Set high confidence since user manually edited
+    });
+
+    return { success: true };
   },
 });
 

@@ -13,7 +13,6 @@ import type * as agents_financialTools from "../agents/financialTools.js";
 import type * as agents_title from "../agents/title.js";
 import type * as ai from "../ai.js";
 import type * as auth from "../auth.js";
-import type * as conversations from "../conversations.js";
 import type * as domain_agents from "../domain/agents.js";
 import type * as domain_facts from "../domain/facts.js";
 import type * as domain_transactions from "../domain/transactions.js";
@@ -47,7 +46,6 @@ declare const fullApi: ApiFromModules<{
   "agents/title": typeof agents_title;
   ai: typeof ai;
   auth: typeof auth;
-  conversations: typeof conversations;
   "domain/agents": typeof domain_agents;
   "domain/facts": typeof domain_facts;
   "domain/transactions": typeof domain_transactions;
