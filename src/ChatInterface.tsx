@@ -80,14 +80,8 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
     console.log("Processing message with threadId:", threadId);
 
     try {
-      // Add user message to local state immediately for UI responsiveness
-      const userMessage: Message = {
-        _id: `user-${Date.now()}`,
-        type: "user",
-        content: messageText,
-        timestamp: Date.now(),
-      };
-      setMessages(prev => [...prev, userMessage]);
+      // Don't add messages locally - let the backend handle persistence
+      // The useEffect will reload all messages after the API call
 
       let result;
       
@@ -114,15 +108,11 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
         });
       }
 
-      // Reload messages from thread to ensure persistence
-      if (result.threadId) {
-        // If a new thread was created, we'll get the threadId
-        // The parent will handle updating the threadId via onThreadCreated
-        // Messages will reload via useEffect when threadId changes
-      } else if (threadId) {
-        // For existing threads, reload messages immediately
+      // Always reload messages after processing to ensure consistency
+      const targetThreadId = result.threadId || threadId;
+      if (targetThreadId) {
         try {
-          const updatedMessages = await getThreadMessages({ threadId });
+          const updatedMessages = await getThreadMessages({ threadId: targetThreadId });
           const convertedMessages: Message[] = updatedMessages.map((msg: any) => ({
             _id: msg.id,
             type: msg.type,
@@ -132,14 +122,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
           setMessages(convertedMessages);
         } catch (error) {
           console.error("Error reloading messages:", error);
-          // Fallback: add to local state if reload fails
-          const assistantMessage: Message = {
-            _id: `assistant-${Date.now()}`,
-            type: "assistant",
-            content: result.response,
-            timestamp: Date.now(),
-          };
-          setMessages(prev => [...prev, assistantMessage]);
+          // Keep the error handling simple - just log it
         }
       }
 
@@ -212,7 +195,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
             </div>
           </div>
         ) : (
-          messages.map((message) => (
+          messages.sort((a, b) => a.timestamp - b.timestamp).map((message) => (
             <div
               key={message._id}
               className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}

@@ -6,6 +6,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { components } from "./_generated/api";
 import { financialAgent } from "./agents";
 import { Doc } from "./_generated/dataModel";
+import { listMessages } from "@convex-dev/agent";
 
 
 // List all threads for the authenticated user
@@ -63,20 +64,20 @@ export const getThreadMessages = action({
     }
 
     try {
-      // Get recent messages from the thread
-      const { listMessages } = await import("@convex-dev/agent");
-      
+      // Get recent messages from the thread using correct API
       const messages = await listMessages(ctx, components.agent, {
         threadId: threadId,
         excludeToolMessages: true, // Only show user/assistant messages
         paginationOpts: { cursor: null, numItems: 100 } // Get all messages for chat interface
       });
 
+      console.log("Raw messages from thread:", JSON.stringify(messages, null, 2));
+
       return messages.page.map((message: any) => {
-        console.log("Raw message from thread:", JSON.stringify(message, null, 2));
+        console.log("Processing individual message:", JSON.stringify(message, null, 2));
         return {
           id: message._id,
-          type: message.role || message.type, // Agent messages use 'role'
+          type: message.role === "user" ? "user" : "assistant", // Convert role to type
           content: message.content || message.text || "", // Handle different content fields
           timestamp: message._creationTime,
         };

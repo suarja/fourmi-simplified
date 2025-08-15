@@ -105,6 +105,7 @@ export function FileUpload({ profileId, threadId, onDataProcessed, onThreadCreat
       />
       
       <button
+        type="button"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading || disabled}
         className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

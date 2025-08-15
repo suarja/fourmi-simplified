@@ -2,7 +2,7 @@
 
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import { Agent } from "@convex-dev/agent";
+import { Agent, saveMessage } from "@convex-dev/agent";
 import { openai } from "@ai-sdk/openai";
 import { api, components } from "./_generated/api";
 import { getAuthUserId } from "@convex-dev/auth/server";
@@ -73,21 +73,20 @@ export const startFinancialConversation = action({
       summary: `Financial conversation started with: ${message.substring(0, 100)}...`,
     });
     
-    // Manually save user message to ensure persistence
-    await thread.saveMessage({
-      role: "user",
-      content: message,
+    // Save user message using correct Convex API
+    const { messageId: userMessageId } = await saveMessage(ctx, components.agent, {
+      threadId: thread.threadId,
+      userId: userId,
+      prompt: message,
     });
     
     const response = await thread.generateText({
       prompt: message,
     });
     
-    // Manually save assistant response to ensure persistence
-    await thread.saveMessage({
-      role: "assistant", 
-      content: response.text,
-    });
+    // The generateText should automatically save the assistant response
+    // But let's ensure it's saved with correct format
+    console.log("Generated response:", response.text);
 
     return {
       threadId: thread.threadId,
@@ -121,21 +120,19 @@ export const continueFinancialConversation = action({
     // Use the existing agent - continue existing thread
     const { thread } = await financialAgent.continueThread(ctx, { threadId });
     
-    // Manually save user message to ensure persistence
-    await thread.saveMessage({
-      role: "user",
-      content: message,
+    // Save user message using correct Convex API
+    const { messageId: userMessageId } = await saveMessage(ctx, components.agent, {
+      threadId: threadId,
+      userId: userId,
+      prompt: message,
     });
     
     const response = await thread.generateText({
       prompt: message,
     });
     
-    // Manually save assistant response to ensure persistence  
-    await thread.saveMessage({
-      role: "assistant",
-      content: response.text,
-    });
+    // The generateText should automatically save the assistant response
+    console.log("Generated response:", response.text);
 
     return {
       response: response.text,

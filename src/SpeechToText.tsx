@@ -91,6 +91,7 @@ export function SpeechToText({ onTranscript, disabled }: SpeechToTextProps) {
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       disabled={disabled || isProcessing}
       className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
