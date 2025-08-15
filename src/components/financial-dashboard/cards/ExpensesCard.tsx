@@ -37,14 +37,16 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
   };
 
   const renderExpenseView = (expense: Expense, onEdit: () => void) => (
-    <div className="flex justify-between items-center cursor-pointer hover:bg-gray-700/50 p-2 rounded" onClick={onEdit}>
-      <div>
-        <span className="text-gray-300">{expense.label}</span>
-        <span className="text-gray-500 text-sm ml-2">({expense.category})</span>
+    <div className="cursor-pointer hover:bg-glass-dark/50 p-2 rounded-lg transition-colors" onClick={onEdit}>
+      <div className="flex justify-between items-center">
+        <div>
+          <span className="text-white">{expense.label}</span>
+          <span className="text-secondary-light text-sm ml-2">({expense.category})</span>
+        </div>
+        <span className="text-financial-danger font-semibold">
+          {formatCurrency(expense.amount / 100)}
+        </span>
       </div>
-      <span className="text-red-400 font-semibold">
-        {formatCurrency(expense.amount / 100)}
-      </span>
     </div>
   );
 
@@ -54,23 +56,23 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
     onSave: () => void,
     onCancel: () => void
   ) => (
-    <div className="space-y-3 p-2 bg-gray-700/50 rounded">
+    <div className="space-y-3 p-3 bg-glass-dark/50 backdrop-blur-sm rounded-lg border border-glass-light">
       <div>
-        <label className="text-gray-400 text-sm">Label</label>
+        <label className="text-secondary-light text-sm">Label</label>
         <input
           type="text"
           defaultValue={expense.label}
           onChange={(e) => onChange({ label: e.target.value })}
-          className="w-full px-3 py-2 bg-gray-800 text-white rounded mt-1 border border-gray-600 focus:border-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
           placeholder="e.g., Rent, Groceries"
         />
       </div>
       <div>
-        <label className="text-gray-400 text-sm">Category</label>
+        <label className="text-secondary-light text-sm">Category</label>
         <select
           defaultValue={expense.category}
           onChange={(e) => onChange({ category: e.target.value })}
-          className="w-full px-3 py-2 bg-gray-800 text-white rounded mt-1 border border-gray-600 focus:border-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
         >
           {EXPENSE_CATEGORIES.map(category => (
             <option key={category} value={category}>{category}</option>
@@ -78,12 +80,12 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
         </select>
       </div>
       <div>
-        <label className="text-gray-400 text-sm">Amount (€/month)</label>
+        <label className="text-secondary-light text-sm">Amount (€/month)</label>
         <input
           type="number"
           defaultValue={expense.amount / 100}
           onChange={(e) => onChange({ amount: parseFloat(e.target.value) * 100 })}
-          className="w-full px-3 py-2 bg-gray-800 text-white rounded mt-1 border border-gray-600 focus:border-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
           placeholder="e.g., 800"
           step="0.01"
         />
@@ -91,13 +93,13 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
       <div className="flex gap-2">
         <button
           onClick={onSave}
-          className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-sm transition-colors"
+          className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm transition-colors"
         >
           Save
         </button>
         <button
           onClick={onCancel}
-          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
+          className="px-3 py-1.5 bg-secondary hover:bg-secondary-hover text-white rounded-lg text-sm transition-colors"
         >
           Cancel
         </button>
@@ -110,9 +112,9 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+    <div className="bg-glass-card backdrop-blur-xl rounded-bento p-4 sm:p-6 border border-glass-light/20 shadow-glass hover:shadow-glass-hover transition-all duration-300">
       <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
-        <span className="text-red-400">💸</span>
+        <span className="text-financial-danger">💸</span>
         Monthly Expenses
       </h4>
       <div className="space-y-2">

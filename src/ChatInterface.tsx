@@ -163,14 +163,14 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
   // Always show the chat interface - agent threads are created automatically
 
   return (
-    <div className="flex flex-col h-full bg-gray-900">
+    <div className="flex flex-col h-full bg-background-primary">
       {/* Chat Header */}
-      <div className="p-4 border-b border-gray-700 bg-gray-800">
+      <div className="p-4 border-b border-glass-light/30 bg-glass-card backdrop-blur-xl">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <span className="text-2xl">🐜</span>
           {threadTitle || "Chat with Fourmi"}
         </h3>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-secondary-light mt-1">
           {threadId ? 
             "Continue your conversation with Fourmi" : 
             "Tell me about your finances using text, voice, or files"
@@ -219,8 +219,8 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
                 <div
                   className={`rounded-2xl px-4 py-3 shadow-sm ${
                     messageType === "user"
-                      ? "bg-blue-600 text-white rounded-br-md"
-                      : "bg-gray-700 text-gray-100 rounded-bl-md border border-gray-600"
+                      ? "bg-accent text-white rounded-br-md"
+                      : "bg-glass-dark/50 backdrop-blur-sm text-gray-100 rounded-bl-md border border-glass-light/30"
                   }`}
                 >
                   <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
@@ -267,9 +267,9 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
               </div>
               
               {/* Message Content */}
-              <div className="rounded-2xl rounded-bl-md px-4 py-3 bg-gray-700 text-gray-100 border border-gray-600 shadow-sm">
+              <div className="rounded-2xl rounded-bl-md px-4 py-3 bg-glass-dark/50 backdrop-blur-sm text-gray-100 border border-glass-light/30 shadow-sm">
                 <div className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-500"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
                   <span>Analyzing your message...</span>
                 </div>
               </div>
@@ -281,14 +281,14 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
       </div>
 
       {/* Input */}
-      <div className="flex-shrink-0 p-4 border-t border-gray-700 bg-gray-800">
+      <div className="flex-shrink-0 p-4 border-t border-glass-light/30 bg-glass-card backdrop-blur-xl">
         <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Tell me about your finances..."
-            className="flex-1 min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors text-sm sm:text-base"
+            className="flex-1 min-w-0 px-3 sm:px-4 py-3 rounded-lg bg-background-secondary/60 border border-glass-light/30 text-white placeholder-secondary-light focus:border-primary focus:ring-1 focus:ring-primary/30 outline-none transition-colors text-sm sm:text-base"
             disabled={isProcessing}
           />
           
@@ -312,7 +312,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
             <button
               type="submit"
               disabled={!input.trim() || isProcessing}
-              className="px-4 sm:px-6 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
+              className="px-4 sm:px-6 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
             >
               {isProcessing ? "..." : "Send"}
             </button>

@@ -27,12 +27,14 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
   };
 
   const renderIncomeView = (income: Income, onEdit: () => void) => (
-    <div className="flex justify-between items-center cursor-pointer hover:bg-gray-700/50 p-2 rounded" onClick={onEdit}>
-      <span className="text-gray-300">{income.label}</span>
-      <span className="text-green-400 font-semibold">
-        {formatCurrency(income.amount / 100)}
-        {income.isMonthly ? '/month' : '/year'}
-      </span>
+    <div className="cursor-pointer hover:bg-glass-dark/50 p-2 rounded-lg transition-colors" onClick={onEdit}>
+      <div className="flex justify-between items-center">
+        <span className="text-white">{income.label}</span>
+        <span className="text-financial-success font-semibold">
+          {formatCurrency(income.amount / 100)}
+          {income.isMonthly ? '/month' : '/year'}
+        </span>
+      </div>
     </div>
   );
 
@@ -42,35 +44,35 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
     onSave: () => void,
     onCancel: () => void
   ) => (
-    <div className="space-y-3 p-2 bg-gray-700/50 rounded">
+    <div className="space-y-3 p-3 bg-glass-dark/50 backdrop-blur-sm rounded-lg border border-glass-light">
       <div>
-        <label className="text-gray-400 text-sm">Label</label>
+        <label className="text-secondary-light text-sm">Label</label>
         <input
           type="text"
           defaultValue={income.label}
           onChange={(e) => onChange({ label: e.target.value })}
-          className="w-full px-3 py-2 bg-gray-800 text-white rounded mt-1 border border-gray-600 focus:border-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
           placeholder="e.g., Monthly salary"
         />
       </div>
       <div>
-        <label className="text-gray-400 text-sm">Amount (€)</label>
+        <label className="text-secondary-light text-sm">Amount (€)</label>
         <input
           type="number"
           defaultValue={income.amount / 100}
           onChange={(e) => onChange({ amount: parseFloat(e.target.value) * 100 })}
-          className="w-full px-3 py-2 bg-gray-800 text-white rounded mt-1 border border-gray-600 focus:border-blue-500 focus:outline-none"
+          className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
           placeholder="e.g., 3000"
           step="0.01"
         />
       </div>
       <div>
-        <label className="text-gray-400 text-sm flex items-center gap-2">
+        <label className="text-secondary-light text-sm flex items-center gap-2">
           <input
             type="checkbox"
             defaultChecked={income.isMonthly}
             onChange={(e) => onChange({ isMonthly: e.target.checked })}
-            className="rounded"
+            className="rounded accent-primary"
           />
           Monthly (uncheck for annual)
         </label>
@@ -78,13 +80,13 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
       <div className="flex gap-2">
         <button
           onClick={onSave}
-          className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-sm transition-colors"
+          className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm transition-colors"
         >
           Save
         </button>
         <button
           onClick={onCancel}
-          className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
+          className="px-3 py-1.5 bg-secondary hover:bg-secondary-hover text-white rounded-lg text-sm transition-colors"
         >
           Cancel
         </button>
@@ -97,9 +99,9 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+    <div className="bg-glass-card backdrop-blur-xl rounded-bento p-4 sm:p-6 border border-glass-light/20 shadow-glass hover:shadow-glass-hover transition-all duration-300">
       <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
-        <span className="text-green-400">💰</span>
+        <span className="text-financial-success">💰</span>
         Income Sources
       </h4>
       <div className="space-y-2">

@@ -66,17 +66,17 @@ function SortableItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative ${isDragOverlay ? '' : ''}`}
+      className={`group relative ${isDragOverlay ? 'shadow-glass-hover' : ''}`}
       {...attributes}
     >
       {/* Drag handle */}
       <div
         {...listeners}
-        className="absolute -left-2 top-4 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing transition-opacity z-10 p-1 rounded hover:bg-gray-700"
+        className="absolute -left-3 top-1/2 -translate-y-1/2 opacity-60 group-hover:opacity-100 cursor-grab active:cursor-grabbing transition-all duration-200 z-10 p-2 rounded-lg hover:bg-glass-green/20 hover:shadow-financial"
         title="Drag to reorder"
       >
-        <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+        <svg className="w-4 h-4 text-secondary-light hover:text-primary transition-colors" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M7 4a1 1 0 000 2h1a1 1 0 100-2H7zM7 8a1 1 0 000 2h1a1 1 0 100-2H7zM8 13a1 1 0 01-1-1 1 1 0 00-2 0 3 3 0 003 3h1a1 1 0 100-2H8zM12 4a1 1 0 000 2h1a1 1 0 100-2h-1zM12 8a1 1 0 000 2h1a1 1 0 100-2h-1zM13 12a1 1 0 10-2 0 1 1 0 00-1 1 3 3 0 003 3h1a1 1 0 100-2h-1a1 1 0 01-1-1z" />
         </svg>
       </div>
       {children}
@@ -99,8 +99,8 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <div className="flex items-center justify-center h-full bg-background-primary">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -151,19 +151,21 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
   );
 
   return (
-    <div className="h-full overflow-y-auto bg-gray-900">
+    <div className="h-full overflow-y-auto bg-background-primary">
       {/* Dashboard Header */}
-      <div className="p-4 sm:p-6 border-b border-gray-700 bg-gray-800">
+      <div className="p-4 sm:p-6 border-b border-glass-light/30 bg-glass-card backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">Financial Dashboard</h3>
-            <p className="text-sm sm:text-base text-gray-400">Real-time view of your budget • Drag cards to reorder</p>
+            <p className="text-sm sm:text-base text-secondary-light">Real-time view of your budget • Drag cards to reorder</p>
           </div>
-          <span className="text-2xl">⚡</span>
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-financial">
+            <span className="text-2xl">⚡</span>
+          </div>
         </div>
       </div>
 
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="p-4 sm:p-6 space-y-bento">
         {/* Pending Facts Card - Always first, not draggable */}
         {pendingFacts && pendingFacts.length > 0 && (
           <PendingFactsCard 

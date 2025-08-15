@@ -89,7 +89,7 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
   }, [financialData, profileId]);
 
   return (
-    <div className="bg-gray-800 rounded-lg p-4 sm:p-6 border border-gray-700">
+    <div className="bg-glass-card backdrop-blur-xl rounded-bento p-4 sm:p-6 border border-glass-light/20 shadow-glass hover:shadow-glass-hover transition-all duration-300">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center gap-2">
           <span className="text-lg sm:text-xl">🤖</span>
@@ -100,7 +100,7 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
           <button
             onClick={handleGenerateInsights}
             disabled={loadingInsights}
-            className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {hasGeneratedInsights ? "🔄 Refresh" : "✨ Generate"}
           </button>
@@ -108,14 +108,14 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
       </div>
       
       {loadingInsights ? (
-        <div className="flex items-center gap-2 text-gray-400">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+        <div className="flex items-center gap-2 text-secondary-light">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
           Analyzing your budget...
         </div>
       ) : insights ? (
         <div className="text-gray-300 whitespace-pre-line">{insights}</div>
       ) : (
-        <div className="text-gray-400 text-center py-4">
+        <div className="text-secondary-light text-center py-4">
           Click "Generate" to get AI-powered insights about your budget
         </div>
       )}
