@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as agents_financialTools from "../agents/financialTools.js";
+import type * as agents from "../agents.js";
 import type * as ai from "../ai.js";
 import type * as auth from "../auth.js";
 import type * as conversations from "../conversations.js";
@@ -18,8 +20,10 @@ import type * as http from "../http.js";
 import type * as lib_extraction from "../lib/extraction.js";
 import type * as lib_financial from "../lib/financial.js";
 import type * as lib_validation from "../lib/validation.js";
+import type * as playground from "../playground.js";
 import type * as profiles from "../profiles.js";
 import type * as router from "../router.js";
+import type * as threads from "../threads.js";
 
 import type {
   ApiFromModules,
@@ -36,6 +40,8 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "agents/financialTools": typeof agents_financialTools;
+  agents: typeof agents;
   ai: typeof ai;
   auth: typeof auth;
   conversations: typeof conversations;
@@ -46,8 +52,10 @@ declare const fullApi: ApiFromModules<{
   "lib/extraction": typeof lib_extraction;
   "lib/financial": typeof lib_financial;
   "lib/validation": typeof lib_validation;
+  playground: typeof playground;
   profiles: typeof profiles;
   router: typeof router;
+  threads: typeof threads;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
