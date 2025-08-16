@@ -279,6 +279,78 @@ function calculateMonthlyPayment(
 - ✅ Check for duplicates before adding data
 - ✅ Provide edit/delete capabilities
 
+## Specialized Sub-Agents
+
+Fourmi has specialized Claude Code sub-agents in `.claude/agents/` that provide expert-level assistance for specific feature areas. Each sub-agent has deep domain knowledge and end-to-end ownership of their features.
+
+### Available Sub-Agents
+
+#### 1. Budget Management (`.claude/agents/budget-management.md`)
+**Expertise:** Financial dashboard, pending facts validation, income/expense/loan tracking
+- Complete financial data extraction and validation workflow
+- Dashboard components and real-time calculations
+- Monthly balance computations and duplicate prevention
+- AI-powered fact extraction with human-in-the-loop validation
+
+#### 2. Project Management (`.claude/agents/project-management.md`)
+**Expertise:** Project lifecycle, canvas visualization, thread-to-project linking
+- Dynamic project canvas with type-specific renderers
+- Seamless chat-to-canvas workflow transitions
+- Project state management (FRESH/STALE/NEEDS_DATA)
+- Multi-project coordination and comparison tools
+
+#### 3. Debt Analysis (`.claude/agents/debt-analysis.md`)
+**Expertise:** Debt consolidation analysis, debt payoff strategies
+- PMT formula calculations and interest projections
+- Avalanche vs Snowball strategy implementations
+- Loan eligibility assessment and DTI analysis
+- Consolidation options (personal loan, balance transfer, HELOC)
+
+#### 4. Real Estate Analysis (`.claude/agents/real-estate-analysis.md`)
+**Expertise:** Rent vs buy analysis, property cost calculations
+- PITI calculations (Principal, Interest, Taxes, Insurance)
+- Break-even analysis and opportunity cost modeling
+- Property appreciation and market assumption handling
+- Total cost of ownership vs renting comparisons
+
+### Usage Pattern
+
+```bash
+# Invoke sub-agents through Claude Code
+claude-code task --agent budget-management "Enhance pending facts validation UI with better mobile experience"
+claude-code task --agent project-management "Add side-by-side project comparison dashboard"
+claude-code task --agent debt-analysis "Implement hybrid debt payoff strategy optimization"
+claude-code task --agent real-estate-analysis "Add market data integration for property values"
+```
+
+### Agent Selection Guide
+
+**Use Budget Management Agent for:**
+- Financial dashboard enhancements
+- Fact extraction and validation improvements
+- Income/expense/loan tracking features
+- Monthly balance calculation updates
+
+**Use Project Management Agent for:**
+- New project types and canvas features
+- Thread-to-project workflow improvements
+- Project state management enhancements
+- Multi-project analysis tools
+
+**Use Debt Analysis Agent for:**
+- Debt consolidation algorithm improvements
+- New payoff strategies and optimizations
+- Interest calculation accuracy
+- Loan eligibility assessment features
+
+**Use Real Estate Analysis Agent for:**
+- Rent vs buy calculation enhancements
+- Property cost modeling improvements
+- Market data integration
+- PITI calculation accuracy
+
+Each sub-agent has comprehensive knowledge of their domain and can handle complex multi-file changes from backend calculations to frontend UI updates.
+
 ## Social Impact Focus
 
 Remember: This isn't just a financial tool. We're fighting consumer debt traps created by $4B+ annual credit company marketing. The free tier must genuinely help people escape debt, while paid tiers fund the mission.
