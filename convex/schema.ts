@@ -17,8 +17,11 @@ const applicationTables = {
     lastMessage: v.number(),
     // Agent threads replace the need for manual message storage
     agentThreadId: v.optional(v.string()), // Link to agent thread
+    // Project context for chat-to-canvas switching
+    activeProjectId: v.optional(v.id("projects")),
   }).index("by_profile", ["profileId"])
-    .index("by_agent_thread", ["agentThreadId"]),
+    .index("by_agent_thread", ["agentThreadId"])
+    .index("by_active_project", ["activeProjectId"]),
 
   messages: defineTable({
     conversationId: v.id("conversations"),
@@ -69,6 +72,25 @@ const applicationTables = {
     reviewed: v.optional(v.number()),
   }).index("by_profile", ["profileId"])
     .index("by_status", ["status"]),
+
+  projects: defineTable({
+    profileId: v.id("profiles"),
+    type: v.union(
+      v.literal("debt_consolidation"),
+      v.literal("debt_payoff_strategy"),
+      v.literal("rent_vs_buy")
+    ),
+    name: v.string(), // "Credit Card Consolidation" or user-defined
+    status: v.union(v.literal("draft"), v.literal("active"), v.literal("completed")),
+    inputs: v.any(), // Project-specific input data (flexible JSON)
+    results: v.optional(v.any()), // Calculated results (flexible JSON)
+    state: v.union(v.literal("FRESH"), v.literal("STALE"), v.literal("NEEDS_DATA")),
+    created: v.number(),
+    updated: v.number(),
+  }).index("by_profile", ["profileId"])
+    .index("by_type", ["type"])
+    .index("by_status", ["status"])
+    .index("by_state", ["state"]),
 };
 
 export default defineSchema({

@@ -7,6 +7,7 @@ import { FinancialDashboard } from "./components/financial-dashboard/FinancialDa
 import { ConversationSidebar } from "./ConversationSidebar";
 import { MobileNavigation } from "./MobileNavigation";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { ProjectCanvas } from "./components/projects/ProjectCanvas";
 
 export function FinancialCopilot() {
   const profile = useQuery(api.profiles.getUserProfile);
@@ -17,10 +18,36 @@ export function FinancialCopilot() {
   const [currentThreadId, setCurrentThreadId] = useState<string | null>(null);
   const [currentThreadTitle, setCurrentThreadTitle] = useState<string>("");
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
-  const [mobileView, setMobileView] = useState<'chat' | 'dashboard' | 'history'>('chat');
+  const [mobileView, setMobileView] = useState<'chat' | 'dashboard' | 'history' | 'project'>('chat');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  
+  // Project view state
+  const [viewMode, setViewMode] = useState<'dashboard' | 'project'>('dashboard');
+  
+  // Get active project for current thread
+  const activeProject = useQuery(
+    api.conversations.getActiveProjectByThread,
+    currentThreadId ? { threadId: currentThreadId } : "skip"
+  );
+
+  // Auto-switch to project mode when active project is available
+  useEffect(() => {
+    if (activeProject) {
+      setViewMode('project');
+      // Also switch mobile view if on mobile
+      if (isMobile) {
+        setMobileView('project');
+      }
+    } else {
+      setViewMode('dashboard');
+      // Switch back to dashboard on mobile if no active project
+      if (isMobile && mobileView === 'project') {
+        setMobileView('dashboard');
+      }
+    }
+  }, [activeProject, isMobile, mobileView]);
 
   // Detect screen size
   useEffect(() => {
@@ -73,6 +100,11 @@ export function FinancialCopilot() {
     setRefreshTrigger(prev => prev + 1);
   };
 
+  const handleBackToDashboard = () => {
+    setViewMode('dashboard');
+    // Could also clear active project if needed
+  };
+
   // Mobile Layout
   if (isMobile) {
     return (
@@ -89,6 +121,14 @@ export function FinancialCopilot() {
           {mobileView === 'dashboard' && (
             <div className="h-full overflow-y-auto">
               <FinancialDashboard profileId={profile._id} />
+            </div>
+          )}
+          {mobileView === 'project' && activeProject && (
+            <div className="h-full overflow-y-auto">
+              <ProjectCanvas 
+                project={activeProject} 
+                onBack={() => setMobileView('dashboard')} 
+              />
             </div>
           )}
           {mobileView === 'history' && (
@@ -184,7 +224,16 @@ export function FinancialCopilot() {
               />
             </div>
             <div className="w-80">
-              <FinancialDashboard profileId={profile._id} />
+              {viewMode === 'dashboard' ? (
+                <FinancialDashboard profileId={profile._id} />
+              ) : activeProject ? (
+                <ProjectCanvas 
+                  project={activeProject} 
+                  onBack={handleBackToDashboard} 
+                />
+              ) : (
+                <FinancialDashboard profileId={profile._id} />
+              )}
             </div>
           </div>
         ) : (
@@ -202,9 +251,18 @@ export function FinancialCopilot() {
             
             <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
             
-            {/* Financial Dashboard */}
+            {/* Financial Dashboard / Project Canvas */}
             <Panel defaultSize={70} minSize={50} maxSize={70}>
-              <FinancialDashboard profileId={profile._id} />
+              {viewMode === 'dashboard' ? (
+                <FinancialDashboard profileId={profile._id} />
+              ) : activeProject ? (
+                <ProjectCanvas 
+                  project={activeProject} 
+                  onBack={handleBackToDashboard} 
+                />
+              ) : (
+                <FinancialDashboard profileId={profile._id} />
+              )}
             </Panel>
           </PanelGroup>
         )}
