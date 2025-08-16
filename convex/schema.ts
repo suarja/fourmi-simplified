@@ -91,6 +91,31 @@ const applicationTables = {
     .index("by_type", ["type"])
     .index("by_status", ["status"])
     .index("by_state", ["state"]),
+
+  insights: defineTable({
+    profileId: v.id("profiles"),
+    userId: v.string(), // Clerk user ID for security
+    content: v.string(), // The generated educational insights
+    metadata: v.object({
+      generatedBy: v.literal("educational-agent"),
+      focusArea: v.optional(v.string()),
+      userSophisticationLevel: v.string(), // beginner/intermediate/advanced
+      financialHealthScore: v.optional(v.number()),
+      dataSnapshot: v.object({
+        monthlyBalance: v.number(),
+        debtToIncomeRatio: v.number(),
+        hasIncomes: v.boolean(),
+        hasExpenses: v.boolean(),
+        hasLoans: v.boolean(),
+      }),
+    }),
+    createdAt: v.number(),
+    expiresAt: v.number(), // Insights expire after 24 hours by default
+    isActive: v.boolean(), // Can be deactivated if financial data changes significantly
+  }).index("by_profile", ["profileId"])
+    .index("by_user", ["userId"])
+    .index("by_expiration", ["expiresAt"])
+    .index("by_active", ["isActive"]),
 };
 
 export default defineSchema({

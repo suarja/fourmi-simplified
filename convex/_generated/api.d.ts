@@ -9,6 +9,8 @@
  */
 
 import type * as agents_debtConsolidationTool from "../agents/debtConsolidationTool.js";
+import type * as agents_educationalInsights from "../agents/educationalInsights.js";
+import type * as agents_educationalTools from "../agents/educationalTools.js";
 import type * as agents_finance from "../agents/finance.js";
 import type * as agents_financialTools from "../agents/financialTools.js";
 import type * as agents_projectManagementTools from "../agents/projectManagementTools.js";
@@ -23,6 +25,7 @@ import type * as domain_facts from "../domain/facts.js";
 import type * as domain_transactions from "../domain/transactions.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
+import type * as insights from "../insights.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_debtConsolidation from "../lib/debtConsolidation.js";
 import type * as lib_debtPayoffStrategy from "../lib/debtPayoffStrategy.js";
@@ -53,6 +56,8 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   "agents/debtConsolidationTool": typeof agents_debtConsolidationTool;
+  "agents/educationalInsights": typeof agents_educationalInsights;
+  "agents/educationalTools": typeof agents_educationalTools;
   "agents/finance": typeof agents_finance;
   "agents/financialTools": typeof agents_financialTools;
   "agents/projectManagementTools": typeof agents_projectManagementTools;
@@ -67,6 +72,7 @@ declare const fullApi: ApiFromModules<{
   "domain/transactions": typeof domain_transactions;
   files: typeof files;
   http: typeof http;
+  insights: typeof insights;
   "lib/auth": typeof lib_auth;
   "lib/debtConsolidation": typeof lib_debtConsolidation;
   "lib/debtPayoffStrategy": typeof lib_debtPayoffStrategy;
