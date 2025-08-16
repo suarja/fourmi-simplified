@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { toast } from "sonner";
-import { useSchematicFlag } from "@schematichq/schematic-react";
+import { useSchematicFlag,  } from "@schematichq/schematic-react";
 
 interface ConversationSidebarProps {
   profileId: string;
