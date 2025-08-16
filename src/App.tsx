@@ -1,11 +1,32 @@
+import { useState } from "react";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { SignInForm } from "./SignInForm";
-import { SignOutButton } from "./SignOutButton";
+import { UserProfileDropdown } from "./components/UserProfileDropdown";
+import { BillingPage } from "./components/BillingPage";
 import { Toaster } from "sonner";
 import { FinancialCopilot } from "./FinancialCopilot";
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<"main" | "billing">("main");
+
+  const handleBillingClick = () => {
+    setCurrentPage("billing");
+  };
+
+  const handleBackToMain = () => {
+    setCurrentPage("main");
+  };
+
+  if (currentPage === "billing") {
+    return (
+      <>
+        <BillingPage onBack={handleBackToMain} />
+        <Toaster theme="dark" />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen gradient-bg text-white">
       <header className="fixed top-4 left-4 right-4 z-[100] bg-white/[0.03] backdrop-blur-2xl h-14 flex justify-between items-center rounded-2xl px-6 shadow-xl">
@@ -16,7 +37,7 @@ export default function App() {
           <h2 className="text-xl font-semibold text-white">Fourmi Financial</h2>
         </div>
         <Authenticated>
-          <SignOutButton />
+          <UserProfileDropdown onBillingClick={handleBillingClick} />
         </Authenticated>
       </header>
       <main className="flex-1 pt-20">

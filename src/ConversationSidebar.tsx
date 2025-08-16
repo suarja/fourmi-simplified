@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useAction, useQuery } from "convex/react";
+import { useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { toast } from "sonner";
 import { useSchematicFlag } from "@schematichq/schematic-react";
-import { get } from "http";
 
 interface ConversationSidebarProps {
   profileId: string;
@@ -26,8 +25,6 @@ export function ConversationSidebar({
 
   const isFeatureEnabled = useSchematicFlag("basic_kpis");
   console.log("basic_kpis", isFeatureEnabled)
-
-  const getAccessToken = useAction(api.schematic.getAccessToken)
   
   // Use action to get thread data
   const listUserThreads = useAction(api.threads.listUserThreads);
@@ -100,12 +97,6 @@ export function ConversationSidebar({
               New Chat
             </button>
 
-            <button onClick={async()=> {
-             const token= await getAccessToken()
-             console.log({token})
-            }}>
-              ask token
-            </button>
 
 
             {/* Threads List */}
