@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 interface RightPanelNavigationProps {
   viewMode: 'dashboard' | 'projects' | 'project';
   onViewChange: (view: 'dashboard' | 'projects' | 'project') => void;
@@ -11,6 +13,7 @@ export function RightPanelNavigation({
   activeProject, 
   onBackToProjects 
 }: RightPanelNavigationProps) {
+  const { t } = useTranslation();
   return (
     <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
       {viewMode === 'project' && activeProject ? (
@@ -35,13 +38,13 @@ export function RightPanelNavigation({
               onClick={() => onViewChange('dashboard')}
               className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
             >
-              Dashboard
+              {t('navigation.dashboard')}
             </button>
             <button
               onClick={() => onViewChange('projects')}
               className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
             >
-              All Projects
+              {t('navigation.allProjects')}
             </button>
           </div>
         </div>
@@ -56,7 +59,7 @@ export function RightPanelNavigation({
                 : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
-            Dashboard
+            {t('navigation.dashboard')}
           </button>
           <button
             onClick={() => onViewChange('projects')}
@@ -66,7 +69,7 @@ export function RightPanelNavigation({
                 : 'text-white/60 hover:text-white hover:bg-white/10'
             }`}
           >
-            Projects
+            {t('navigation.projects')}
           </button>
         </div>
       )}

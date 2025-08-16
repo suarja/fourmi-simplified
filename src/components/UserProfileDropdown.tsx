@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/clerk-react";
 import { useAction } from "convex/react";
+import { useTranslation } from "react-i18next";
 import { api } from "../../convex/_generated/api";
 
 interface UserProfileDropdownProps {
@@ -8,6 +9,7 @@ interface UserProfileDropdownProps {
 }
 
 export function UserProfileDropdown({ className, onBillingClick }: UserProfileDropdownProps) {
+  const { t } = useTranslation();
   const getAccessToken = useAction(api.schematic.getAccessToken);
 
   const handleTestToken = async () => {
@@ -35,7 +37,7 @@ export function UserProfileDropdown({ className, onBillingClick }: UserProfileDr
       >
         <UserButton.MenuItems>
           <UserButton.Action 
-            label="Billing & Subscription" 
+            label={t('profile.billingSubscription')} 
             labelIcon={
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -44,7 +46,7 @@ export function UserProfileDropdown({ className, onBillingClick }: UserProfileDr
             onClick={onBillingClick}
           />
           <UserButton.Action 
-            label="Test Token" 
+            label={t('profile.testToken')} 
             labelIcon={
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -53,7 +55,7 @@ export function UserProfileDropdown({ className, onBillingClick }: UserProfileDr
             onClick={handleTestToken}
           />
           <UserButton.Link 
-            label="Help & Support" 
+            label={t('profile.helpSupport')} 
             href="/help"
             labelIcon={
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,79 +1,83 @@
+import { useTranslation } from 'react-i18next';
+
 export function DocsHome() {
+  const { t } = useTranslation();
+  
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold text-white mb-4">Fourmi Documentation</h1>
+        <h1 className="text-4xl font-bold text-white mb-4">{t('docs.home.title')}</h1>
         <p className="text-xl text-white/70 mb-6">
-          Complete guide to your financial copilot
+          {t('docs.home.subtitle')}
         </p>
         <div className="bg-primary/20 border border-primary/30 rounded-lg p-4">
           <p className="text-white/90">
-            Welcome to Fourmi's documentation. Here you'll find everything you need to know about using your financial copilot effectively.
+            {t('docs.home.welcome')}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-          <h3 className="text-xl font-semibold text-white mb-3">🤖 Agents</h3>
+          <h3 className="text-xl font-semibold text-white mb-3">🤖 {t('docs.home.agents.title')}</h3>
           <p className="text-white/70 mb-4">
-            Learn about our AI agents, their capabilities, and how they process your financial information.
+            {t('docs.home.agents.description')}
           </p>
           <ul className="text-sm text-white/60 space-y-1">
-            <li>• Financial data extraction</li>
-            <li>• Advice generation</li>
-            <li>• Project tools</li>
-            <li>• Validation workflows</li>
+            <li>• {t('docs.home.agents.features.extraction')}</li>
+            <li>• {t('docs.home.agents.features.advice')}</li>
+            <li>• {t('docs.home.agents.features.tools')}</li>
+            <li>• {t('docs.home.agents.features.validation')}</li>
           </ul>
         </div>
 
         <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-          <h3 className="text-xl font-semibold text-white mb-3">💰 Financial</h3>
+          <h3 className="text-xl font-semibold text-white mb-3">💰 {t('docs.home.financial.title')}</h3>
           <p className="text-white/70 mb-4">
-            Understand financial terms, calculations, and how Fourmi processes your money data.
+            {t('docs.home.financial.description')}
           </p>
           <ul className="text-sm text-white/60 space-y-1">
-            <li>• HELOC, DTI, and loan types</li>
-            <li>• Interest rate calculations</li>
-            <li>• Hardcoded values (12%, 18%, 8%)</li>
-            <li>• PMT formulas</li>
+            <li>• {t('docs.home.financial.features.terms')}</li>
+            <li>• {t('docs.home.financial.features.calculations')}</li>
+            <li>• {t('docs.home.financial.features.values')}</li>
+            <li>• {t('docs.home.financial.features.formulas')}</li>
           </ul>
         </div>
 
         <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-          <h3 className="text-xl font-semibold text-white mb-3">⚙️ Implementation</h3>
+          <h3 className="text-xl font-semibold text-white mb-3">⚙️ {t('docs.home.implementation.title')}</h3>
           <p className="text-white/70 mb-4">
-            Technical details about the current implementation and architecture.
+            {t('docs.home.implementation.description')}
           </p>
           <ul className="text-sm text-white/60 space-y-1">
-            <li>• Current vs roadmap audit</li>
-            <li>• Convex patterns</li>
-            <li>• Component architecture</li>
-            <li>• Testing approach</li>
+            <li>• {t('docs.home.implementation.features.audit')}</li>
+            <li>• {t('docs.home.implementation.features.patterns')}</li>
+            <li>• {t('docs.home.implementation.features.architecture')}</li>
+            <li>• {t('docs.home.implementation.features.testing')}</li>
           </ul>
         </div>
 
         <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-          <h3 className="text-xl font-semibold text-white mb-3">📊 Projects</h3>
+          <h3 className="text-xl font-semibold text-white mb-3">📊 {t('docs.home.projects.title')}</h3>
           <p className="text-white/70 mb-4">
-            Learn about financial projects and simulations (Coming soon).
+            {t('docs.home.projects.description')}
           </p>
           <ul className="text-sm text-white/60 space-y-1">
-            <li>• Debt consolidation</li>
-            <li>• Rent vs buy analysis</li>
-            <li>• Payoff strategies</li>
-            <li>• Multi-project comparisons</li>
+            <li>• {t('docs.home.projects.features.consolidation')}</li>
+            <li>• {t('docs.home.projects.features.rentVsBuy')}</li>
+            <li>• {t('docs.home.projects.features.strategies')}</li>
+            <li>• {t('docs.home.projects.features.comparisons')}</li>
           </ul>
         </div>
       </div>
 
       <div className="bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg p-6 border border-primary/30">
-        <h3 className="text-xl font-semibold text-white mb-3">🎯 Mission</h3>
+        <h3 className="text-xl font-semibold text-white mb-3">🎯 {t('docs.home.mission.title')}</h3>
         <p className="text-white/90 mb-4">
-          Fourmi is a chat-first financial copilot helping households escape debt traps and make informed real estate decisions.
+          {t('docs.home.mission.description')}
         </p>
         <p className="text-white/70">
-          We're fighting consumer debt traps created by $4B+ annual credit company marketing with accessible, empowering tools.
+          {t('docs.home.mission.fight')}
         </p>
       </div>
     </div>

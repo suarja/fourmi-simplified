@@ -10,7 +10,8 @@
     "previous": "Précédent",
     "confirm": "Confirmer",
     "reject": "Rejeter",
-    "close": "Fermer"
+    "close": "Fermer",
+    "copy": "Copier"
   },
   "auth": {
     "signIn": "Se connecter",
@@ -25,7 +26,8 @@
     "billing": "Facturation",
     "backToDashboard": "Retour au tableau de bord",
     "backToProjects": "Retour aux projets",
-    "backToApp": "Retour à l'app"
+    "backToApp": "Retour à l'app",
+    "allProjects": "Tous les projets"
   },
   "financial": {
     "income": "Revenus",
@@ -55,6 +57,7 @@
   },
   "dashboard": {
     "title": "Tableau de bord financier",
+    "subtitle": "Vue en temps réel de votre budget • Glissez les cartes pour réorganiser",
     "noData": "Aucune donnée financière pour l'instant. Commencez par me parler de vos revenus et dépenses !",
     "pendingFacts": "Éléments en attente",
     "confirmToSave": "Confirmez pour enregistrer dans votre profil",
@@ -69,7 +72,60 @@
     "rentVsBuy": "Location vs achat",
     "payoffStrategy": "Stratégie de remboursement",
     "createProject": "Créer un projet",
-    "noProjects": "Aucun projet pour l'instant. Demandez-moi des conseils sur le rachat de crédit ou l'analyse location vs achat !"
+    "noProjects": "Aucun projet pour l'instant. Demandez-moi des conseils sur le rachat de crédit ou l'analyse location vs achat !",
+    "subtitle": "Vos projets d'analyse financière",
+    "noProjectsTitle": "Aucun projet pour l'instant",
+    "noProjectsSubtitle": "Commencez une conversation sur le rachat de crédit, la planification budgétaire ou vos objectifs financiers pour créer votre premier projet.",
+    "startChatting": "Commencer à discuter",
+    "created": "Créé",
+    "options": "Options",
+    "maxSavings": "Économies max",
+    "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce projet ? Cette action ne peut pas être annulée.",
+    "noResultsAvailable": "Aucun résultat d'analyse disponible",
+    "currentDebtSummary": "Résumé de la dette actuelle",
+    "totalInterest": "Intérêts totaux",
+    "overview": "Aperçu",
+    "inputs": "Données",
+    "results": "Résultats",
+    "canvas": {
+      "currentDebtSummary": "Résumé de la dette actuelle",
+      "totalDebt": "Dette totale",
+      "monthlyPayment": "Mensualité",
+      "totalInterest": "Intérêts totaux",
+      "consolidationOptions": "Options de rachat de crédit",
+      "eligible": "Éligible",
+      "notEligible": "Non éligible",
+      "monthsSaved": "Mois économisés",
+      "totalSavings": "Économies totales",
+      "noEligibleOptions": "Aucune option de rachat de crédit éligible trouvée",
+      "recommendation": "Recommandation",
+      "nextSteps": "Prochaines étapes :",
+      "importantConsiderations": "Considérations importantes",
+      "noInputData": "Aucune donnée d'entrée disponible",
+      "currentDebts": "Dettes actuelles",
+      "balance": "Solde :",
+      "apr": "TAP",
+      "analyzedOptions": "Options analysées",
+      "fees": "Frais :",
+      "financialContext": "Contexte financier",
+      "monthlyIncome": "Revenus mensuels",
+      "creditScore": "Score de crédit",
+      "projectInformation": "Informations du projet",
+      "created": "Créé",
+      "lastUpdated": "Dernière mise à jour",
+      "status": "Statut",
+      "state": "État",
+      "quickSummary": "Résumé rapide",
+      "eligibleOptions": "Options éligibles",
+      "maxPotentialSavings": "Économies potentielles maximales",
+      "editProjectName": "Modifier le nom du projet",
+      "deleteProject": "Supprimer le projet"
+    },
+    "states": {
+      "FRESH": "Récent",
+      "STALE": "Obsolète",
+      "NEEDS_DATA": "Nécessite des données"
+    }
   },
   "chat": {
     "placeholder": "Parlez-moi de vos revenus, dépenses ou objectifs financiers...",
@@ -78,6 +134,13 @@
     "uploadFile": "Télécharger un fichier",
     "processing": "Traitement...",
     "tryAgain": "Réessayer",
+    "defaultTitle": "Discuter avec Fourmi",
+    "continueConversation": "Continuez votre conversation avec Fourmi",
+    "startConversation": "Parlez-moi de vos finances par texte, voix ou fichier",
+    "startPrompt": "Commencez la conversation !",
+    "you": "Vous",
+    "copyMessage": "Copier le message",
+    "analyzing": "Analyse de votre message...",
     "suggestions": {
       "income": "Je gagne 3000€ par mois",
       "expenses": "Mon loyer est de 800€ et les courses coûtent 300€",
@@ -89,7 +152,8 @@
     "networkError": "Erreur réseau. Vérifiez votre connexion.",
     "uploadFailed": "Échec du téléchargement. Veuillez réessayer.",
     "invalidAmount": "Veuillez saisir un montant valide",
-    "required": "Ce champ est requis"
+    "required": "Ce champ est requis",
+    "processingMessage": "Désolé, j'ai rencontré une erreur en traitant votre message. Veuillez réessayer ou utiliser l'enregistrement vocal ou le téléchargement de fichier !"
   },
   "success": {
     "saved": "Enregistré avec succès",
@@ -101,5 +165,581 @@
     "title": "Votre copilote financier",
     "subtitle": "Lutter contre les pièges de l'endettement avec des outils financiers accessibles",
     "description": "Nous aidons les ménages à échapper aux pièges de l'endettement créés par plus de 4 milliards d'euros de marketing des sociétés de crédit grâce à des outils accessibles et responsabilisants."
+  },
+  "profile": {
+    "billingSubscription": "Facturation et abonnement",
+    "testToken": "Tester le jeton",
+    "helpSupport": "Aide et support"
+  },
+  "cards": {
+    "balance": {
+      "title": "Solde mensuel"
+    },
+    "income": {
+      "title": "Sources de revenus",
+      "label": "Libellé",
+      "amount": "Montant (€)",
+      "labelPlaceholder": "ex. Salaire mensuel",
+      "amountPlaceholder": "ex. 3000",
+      "monthlyLabel": "Mensuel (décocher pour annuel)",
+      "perMonth": "/mois",
+      "perYear": "/an"
+    },
+    "expenses": {
+      "title": "Dépenses mensuelles",
+      "label": "Libellé",
+      "category": "Catégorie",
+      "amount": "Montant (€/mois)",
+      "labelPlaceholder": "ex. Loyer, Courses",
+      "amountPlaceholder": "ex. 800"
+    },
+    "loans": {
+      "title": "Crédits et dettes",
+      "monthlyPayment": "Mensualité",
+      "interestRate": "Taux d'intérêt",
+      "remainingBalance": "Capital restant",
+      "monthsLeft": "Mois restants",
+      "loanName": "Nom du crédit",
+      "loanNamePlaceholder": "ex. Crédit auto, Prêt immobilier",
+      "loanType": "Type de crédit",
+      "monthlyPaymentAmount": "Mensualité (€)",
+      "monthlyPaymentPlaceholder": "ex. 250",
+      "interestRatePercent": "Taux d'intérêt (%)",
+      "interestRatePlaceholder": "ex. 3,5",
+      "remainingBalanceAmount": "Capital restant (€)",
+      "remainingBalancePlaceholder": "ex. 15000",
+      "monthsLeftLabel": "Mois restants",
+      "monthsLeftPlaceholder": "ex. 60"
+    },
+    "insights": {
+      "title": "Analyses IA",
+      "refresh": "🔄 Actualiser",
+      "generate": "✨ Générer",
+      "analyzing": "Analyse de votre budget...",
+      "clickToGenerate": "Cliquez sur \"Générer\" pour obtenir des analyses IA de votre budget"
+    },
+    "empty": {
+      "title": "Aucune donnée financière",
+      "subtitle": "Commencez à discuter avec Fourmi pour ajouter vos revenus, dépenses et crédits",
+      "trySaying": "Essayez de dire",
+      "suggestion1": "Je gagne 3000€ par mois",
+      "suggestion2": "Mon loyer est de 800€ par mois",
+      "suggestion3": "Je dépense 300€ en courses",
+      "suggestion4": "J'ai un crédit auto de 250€/mois"
+    },
+    "pending": {
+      "title": "En attente de confirmation",
+      "item": "élément",
+      "items": "éléments",
+      "edit": "Modifier",
+      "optional": "Optionnel",
+      "months": "mois",
+      "unknownData": "Donnée inconnue",
+      "dataRejected": "Donnée rejetée",
+      "incompleteData": "Données incomplètes - cliquez sur Modifier pour ajouter des détails",
+      "possibleDuplicate": "Possible doublon détecté",
+      "confidence": "Confiance"
+    }
+  },
+  "projects": {
+    "subtitle": "Vos projets d'analyse financière",
+    "noProjectsTitle": "Aucun projet pour l'instant",
+    "noProjectsSubtitle": "Commencez une conversation sur le rachat de crédit, la planification budgétaire ou vos objectifs financiers pour créer votre premier projet.",
+    "startChatting": "Commencer à discuter",
+    "created": "Créé",
+    "options": "Options",
+    "maxSavings": "Économies max",
+    "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce projet ? Cette action ne peut pas être annulée.",
+    "noResultsAvailable": "Aucun résultat d'analyse disponible",
+    "currentDebtSummary": "Résumé de la dette actuelle",
+    "totalInterest": "Intérêts totaux",
+    "overview": "Aperçu",
+    "inputs": "Données",
+    "results": "Résultats"
+  },
+  "docs": {
+    "layout": {
+      "title": "Documentation Fourmi"
+    },
+    "navigation": {
+      "overview": "Aperçu",
+      "agents": "Agents",
+      "financial": "Financier",
+      "implementation": "Implémentation"
+    },
+    "home": {
+      "title": "Documentation Fourmi",
+      "subtitle": "Guide complet de votre copilote financier",
+      "welcome": "Bienvenue dans la documentation de Fourmi. Vous trouverez ici tout ce que vous devez savoir pour utiliser efficacement votre copilote financier.",
+      "agents": {
+        "title": "Agents",
+        "description": "Découvrez nos agents IA, leurs capacités et comment ils traitent vos informations financières.",
+        "features": {
+          "extraction": "Extraction de données financières",
+          "advice": "Génération de conseils",
+          "tools": "Outils de projet",
+          "validation": "Flux de validation"
+        }
+      },
+      "financial": {
+        "title": "Financier",
+        "description": "Comprenez les termes financiers, les calculs et comment Fourmi traite vos données monétaires.",
+        "features": {
+          "terms": "HELOC, DTI et types de prêts",
+          "calculations": "Calculs de taux d'intérêt",
+          "values": "Valeurs codées en dur (12%, 18%, 8%)",
+          "formulas": "Formules PMT"
+        }
+      },
+      "implementation": {
+        "title": "Implémentation",
+        "description": "Détails techniques sur l'implémentation actuelle et l'architecture.",
+        "features": {
+          "audit": "Audit actuel vs feuille de route",
+          "patterns": "Modèles Convex",
+          "architecture": "Architecture des composants",
+          "testing": "Approche de test"
+        }
+      },
+      "projects": {
+        "title": "Projets",
+        "description": "Découvrez les projets financiers et les simulations (Bientôt disponible).",
+        "features": {
+          "consolidation": "Rachat de crédit",
+          "rentVsBuy": "Analyse location vs achat",
+          "strategies": "Stratégies de remboursement",
+          "comparisons": "Comparaisons multi-projets"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "Fourmi est un copilote financier conversationnel qui aide les ménages à échapper aux pièges de l'endettement et à prendre des décisions immobilières éclairées.",
+        "fight": "Nous luttons contre les pièges de l'endettement créés par plus de 4 milliards d'euros annuels de marketing des sociétés de crédit avec des outils accessibles et responsabilisants."
+      }
+    },
+    "agents": {
+      "title": "Système d'agents",
+      "subtitle": "Comment les agents IA de Fourmi traitent vos informations financières",
+      "financial": {
+        "title": "Agent financier",
+        "description": "L'agent principal qui traite vos messages de chat et extrait les informations financières.",
+        "capabilities": {
+          "title": "Capacités actuelles",
+          "income": {
+            "title": "Détection des revenus",
+            "description": "Reconnaît les salaires, traitements, revenus freelance",
+            "keywords": "Mots-clés : gagner, salaire, revenu, toucher, payé, traitement, chiffre d'affaires"
+          },
+          "expenses": {
+            "title": "Suivi des dépenses",
+            "description": "Catégorise les dépenses en 7 catégories",
+            "categories": "Logement, Alimentation, Transport, Services publics, Loisirs, Santé, Autres"
+          },
+          "loans": {
+            "title": "Traitement des crédits",
+            "description": "Extrait les détails des prêts y compris les montants de paiement",
+            "types": "Types : carte de crédit, personnel, immobilier, auto"
+          },
+          "duplicates": {
+            "title": "Prévention des doublons",
+            "description": "Vérifie les données existantes avant d'ajouter de nouvelles entrées",
+            "detail": "Empêche la double saisie accidentelle des mêmes informations"
+          },
+          "validation": {
+            "title": "Validation des faits",
+            "description": "Crée des faits en attente pour confirmation utilisateur",
+            "detail": "Toutes les extractions nécessitent une confirmation dans le tableau de bord avant sauvegarde"
+          }
+        },
+        "examples": {
+          "title": "Exemples d'extraction",
+          "input": "Entrée",
+          "output": "Sortie",
+          "example1": {
+            "input": "\"Je gagne 3000€ par mois\"",
+            "output": "Revenu : Gains mensuels - 3000€/mois"
+          },
+          "example2": {
+            "input": "\"Mon loyer est de 800€ et je dépense 300 en courses\"",
+            "output": "Dépense : Logement - Loyer - 800€/mois\nDépense : Alimentation - Courses - 300€/mois"
+          },
+          "example3": {
+            "input": "\"Crédit auto 250€/mois à 4,5%\"",
+            "output": "Crédit : Auto - Crédit auto - 250€/mois (4,5% TAP)"
+          }
+        },
+        "limitations": {
+          "title": "Limitations",
+          "language": {
+            "title": "Support linguistique",
+            "description": "Optimisé pour l'anglais et le français",
+            "detail": "Les autres langues peuvent avoir une précision réduite"
+          },
+          "complex": {
+            "title": "Scénarios complexes",
+            "description": "Difficultés avec les situations financières très complexes",
+            "detail": "Fonctionne mieux avec des déclarations financières claires et directes"
+          },
+          "rates": {
+            "title": "Estimation des taux d'intérêt",
+            "description": "N'extrait que les taux explicitement mentionnés",
+            "detail": "N'estimera pas ou n'assumera pas de taux s'ils ne sont pas indiqués"
+          }
+        }
+      },
+      "tools": {
+        "title": "Outils d'agent",
+        "description": "Outils spécialisés utilisés par l'agent pour différentes tâches.",
+        "location": "Emplacement",
+        "extract": {
+          "title": "extractFinancialDataTool",
+          "description": "Traite le langage naturel et extrait les faits financiers avec validation."
+        },
+        "summary": {
+          "title": "getFinancialSummaryTool",
+          "description": "Fournit un aperçu financier actuel avec calculs de solde mensuel."
+        },
+        "advice": {
+          "title": "generateFinancialAdviceTool",
+          "description": "Crée des conseils financiers personnalisés basés sur la situation de l'utilisateur."
+        }
+      },
+      "workflow": {
+        "title": "Flux de validation",
+        "description": "Comment l'agent assure la précision des données grâce à la validation humaine dans la boucle.",
+        "steps": {
+          "processing": {
+            "title": "Traitement du message",
+            "description": "L'agent analyse le message utilisateur pour le contenu financier"
+          },
+          "extraction": {
+            "title": "Extraction de faits",
+            "description": "L'IA extrait des données financières structurées avec GPT-4"
+          },
+          "duplicates": {
+            "title": "Vérification des doublons",
+            "description": "Le système vérifie les entrées similaires existantes"
+          },
+          "pending": {
+            "title": "Création en attente",
+            "description": "Crée des faits en attente nécessitant une confirmation utilisateur"
+          },
+          "validation": {
+            "title": "Validation utilisateur",
+            "description": "L'utilisateur révise et confirme/rejette dans le tableau de bord"
+          },
+          "storage": {
+            "title": "Stockage des données",
+            "description": "Les faits confirmés sont sauvegardés de façon permanente dans le profil"
+          }
+        }
+      }
+    },
+    "financial": {
+      "title": "Guide financier",
+      "subtitle": "Comprendre les termes financiers, les calculs et comment Fourmi traite vos données monétaires",
+      "terms": {
+        "title": "Termes financiers",
+        "description": "Concepts financiers clés utilisés dans Fourmi.",
+        "heloc": {
+          "title": "HELOC (Ligne de crédit sur valeur domiciliaire)",
+          "description": "Une ligne de crédit renouvelable garantie par la valeur nette de votre maison. Fonctionne comme une carte de crédit mais avec des taux d'intérêt plus bas.",
+          "rate": "Taux typique",
+          "rateDetail": "Taux directeur + marge de 0,5-2,0%",
+          "limit": "Limite de crédit",
+          "limitDetail": "Jusqu'à 80-90% de la valeur du logement moins l'hypothèque existante",
+          "usage": "Usage",
+          "usageDetail": "Rachat de crédit, améliorations domiciliaires, fonds d'urgence"
+        },
+        "dti": {
+          "title": "DTI (Ratio dette/revenu)",
+          "description": "Le pourcentage de votre revenu mensuel qui va vers les paiements de dette. Une métrique clé utilisée par les prêteurs.",
+          "formula": "Formule",
+          "formulaDetail": "(Total des paiements mensuels de dette / Revenu mensuel brut) × 100",
+          "good": "Bon DTI",
+          "goodDetail": "En dessous de 36% (y compris logement)",
+          "housing": "DTI logement",
+          "housingDetail": "En dessous de 28% pour les coûts de logement uniquement"
+        },
+        "personal": {
+          "title": "Prêt personnel",
+          "description": "Prêt à tempérament non garanti avec paiements mensuels fixes. Commun pour le rachat de crédit.",
+          "rate": "Taux typique",
+          "rateDetail": "6-36% TAP (dépend du score de crédit)",
+          "terms": "Termes",
+          "termsDetail": "2-7 ans",
+          "amount": "Montant",
+          "amountDetail": "1 000€-100 000€"
+        },
+        "transfer": {
+          "title": "Transfert de solde",
+          "description": "Déplacer une dette à taux élevé vers une carte de crédit avec des taux promotionnels plus bas.",
+          "promo": "Taux promotionnel",
+          "promoDetail": "Souvent 0% TAP pour 12-21 mois",
+          "fee": "Frais de transfert",
+          "feeDetail": "Typiquement 3-5% du montant transféré",
+          "after": "Après promo",
+          "afterDetail": "Le taux passe au TAP standard (15-25%)"
+        }
+      },
+      "values": {
+        "title": "Valeurs codées en dur",
+        "description": "Taux standard et hypothèses utilisés dans les calculs de Fourmi.",
+        "creditCard": {
+          "title": "Taux par défaut carte de crédit : 18%",
+          "description": "Quand les utilisateurs ne spécifient pas leur taux d'intérêt de carte de crédit, nous assumons 18% TAP.",
+          "reasoning": "Raisonnement",
+          "reasoningDetail": "TAP moyen des cartes de crédit françaises en 2024",
+          "usage": "Usage",
+          "usageDetail": "Calculs de remboursement, comparaisons de consolidation"
+        },
+        "personalLoan": {
+          "title": "Taux prêt personnel : 12%",
+          "description": "Taux par défaut pour les calculs de prêt personnel quand non spécifié par l'utilisateur.",
+          "reasoning": "Raisonnement",
+          "reasoningDetail": "Taux moyen pour les emprunteurs avec bon crédit (score 650+)",
+          "usage": "Usage",
+          "usageDetail": "Scénarios de rachat de crédit"
+        },
+        "heloc": {
+          "title": "Taux HELOC : 8%",
+          "description": "Taux par défaut pour les calculs de ligne de crédit sur valeur domiciliaire.",
+          "reasoning": "Raisonnement",
+          "reasoningDetail": "Taux typique pour directeur + marge 1-2%",
+          "usage": "Usage",
+          "usageDetail": "Scénarios de rachat de crédit de montant élevé"
+        },
+        "maxDti": {
+          "title": "DTI maximum : 36%",
+          "description": "Ratio dette/revenu maximum pour les calculs d'éligibilité de prêt.",
+          "reasoning": "Raisonnement",
+          "reasoningDetail": "Standard de prêt conservateur",
+          "usage": "Usage",
+          "usageDetail": "Détermination de l'éligibilité au prêt de consolidation"
+        }
+      },
+      "formulas": {
+        "title": "Formules financières",
+        "description": "Formules mathématiques utilisées dans les calculs de Fourmi.",
+        "location": "Emplacement",
+        "pmt": {
+          "title": "PMT (Paiement mensuel)",
+          "description": "Calcule le paiement mensuel fixe pour les prêts.",
+          "principal": "Principal (montant du prêt)",
+          "rate": "Taux d'intérêt mensuel (taux annuel ÷ 12)",
+          "months": "Nombre de mois"
+        },
+        "payoff": {
+          "title": "Calendrier de remboursement",
+          "description": "Calcule les mois nécessaires pour rembourser la dette avec les paiements actuels.",
+          "balance": "Solde actuel",
+          "rate": "Taux d'intérêt mensuel",
+          "payment": "Paiement mensuel"
+        },
+        "interest": {
+          "title": "Intérêts totaux",
+          "description": "Calcule les intérêts totaux payés sur la durée de vie d'un prêt.",
+          "usage": "Usage",
+          "usageDetail": "Comparaison des options de consolidation"
+        }
+      },
+      "storage": {
+        "title": "Stockage des données",
+        "description": "Comment Fourmi stocke et traite vos données financières.",
+        "money": {
+          "title": "Stockage monétaire : Centimes",
+          "description": "Tous les montants monétaires sont stockés comme entiers en centimes pour éviter les erreurs de virgule flottante.",
+          "example": "Exemple",
+          "exampleDetail": "25,50€ est stocké comme 2550 centimes",
+          "benefit": "Avantage",
+          "benefitDetail": "Calculs précis, pas d'erreurs d'arrondi",
+          "conversion": "Conversion",
+          "conversionDetail": "Valeur d'affichage = valeur_stockée / 100"
+        },
+        "validation": {
+          "title": "Validation des données",
+          "description": "Règles de validation d'entrée pour la saisie de données financières.",
+          "amounts": "Montants",
+          "amountsDetail": "Doivent être positifs, max 1M€",
+          "rates": "Taux d'intérêt",
+          "ratesDetail": "Plage 0-50%",
+          "location": "Emplacement"
+        },
+        "realtime": {
+          "title": "Mises à jour en temps réel",
+          "description": "Le tableau de bord se met à jour automatiquement quand de nouvelles données sont ajoutées ou confirmées.",
+          "technology": "Technologie",
+          "technologyDetail": "Abonnements temps réel Convex",
+          "pattern": "Modèle",
+          "patternDetail": "Les hooks useQuery se re-rendent automatiquement",
+          "performance": "Performance",
+          "performanceDetail": "Seules les données modifiées déclenchent des mises à jour"
+        }
+      }
+    },
+    "implementation": {
+      "title": "État de l'implémentation",
+      "subtitle": "Audit de l'implémentation actuelle vs feuille de route et architecture technique",
+      "location": "Emplacement",
+      "completed": {
+        "title": "Fonctionnalités terminées",
+        "description": "Fonctionnalité principale entièrement implémentée et fonctionnelle.",
+        "features": {
+          "profiles": {
+            "title": "Gestion de profil de base",
+            "description": "Profils utilisateur avec authentification via Convex Auth"
+          },
+          "tracking": {
+            "title": "Suivi des données financières",
+            "description": "Suivi des revenus, dépenses et prêts avec calculs en temps réel"
+          },
+          "extraction": {
+            "title": "Extraction de faits alimentée par IA",
+            "description": "GPT-4 extrait les informations financières du langage naturel"
+          },
+          "duplicates": {
+            "title": "Prévention des doublons",
+            "description": "Vérifie les entrées similaires existantes avant d'ajouter de nouvelles données"
+          },
+          "dashboard": {
+            "title": "Tableau de bord en temps réel",
+            "description": "Tableau de bord financier en direct avec calculs de solde mensuel"
+          },
+          "csv": {
+            "title": "Téléchargement de fichier CSV",
+            "description": "Traite les données financières des fichiers CSV téléchargés"
+          },
+          "i18n": {
+            "title": "Internationalisation (Français/Anglais)",
+            "description": "Système de localisation complet avec commutateur de langue et traductions financières professionnelles"
+          },
+          "billing": {
+            "title": "Système de facturation Schematic",
+            "description": "Gestion d'abonnement complète avec portail de facturation et drapeaux de fonctionnalité"
+          }
+        }
+      },
+      "inProgress": {
+        "title": "En cours",
+        "description": "Fonctionnalités actuellement en développement ou partiellement implémentées.",
+        "features": {
+          "validation": {
+            "title": "Système de validation des faits",
+            "description": "Validation humaine dans la boucle pour les extractions IA (backend terminé, UI en cours)",
+            "status": "Backend : convex/domain/facts.ts | UI : En attente"
+          },
+          "editDelete": {
+            "title": "Fonctionnalité modifier/supprimer",
+            "description": "Permettre aux utilisateurs de modifier ou supprimer des entrées financières (partiellement implémenté)",
+            "status": "Les mutations backend existent, intégration UI nécessaire"
+          },
+          "logic": {
+            "title": "Organisation de la logique métier",
+            "description": "Déplacement des calculs vers des dossiers lib/ et domain/ dédiés",
+            "status": "Commencé : convex/lib/debtConsolidation.ts"
+          },
+          "router": {
+            "title": "Implémentation React Router",
+            "description": "Routage approprié au lieu de l'approche overlay/modal (actuellement en cours d'implémentation)",
+            "status": "Statut : Configuration du routeur terminée, pages de documentation en cours"
+          }
+        }
+      },
+      "todo": {
+        "title": "À FAIRE",
+        "description": "Fonctionnalités planifiées et améliorations pour le développement futur.",
+        "features": {
+          "realEstate": {
+            "title": "Projets immobiliers (Niveau PAYANT)",
+            "description": "Analyse location vs achat et outils de décision immobilière",
+            "status": "Conception : docs/technical/PROJECTS_IMPLEMENTATION.md"
+          },
+          "simulations": {
+            "title": "Simulations multiples (Niveau PREMIUM)",
+            "description": "Comparer plusieurs scénarios financiers et projections",
+            "requirements": "Nécessite : Fondation du système de projet + moteur de comparaison"
+          },
+          "testing": {
+            "title": "Tests complets",
+            "description": "Tests unitaires et d'intégration avec le framework Vitest",
+            "setup": "Configuration : Configuration d'environnement de test nécessaire"
+          },
+          "deployment": {
+            "title": "Déploiement en production",
+            "description": "Déployer en production avec pipeline CI/CD approprié",
+            "prerequisites": "Prérequis : Tests + intégration facturation"
+          }
+        }
+      },
+      "architecture": {
+        "title": "Modèles d'architecture",
+        "description": "Décisions architecturales clés et modèles utilisés dans la base de code.",
+        "patterns": {
+          "agents": {
+            "title": "Modèle d'outils d'agent Convex",
+            "description": "Chaque fonctionnalité majeure est implémentée comme un outil d'agent focalisé utilisant createTool().",
+            "benefits": "Avantages",
+            "benefitsDetail": "Modularité, testabilité, isolation d'erreur",
+            "example": "Exemple",
+            "future": "Futur",
+            "futureDetail": "Outils spécifiques au projet (rachat de crédit, location vs achat)"
+          },
+          "realtime": {
+            "title": "Flux de données en temps réel",
+            "description": "Convex gère les abonnements temps réel avec des hooks useQuery pour des mises à jour UI automatiques.",
+            "pattern": "Modèle",
+            "patternDetail": "Les mutations déclenchent des re-rendus automatiques",
+            "performance": "Performance",
+            "performanceDetail": "Seules les données modifiées causent des mises à jour",
+            "usage": "Usage",
+            "usageDetail": "Le tableau de bord reflète les changements immédiatement"
+          },
+          "validation": {
+            "title": "Validation humaine dans la boucle",
+            "description": "Les extractions IA créent des faits en attente qui nécessitent une confirmation utilisateur avant stockage permanent.",
+            "flow": "Flux",
+            "flowDetail": "Extraire → En attente → Confirmer → Sauvegarder",
+            "benefit": "Avantage",
+            "benefitDetail": "Précision et contrôle utilisateur",
+            "implementation": "Implémentation"
+          },
+          "composition": {
+            "title": "Composition de composants",
+            "description": "Les composants UI sont composés avec une séparation claire entre données, logique et présentation.",
+            "pattern": "Modèle",
+            "patternDetail": "Les composants conteneurs récupèrent les données, les composants de présentation affichent",
+            "example": "Exemple",
+            "reusability": "Réutilisabilité",
+            "reusabilityDetail": "Les composants peuvent être facilement testés et réutilisés"
+          }
+        }
+      },
+      "workflow": {
+        "title": "Flux de développement",
+        "description": "Processus recommandé pour ajouter de nouvelles fonctionnalités et maintenir la qualité.",
+        "steps": {
+          "design": {
+            "title": "Phase de conception",
+            "description": "Créer de la documentation technique dans docs/technical/"
+          },
+          "backend": {
+            "title": "Implémentation backend",
+            "description": "Ajouter des fonctions Convex, schémas et outils d'agent"
+          },
+          "frontend": {
+            "title": "Intégration frontend",
+            "description": "Créer des composants UI et intégrer avec le backend"
+          },
+          "testing": {
+            "title": "Tests",
+            "description": "Tests unitaires pour la logique métier, tests d'intégration pour les flux de travail"
+          },
+          "documentation": {
+            "title": "Mise à jour de la documentation",
+            "description": "Mettre à jour ce statut d'implémentation et les guides utilisateur"
+          }
+        }
+      }
+    }
   }
 }

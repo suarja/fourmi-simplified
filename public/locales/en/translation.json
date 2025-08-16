@@ -10,7 +10,8 @@
     "previous": "Previous",
     "confirm": "Confirm",
     "reject": "Reject",
-    "close": "Close"
+    "close": "Close",
+    "copy": "Copy"
   },
   "auth": {
     "signIn": "Sign In",
@@ -25,7 +26,8 @@
     "billing": "Billing",
     "backToDashboard": "Back to Dashboard",
     "backToProjects": "Back to Projects",
-    "backToApp": "Back to App"
+    "backToApp": "Back to App",
+    "allProjects": "All Projects"
   },
   "financial": {
     "income": "Income",
@@ -55,6 +57,7 @@
   },
   "dashboard": {
     "title": "Financial Dashboard",
+    "subtitle": "Real-time view of your budget • Drag cards to reorder",
     "noData": "No financial data yet. Start by telling me about your income and expenses!",
     "pendingFacts": "Pending Facts",
     "confirmToSave": "Confirm to save to your profile",
@@ -78,6 +81,13 @@
     "uploadFile": "Upload File",
     "processing": "Processing...",
     "tryAgain": "Try again",
+    "defaultTitle": "Chat with Fourmi",
+    "continueConversation": "Continue your conversation with Fourmi",
+    "startConversation": "Tell me about your finances using text, voice, or files",
+    "startPrompt": "Start the conversation!",
+    "you": "You",
+    "copyMessage": "Copy message",
+    "analyzing": "Analyzing your message...",
     "suggestions": {
       "income": "I earn 3000€ per month",
       "expenses": "My rent is 800€ and groceries cost 300€",
@@ -89,7 +99,8 @@
     "networkError": "Network error. Please check your connection.",
     "uploadFailed": "File upload failed. Please try again.",
     "invalidAmount": "Please enter a valid amount",
-    "required": "This field is required"
+    "required": "This field is required",
+    "processingMessage": "Sorry, I encountered an error processing your message. Please try again or use voice recording or file upload!"
   },
   "success": {
     "saved": "Saved successfully",
@@ -101,5 +112,620 @@
     "title": "Your Financial Copilot",
     "subtitle": "Fighting consumer debt traps with accessible financial tools",
     "description": "We're helping households escape debt traps created by $4B+ annual credit company marketing with empowering, accessible tools."
+  },
+  "profile": {
+    "billingSubscription": "Billing & Subscription",
+    "testToken": "Test Token",
+    "helpSupport": "Help & Support"
+  },
+  "cards": {
+    "balance": {
+      "title": "Monthly Balance"
+    },
+    "income": {
+      "title": "Income Sources",
+      "label": "Label",
+      "amount": "Amount (€)",
+      "labelPlaceholder": "e.g., Monthly salary",
+      "amountPlaceholder": "e.g., 3000",
+      "monthlyLabel": "Monthly (uncheck for annual)",
+      "perMonth": "/month",
+      "perYear": "/year"
+    },
+    "expenses": {
+      "title": "Monthly Expenses",
+      "label": "Label",
+      "category": "Category",
+      "amount": "Amount (€/month)",
+      "labelPlaceholder": "e.g., Rent, Groceries",
+      "amountPlaceholder": "e.g., 800"
+    },
+    "loans": {
+      "title": "Loans & Debt",
+      "monthlyPayment": "Monthly Payment",
+      "interestRate": "Interest Rate",
+      "remainingBalance": "Remaining Balance",
+      "monthsLeft": "Months Left",
+      "loanName": "Loan Name",
+      "loanNamePlaceholder": "e.g., Car Loan, Mortgage",
+      "loanType": "Loan Type",
+      "monthlyPaymentAmount": "Monthly Payment (€)",
+      "monthlyPaymentPlaceholder": "e.g., 250",
+      "interestRatePercent": "Interest Rate (%)",
+      "interestRatePlaceholder": "e.g., 3.5",
+      "remainingBalanceAmount": "Remaining Balance (€)",
+      "remainingBalancePlaceholder": "e.g., 15000",
+      "monthsLeftLabel": "Months Left",
+      "monthsLeftPlaceholder": "e.g., 60"
+    },
+    "insights": {
+      "title": "AI Insights",
+      "refresh": "🔄 Refresh",
+      "generate": "✨ Generate",
+      "analyzing": "Analyzing your budget...",
+      "clickToGenerate": "Click \"Generate\" to get AI-powered insights about your budget"
+    },
+    "empty": {
+      "title": "No Financial Data Yet",
+      "subtitle": "Start chatting with Fourmi to add your income, expenses, and loans",
+      "trySaying": "Try saying",
+      "suggestion1": "I earn 3000€ per month",
+      "suggestion2": "My rent is 800€ monthly",
+      "suggestion3": "I spend 300€ on groceries",
+      "suggestion4": "I have a car loan of 250€/month"
+    },
+    "pending": {
+      "title": "Pending Confirmation",
+      "item": "item",
+      "items": "items",
+      "edit": "Edit",
+      "optional": "Optional",
+      "months": "months",
+      "unknownData": "Unknown data",
+      "dataRejected": "Data rejected",
+      "incompleteData": "Incomplete data - click Edit to add details",
+      "possibleDuplicate": "Possible duplicate detected",
+      "confidence": "Confidence"
+    }
+  },
+  "projects": {
+    "subtitle": "Your financial analysis projects",
+    "noProjectsTitle": "No Projects Yet",
+    "noProjectsSubtitle": "Start a conversation about debt consolidation, budget planning, or financial goals to create your first project.",
+    "startChatting": "Start Chatting",
+    "created": "Created",
+    "options": "Options",
+    "maxSavings": "Max Savings",
+    "deleteConfirmation": "Are you sure you want to delete this project? This action cannot be undone.",
+    "noResultsAvailable": "No analysis results available",
+    "currentDebtSummary": "Current Debt Summary",
+    "totalInterest": "Total Interest",
+    "overview": "Overview",
+    "inputs": "Inputs",
+    "results": "Results",
+    "canvas": {
+      "currentDebtSummary": "Current Debt Summary",
+      "totalDebt": "Total Debt",
+      "monthlyPayment": "Monthly Payment",
+      "totalInterest": "Total Interest",
+      "consolidationOptions": "Consolidation Options",
+      "eligible": "Eligible",
+      "notEligible": "Not Eligible",
+      "monthsSaved": "Months Saved",
+      "totalSavings": "Total Savings",
+      "noEligibleOptions": "No eligible consolidation options found",
+      "recommendation": "Recommendation",
+      "nextSteps": "Next Steps:",
+      "importantConsiderations": "Important Considerations",
+      "noInputData": "No input data available",
+      "currentDebts": "Current Debts",
+      "balance": "Balance:",
+      "apr": "APR",
+      "analyzedOptions": "Analyzed Options",
+      "fees": "Fees:",
+      "financialContext": "Financial Context",
+      "monthlyIncome": "Monthly Income",
+      "creditScore": "Credit Score",
+      "projectInformation": "Project Information",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "status": "Status",
+      "state": "State",
+      "quickSummary": "Quick Summary",
+      "eligibleOptions": "Eligible Options",
+      "maxPotentialSavings": "Max Potential Savings",
+      "editProjectName": "Edit project name",
+      "deleteProject": "Delete project"
+    },
+    "states": {
+      "FRESH": "Fresh",
+      "STALE": "Stale",
+      "NEEDS_DATA": "Needs Data"
+    }
+  },
+  "docs": {
+    "layout": {
+      "title": "Fourmi Docs"
+    },
+    "navigation": {
+      "overview": "Overview",
+      "agents": "Agents",
+      "financial": "Financial",
+      "implementation": "Implementation"
+    },
+    "home": {
+      "title": "Fourmi Documentation",
+      "subtitle": "Complete guide to your financial copilot",
+      "welcome": "Welcome to Fourmi's documentation. Here you'll find everything you need to know about using your financial copilot effectively.",
+      "agents": {
+        "title": "Agents",
+        "description": "Learn about our AI agents, their capabilities, and how they process your financial information.",
+        "features": {
+          "extraction": "Financial data extraction",
+          "advice": "Advice generation",
+          "tools": "Project tools",
+          "validation": "Validation workflows"
+        }
+      },
+      "financial": {
+        "title": "Financial",
+        "description": "Understand financial terms, calculations, and how Fourmi processes your money data.",
+        "features": {
+          "terms": "HELOC, DTI, and loan types",
+          "calculations": "Interest rate calculations",
+          "values": "Hardcoded values (12%, 18%, 8%)",
+          "formulas": "PMT formulas"
+        }
+      },
+      "implementation": {
+        "title": "Implementation",
+        "description": "Technical details about the current implementation and architecture.",
+        "features": {
+          "audit": "Current vs roadmap audit",
+          "patterns": "Convex patterns",
+          "architecture": "Component architecture",
+          "testing": "Testing approach"
+        }
+      },
+      "projects": {
+        "title": "Projects",
+        "description": "Learn about financial projects and simulations (Coming soon).",
+        "features": {
+          "consolidation": "Debt consolidation",
+          "rentVsBuy": "Rent vs buy analysis",
+          "strategies": "Payoff strategies",
+          "comparisons": "Multi-project comparisons"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "Fourmi is a chat-first financial copilot helping households escape debt traps and make informed real estate decisions.",
+        "fight": "We're fighting consumer debt traps created by $4B+ annual credit company marketing with accessible, empowering tools."
+      }
+    },
+    "agents": {
+      "title": "Agent System",
+      "subtitle": "How Fourmi's AI agents process your financial information",
+      "financial": {
+        "title": "Financial Agent",
+        "description": "The main agent that processes your chat messages and extracts financial information.",
+        "capabilities": {
+          "title": "Current Capabilities",
+          "income": {
+            "title": "Income Detection",
+            "description": "Recognizes salary, wages, freelance income",
+            "keywords": "Keywords: earn, salary, income, make, paid, wage, revenue"
+          },
+          "expenses": {
+            "title": "Expense Tracking",
+            "description": "Categorizes spending across 7 categories",
+            "categories": "Housing, Food, Transport, Utilities, Entertainment, Healthcare, Other"
+          },
+          "loans": {
+            "title": "Loan Processing",
+            "description": "Extracts loan details including payment amounts",
+            "types": "Types: credit_card, personal, mortgage, auto"
+          },
+          "duplicates": {
+            "title": "Duplicate Prevention",
+            "description": "Checks existing data before adding new entries",
+            "detail": "Prevents accidental double-entry of the same information"
+          },
+          "validation": {
+            "title": "Fact Validation",
+            "description": "Creates pending facts for user confirmation",
+            "detail": "All extractions require dashboard confirmation before saving"
+          }
+        },
+        "examples": {
+          "title": "Extraction Examples",
+          "input": "Input",
+          "output": "Output",
+          "example1": {
+            "input": "\"I earn 3000€ per month\"",
+            "output": "Income: Monthly earnings - €3000/month"
+          },
+          "example2": {
+            "input": "\"My rent is 800€ and I spend 300 on groceries\"",
+            "output": "Expense: Housing - Rent - €800/month\nExpense: Food - Groceries - €300/month"
+          },
+          "example3": {
+            "input": "\"Car loan 250€/month at 4.5%\"",
+            "output": "Loan: Auto - Car loan - €250/month (4.5% APR)"
+          }
+        },
+        "limitations": {
+          "title": "Limitations",
+          "language": {
+            "title": "Language Support",
+            "description": "Optimized for English and French",
+            "detail": "Other languages may have reduced accuracy"
+          },
+          "complex": {
+            "title": "Complex Scenarios",
+            "description": "Struggles with highly complex financial situations",
+            "detail": "Best with clear, straightforward financial statements"
+          },
+          "rates": {
+            "title": "Interest Rate Guessing",
+            "description": "Only extracts explicitly mentioned rates",
+            "detail": "Will not estimate or assume rates if not stated"
+          }
+        }
+      },
+      "tools": {
+        "title": "Agent Tools",
+        "description": "Specialized tools used by the agent for different tasks.",
+        "location": "Location",
+        "extract": {
+          "title": "extractFinancialDataTool",
+          "description": "Processes natural language and extracts financial facts with validation."
+        },
+        "summary": {
+          "title": "getFinancialSummaryTool",
+          "description": "Provides current financial overview with monthly balance calculations."
+        },
+        "advice": {
+          "title": "generateFinancialAdviceTool",
+          "description": "Creates personalized financial advice based on user's situation."
+        }
+      },
+      "workflow": {
+        "title": "Validation Workflow",
+        "description": "How the agent ensures data accuracy through human-in-the-loop validation.",
+        "steps": {
+          "processing": {
+            "title": "Message Processing",
+            "description": "Agent analyzes user message for financial content"
+          },
+          "extraction": {
+            "title": "Fact Extraction",
+            "description": "AI extracts structured financial data using GPT-4"
+          },
+          "duplicates": {
+            "title": "Duplicate Check",
+            "description": "System checks for existing similar entries"
+          },
+          "pending": {
+            "title": "Pending Creation",
+            "description": "Creates pending facts requiring user confirmation"
+          },
+          "validation": {
+            "title": "User Validation",
+            "description": "User reviews and confirms/rejects in dashboard"
+          },
+          "storage": {
+            "title": "Data Storage",
+            "description": "Confirmed facts are permanently saved to profile"
+          }
+        }
+      }
+    },
+    "financial": {
+      "title": "Financial Guide",
+      "subtitle": "Understanding financial terms, calculations, and how Fourmi processes your money data",
+      "terms": {
+        "title": "Financial Terms",
+        "description": "Key financial concepts used throughout Fourmi.",
+        "heloc": {
+          "title": "HELOC (Home Equity Line of Credit)",
+          "description": "A revolving credit line secured by your home's equity. Functions like a credit card but with lower interest rates.",
+          "rate": "Typical Rate",
+          "rateDetail": "Prime rate + 0.5-2.0% margin",
+          "limit": "Credit Limit",
+          "limitDetail": "Up to 80-90% of home value minus existing mortgage",
+          "usage": "Usage",
+          "usageDetail": "Debt consolidation, home improvements, emergency funds"
+        },
+        "dti": {
+          "title": "DTI (Debt-to-Income Ratio)",
+          "description": "The percentage of your monthly income that goes toward debt payments. A key metric lenders use.",
+          "formula": "Formula",
+          "formulaDetail": "(Total Monthly Debt Payments / Gross Monthly Income) × 100",
+          "good": "Good DTI",
+          "goodDetail": "Below 36% (including housing)",
+          "housing": "Housing DTI",
+          "housingDetail": "Below 28% for housing costs only"
+        },
+        "personal": {
+          "title": "Personal Loan",
+          "description": "Unsecured installment loan with fixed monthly payments. Common for debt consolidation.",
+          "rate": "Typical Rate",
+          "rateDetail": "6-36% APR (depends on credit score)",
+          "terms": "Terms",
+          "termsDetail": "2-7 years",
+          "amount": "Amount",
+          "amountDetail": "$1,000-$100,000"
+        },
+        "transfer": {
+          "title": "Balance Transfer",
+          "description": "Moving high-interest debt to a credit card with lower promotional rates.",
+          "promo": "Promotional Rate",
+          "promoDetail": "Often 0% APR for 12-21 months",
+          "fee": "Transfer Fee",
+          "feeDetail": "Typically 3-5% of transferred amount",
+          "after": "After Promo",
+          "afterDetail": "Rate jumps to standard APR (15-25%)"
+        }
+      },
+      "values": {
+        "title": "Hardcoded Values",
+        "description": "Standard rates and assumptions used in Fourmi's calculations.",
+        "creditCard": {
+          "title": "Credit Card Default Rate: 18%",
+          "description": "When users don't specify their credit card interest rate, we assume 18% APR.",
+          "reasoning": "Reasoning",
+          "reasoningDetail": "Average US credit card APR as of 2024",
+          "usage": "Usage",
+          "usageDetail": "Payoff calculations, consolidation comparisons"
+        },
+        "personalLoan": {
+          "title": "Personal Loan Rate: 12%",
+          "description": "Default rate for personal loan calculations when not specified by user.",
+          "reasoning": "Reasoning",
+          "reasoningDetail": "Average rate for borrowers with good credit (650+ score)",
+          "usage": "Usage",
+          "usageDetail": "Debt consolidation scenarios"
+        },
+        "heloc": {
+          "title": "HELOC Rate: 8%",
+          "description": "Default rate for Home Equity Line of Credit calculations.",
+          "reasoning": "Reasoning",
+          "reasoningDetail": "Typical rate for prime + 1-2% margin",
+          "usage": "Usage",
+          "usageDetail": "High-amount debt consolidation scenarios"
+        },
+        "maxDti": {
+          "title": "Maximum DTI: 36%",
+          "description": "Maximum debt-to-income ratio for loan eligibility calculations.",
+          "reasoning": "Reasoning",
+          "reasoningDetail": "Conservative lending standard",
+          "usage": "Usage",
+          "usageDetail": "Determining consolidation loan eligibility"
+        }
+      },
+      "formulas": {
+        "title": "Financial Formulas",
+        "description": "Mathematical formulas used in Fourmi's calculations.",
+        "location": "Location",
+        "pmt": {
+          "title": "PMT (Monthly Payment)",
+          "description": "Calculates fixed monthly payment for loans.",
+          "principal": "Principal (loan amount)",
+          "rate": "Monthly interest rate (annual rate ÷ 12)",
+          "months": "Number of months"
+        },
+        "payoff": {
+          "title": "Payoff Timeline",
+          "description": "Calculates months needed to pay off debt with current payments.",
+          "balance": "Current balance",
+          "rate": "Monthly interest rate",
+          "payment": "Monthly payment"
+        },
+        "interest": {
+          "title": "Total Interest",
+          "description": "Calculates total interest paid over the life of a loan.",
+          "usage": "Usage",
+          "usageDetail": "Comparing consolidation options"
+        }
+      },
+      "storage": {
+        "title": "Data Storage",
+        "description": "How Fourmi stores and processes your financial data.",
+        "money": {
+          "title": "Money Storage: Cents",
+          "description": "All monetary amounts are stored as integers in cents to avoid floating-point errors.",
+          "example": "Example",
+          "exampleDetail": "€25.50 is stored as 2550 cents",
+          "benefit": "Benefit",
+          "benefitDetail": "Precise calculations, no rounding errors",
+          "conversion": "Conversion",
+          "conversionDetail": "Display value = stored_value / 100"
+        },
+        "validation": {
+          "title": "Data Validation",
+          "description": "Input validation rules for financial data entry.",
+          "amounts": "Amounts",
+          "amountsDetail": "Must be positive, max €1M",
+          "rates": "Interest Rates",
+          "ratesDetail": "0-50% range",
+          "location": "Location"
+        },
+        "realtime": {
+          "title": "Real-time Updates",
+          "description": "Dashboard automatically updates when new data is added or confirmed.",
+          "technology": "Technology",
+          "technologyDetail": "Convex real-time subscriptions",
+          "pattern": "Pattern",
+          "patternDetail": "useQuery hooks automatically re-render",
+          "performance": "Performance",
+          "performanceDetail": "Only changed data triggers updates"
+        }
+      }
+    },
+    "implementation": {
+      "title": "Implementation Status",
+      "subtitle": "Current implementation vs roadmap audit and technical architecture",
+      "location": "Location",
+      "completed": {
+        "title": "Completed Features",
+        "description": "Core functionality that's fully implemented and working.",
+        "features": {
+          "profiles": {
+            "title": "Basic Profile Management",
+            "description": "User profiles with authentication via Convex Auth"
+          },
+          "tracking": {
+            "title": "Financial Data Tracking",
+            "description": "Income, expense, and loan tracking with real-time calculations"
+          },
+          "extraction": {
+            "title": "AI-Powered Fact Extraction",
+            "description": "GPT-4 extracts financial information from natural language"
+          },
+          "duplicates": {
+            "title": "Duplicate Prevention",
+            "description": "Checks for existing similar entries before adding new data"
+          },
+          "dashboard": {
+            "title": "Real-time Dashboard",
+            "description": "Live financial dashboard with monthly balance calculations"
+          },
+          "csv": {
+            "title": "CSV File Upload",
+            "description": "Process financial data from uploaded CSV files"
+          },
+          "i18n": {
+            "title": "Internationalization (French/English)",
+            "description": "Complete localization system with language switcher and professional financial translations"
+          },
+          "billing": {
+            "title": "Schematic Billing System",
+            "description": "Complete subscription management with billing portal and feature flags"
+          }
+        }
+      },
+      "inProgress": {
+        "title": "In Progress",
+        "description": "Features currently being developed or partially implemented.",
+        "features": {
+          "validation": {
+            "title": "Fact Validation System",
+            "description": "Human-in-the-loop validation for AI extractions (backend complete, UI in progress)",
+            "status": "Backend: convex/domain/facts.ts | UI: Pending"
+          },
+          "editDelete": {
+            "title": "Edit/Delete Functionality",
+            "description": "Allow users to modify or remove financial entries (partially implemented)",
+            "status": "Backend mutations exist, UI integration needed"
+          },
+          "logic": {
+            "title": "Business Logic Organization",
+            "description": "Moving calculations to dedicated lib/ and domain/ folders",
+            "status": "Started: convex/lib/debtConsolidation.ts"
+          },
+          "router": {
+            "title": "React Router Implementation",
+            "description": "Proper routing instead of overlay/modal approach (currently being implemented)",
+            "status": "Status: Router setup complete, documentation pages in progress"
+          }
+        }
+      },
+      "todo": {
+        "title": "TODO",
+        "description": "Planned features and improvements for future development.",
+        "features": {
+          "realEstate": {
+            "title": "Real Estate Projects (PAID Tier)",
+            "description": "Rent vs buy analysis and real estate decision tools",
+            "status": "Design: docs/technical/PROJECTS_IMPLEMENTATION.md"
+          },
+          "simulations": {
+            "title": "Multiple Simulations (PREMIUM Tier)",
+            "description": "Compare multiple financial scenarios and projections",
+            "requirements": "Requires: Project system foundation + comparison engine"
+          },
+          "testing": {
+            "title": "Comprehensive Testing",
+            "description": "Unit and integration tests with Vitest framework",
+            "setup": "Setup: Test environment configuration needed"
+          },
+          "deployment": {
+            "title": "Production Deployment",
+            "description": "Deploy to production with proper CI/CD pipeline",
+            "prerequisites": "Prerequisites: Testing + billing integration"
+          }
+        }
+      },
+      "architecture": {
+        "title": "Architecture Patterns",
+        "description": "Key architectural decisions and patterns used in the codebase.",
+        "patterns": {
+          "agents": {
+            "title": "Convex Agent Tools Pattern",
+            "description": "Each major functionality is implemented as a focused agent tool using createTool().",
+            "benefits": "Benefits",
+            "benefitsDetail": "Modularity, testability, error isolation",
+            "example": "Example",
+            "future": "Future",
+            "futureDetail": "Project-specific tools (debt consolidation, rent vs buy)"
+          },
+          "realtime": {
+            "title": "Real-time Data Flow",
+            "description": "Convex handles real-time subscriptions with useQuery hooks for automatic UI updates.",
+            "pattern": "Pattern",
+            "patternDetail": "Mutations trigger automatic re-renders",
+            "performance": "Performance",
+            "performanceDetail": "Only changed data causes updates",
+            "usage": "Usage",
+            "usageDetail": "Dashboard reflects changes immediately"
+          },
+          "validation": {
+            "title": "Human-in-the-Loop Validation",
+            "description": "AI extractions create pending facts that require user confirmation before permanent storage.",
+            "flow": "Flow",
+            "flowDetail": "Extract → Pending → Confirm → Save",
+            "benefit": "Benefit",
+            "benefitDetail": "Accuracy and user control",
+            "implementation": "Implementation"
+          },
+          "composition": {
+            "title": "Component Composition",
+            "description": "UI components are composed with clear separation between data, logic, and presentation.",
+            "pattern": "Pattern",
+            "patternDetail": "Container components fetch data, presentational components display",
+            "example": "Example",
+            "reusability": "Reusability",
+            "reusabilityDetail": "Components can be easily tested and reused"
+          }
+        }
+      },
+      "workflow": {
+        "title": "Development Workflow",
+        "description": "Recommended process for adding new features and maintaining quality.",
+        "steps": {
+          "design": {
+            "title": "Design Phase",
+            "description": "Create technical documentation in docs/technical/"
+          },
+          "backend": {
+            "title": "Backend Implementation",
+            "description": "Add Convex functions, schemas, and agent tools"
+          },
+          "frontend": {
+            "title": "Frontend Integration",
+            "description": "Create UI components and integrate with backend"
+          },
+          "testing": {
+            "title": "Testing",
+            "description": "Unit tests for business logic, integration tests for workflows"
+          },
+          "documentation": {
+            "title": "Documentation Update",
+            "description": "Update this implementation status and user guides"
+          }
+        }
+      }
+    }
   }
 }

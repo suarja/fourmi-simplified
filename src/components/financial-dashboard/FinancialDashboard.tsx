@@ -48,6 +48,7 @@ function SortableItem({
   children: React.ReactNode;
   isDragOverlay?: boolean;
 }) {
+  const { t } = useTranslation();
   const {
     attributes,
     listeners,
@@ -74,7 +75,7 @@ function SortableItem({
       <div
         {...listeners}
         className="absolute -left-3 top-1/2 -translate-y-1/2 opacity-60 group-hover:opacity-100 cursor-grab active:cursor-grabbing transition-all duration-200 z-10 p-2 rounded-lg hover:bg-glass-green/20 hover:shadow-financial"
-        title="Drag to reorder"
+        title={t('dashboard.dragToReorder')}
       >
         <svg className="w-4 h-4 text-secondary-light hover:text-primary transition-colors" fill="currentColor" viewBox="0 0 20 20">
           <path d="M7 4a1 1 0 000 2h1a1 1 0 100-2H7zM7 8a1 1 0 000 2h1a1 1 0 100-2H7zM8 13a1 1 0 01-1-1 1 1 0 00-2 0 3 3 0 003 3h1a1 1 0 100-2H8zM12 4a1 1 0 000 2h1a1 1 0 100-2h-1zM12 8a1 1 0 000 2h1a1 1 0 100-2h-1zM13 12a1 1 0 10-2 0 1 1 0 00-1 1 3 3 0 003 3h1a1 1 0 100-2h-1a1 1 0 01-1-1z" />
@@ -86,6 +87,7 @@ function SortableItem({
 }
 
 export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
+  const { t } = useTranslation();
   // Custom hooks for data and state management
   const { financialData, monthlyBalance, pendingFacts, isLoading } = useFinancialData(profileId);
   const { componentOrder, handleDragEnd } = useComponentOrder(profileId);
@@ -157,8 +159,8 @@ export function FinancialDashboard({ profileId }: FinancialDashboardProps) {
       <div className="m-4 p-4 sm:p-5 bg-white/5 backdrop-blur-2xl rounded-2xl">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-white mb-1">Financial Dashboard</h3>
-            <p className="text-sm text-white/60">Real-time view of your budget • Drag cards to reorder</p>
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-1">{t('dashboard.title')}</h3>
+            <p className="text-sm text-white/60">{t('dashboard.subtitle')}</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/80 to-primary-light/80 flex items-center justify-center">
             <span className="text-2xl">⚡</span>

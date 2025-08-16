@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "convex/react";
+import { useTranslation } from 'react-i18next';
 import { api } from "../../../convex/_generated/api";
 
 interface ProjectCanvasProps {
@@ -11,6 +12,7 @@ interface ProjectCanvasProps {
 }
 
 export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboard }: ProjectCanvasProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'overview' | 'inputs' | 'results'>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(project.name);
@@ -33,7 +35,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
   };
   
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+    if (window.confirm(t('projects.deleteConfirmation'))) {
       try {
         await deleteProject({ projectId: project._id });
         onDelete?.(project._id);
@@ -48,7 +50,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
     if (!project.results) {
       return (
         <div className="text-center py-8">
-          <p className="text-white/60">No analysis results available</p>
+          <p className="text-white/60">{t('projects.noResultsAvailable')}</p>
         </div>
       );
     }
@@ -60,25 +62,25 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
       <div className="space-y-6">
         {/* Current Debt Summary */}
         <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Current Debt Summary</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.currentDebtSummary')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-red-400">
                 ${(results.totalCurrentDebt / 100).toFixed(2)}
               </div>
-              <div className="text-white/60 text-sm">Total Debt</div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.totalDebt')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-orange-400">
                 ${(results.totalCurrentPayment / 100).toFixed(2)}
               </div>
-              <div className="text-white/60 text-sm">Monthly Payment</div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.monthlyPayment')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-red-300">
                 ${(results.totalCurrentInterest / 100).toFixed(2)}
               </div>
-              <div className="text-white/60 text-sm">Total Interest</div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.totalInterest')}</div>
             </div>
           </div>
         </div>
@@ -369,7 +371,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                   onClick={handleSaveEdit}
                   className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
                 >
-                  Save
+                  {t('common.save')}
                 </button>
                 <button
                   onClick={() => {
@@ -378,7 +380,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                   }}
                   className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors text-sm"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
               </div>
             ) : (
@@ -401,7 +403,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
-                  Edit
+                  {t('common.edit')}
                 </button>
                 <button
                   onClick={handleDelete}
@@ -411,7 +413,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
-                  Delete
+                  {t('common.delete')}
                 </button>
               </>
             )}
@@ -421,7 +423,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                   onClick={onGoToDashboard}
                   className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm"
                 >
-                  Dashboard
+                  {t('navigation.dashboard')}
                 </button>
               )}
               <button
@@ -431,7 +433,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back to Projects
+                {t('navigation.backToProjects')}
               </button>
             </div>
           </div>
@@ -440,9 +442,9 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Tabs */}
         <div className="flex space-x-1 mt-6 bg-white/5 p-1 rounded-lg">
           {[
-            { key: 'overview', label: 'Overview' },
-            { key: 'inputs', label: 'Inputs' },
-            { key: 'results', label: 'Results' }
+            { key: 'overview', label: t('projects.overview') },
+            { key: 'inputs', label: t('projects.inputs') },
+            { key: 'results', label: t('projects.results') }
           ].map((tab) => (
             <button
               key={tab.key}

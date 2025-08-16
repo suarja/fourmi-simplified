@@ -1,4 +1,5 @@
 import { useMutation } from "convex/react";
+import { useTranslation } from 'react-i18next';
 import { api } from "../../../../convex/_generated/api";
 import { Income, formatCurrency } from "../shared/types";
 import { EditableItem } from "../shared/EditableItem";
@@ -8,6 +9,7 @@ interface IncomeCardProps {
 }
 
 export function IncomeCard({ incomes }: IncomeCardProps) {
+  const { t } = useTranslation();
   const editIncome = useMutation(api.domain.transactions.editIncome);
   const deleteIncome = useMutation(api.domain.transactions.deleteIncome);
 
@@ -32,7 +34,7 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
         <span className="text-white">{income.label}</span>
         <span className="text-financial-success font-semibold">
           {formatCurrency(income.amount / 100)}
-          {income.isMonthly ? '/month' : '/year'}
+          {income.isMonthly ? t('cards.income.perMonth') : t('cards.income.perYear')}
         </span>
       </div>
     </div>
@@ -46,23 +48,23 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
   ) => (
     <div className="space-y-3 p-3 bg-glass-dark/50 backdrop-blur-sm rounded-lg border border-glass-light">
       <div>
-        <label className="text-secondary-light text-sm">Label</label>
+        <label className="text-secondary-light text-sm">{t('cards.income.label')}</label>
         <input
           type="text"
           defaultValue={income.label}
           onChange={(e) => onChange({ label: e.target.value })}
           className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
-          placeholder="e.g., Monthly salary"
+          placeholder={t('cards.income.labelPlaceholder')}
         />
       </div>
       <div>
-        <label className="text-secondary-light text-sm">Amount (€)</label>
+        <label className="text-secondary-light text-sm">{t('cards.income.amount')}</label>
         <input
           type="number"
           defaultValue={income.amount / 100}
           onChange={(e) => onChange({ amount: parseFloat(e.target.value) * 100 })}
           className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
-          placeholder="e.g., 3000"
+          placeholder={t('cards.income.amountPlaceholder')}
           step="0.01"
         />
       </div>
@@ -74,7 +76,7 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
             onChange={(e) => onChange({ isMonthly: e.target.checked })}
             className="rounded accent-primary"
           />
-          Monthly (uncheck for annual)
+          {t('cards.income.monthlyLabel')}
         </label>
       </div>
       <div className="flex gap-2">
@@ -82,13 +84,13 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
           onClick={onSave}
           className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm transition-colors"
         >
-          Save
+          {t('common.save')}
         </button>
         <button
           onClick={onCancel}
           className="px-3 py-1.5 bg-secondary hover:bg-secondary-hover text-white rounded-lg text-sm transition-colors"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
       </div>
     </div>
@@ -102,7 +104,7 @@ export function IncomeCard({ incomes }: IncomeCardProps) {
     <div className="bg-white/[0.03] backdrop-blur-2xl rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:bg-white/[0.05]">
       <h4 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
         <span className="text-financial-success">💰</span>
-        Income Sources
+        {t('cards.income.title')}
       </h4>
       <div className="space-y-2">
         {incomes.map((income) => (

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAction } from "convex/react";
+import { useTranslation } from 'react-i18next';
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { FinancialData } from "../shared/types";
@@ -10,6 +11,7 @@ interface InsightsCardProps {
 }
 
 export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
+  const { t } = useTranslation();
   const generateBudgetInsights = useAction(api.ai.generateBudgetInsights);
   
   const [insights, setInsights] = useState<string>("");
@@ -93,7 +95,7 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-lg sm:text-xl">🤖</span>
-          <h4 className="text-base sm:text-lg font-semibold text-white">AI Insights</h4>
+          <h4 className="text-base sm:text-lg font-semibold text-white">{t('cards.insights.title')}</h4>
         </div>
         
         {!loadingInsights && (
@@ -102,7 +104,7 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
             disabled={loadingInsights}
             className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-hover text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {hasGeneratedInsights ? "🔄 Refresh" : "✨ Generate"}
+            {hasGeneratedInsights ? t('cards.insights.refresh') : t('cards.insights.generate')}
           </button>
         )}
       </div>
@@ -110,13 +112,13 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
       {loadingInsights ? (
         <div className="flex items-center gap-2 text-secondary-light">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-          Analyzing your budget...
+          {t('cards.insights.analyzing')}
         </div>
       ) : insights ? (
         <div className="text-gray-300 whitespace-pre-line">{insights}</div>
       ) : (
         <div className="text-secondary-light text-center py-4">
-          Click "Generate" to get AI-powered insights about your budget
+          {t('cards.insights.clickToGenerate')}
         </div>
       )}
     </div>

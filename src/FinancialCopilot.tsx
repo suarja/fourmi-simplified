@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Id } from "../convex/_generated/dataModel";
@@ -15,6 +16,7 @@ import { useViewMode } from "./hooks/useViewMode";
 import { useResponsive } from "./hooks/useResponsive";
 
 export function FinancialCopilot() {
+  const { t } = useTranslation();
   const profile = useQuery(api.profiles.getUserProfile);
   const pendingFacts = useQuery(api.domain.facts.getPendingFacts, 
     profile ? { profileId: profile._id } : "skip"

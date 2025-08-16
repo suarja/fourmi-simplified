@@ -1,4 +1,5 @@
 import { useMutation } from "convex/react";
+import { useTranslation } from 'react-i18next';
 import { api } from "../../../../convex/_generated/api";
 import { Expense, formatCurrency } from "../shared/types";
 import { EditableItem } from "../shared/EditableItem";
@@ -18,6 +19,7 @@ const EXPENSE_CATEGORIES = [
 ];
 
 export function ExpensesCard({ expenses }: ExpensesCardProps) {
+  const { t } = useTranslation();
   const editExpense = useMutation(api.domain.transactions.editExpense);
   const deleteExpense = useMutation(api.domain.transactions.deleteExpense);
 
@@ -58,35 +60,35 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
   ) => (
     <div className="space-y-3 p-3 bg-glass-dark/50 backdrop-blur-sm rounded-lg border border-glass-light">
       <div>
-        <label className="text-secondary-light text-sm">Label</label>
+        <label className="text-secondary-light text-sm">{t('cards.expenses.label')}</label>
         <input
           type="text"
           defaultValue={expense.label}
           onChange={(e) => onChange({ label: e.target.value })}
           className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
-          placeholder="e.g., Rent, Groceries"
+          placeholder={t('cards.expenses.labelPlaceholder')}
         />
       </div>
       <div>
-        <label className="text-secondary-light text-sm">Category</label>
+        <label className="text-secondary-light text-sm">{t('cards.expenses.category')}</label>
         <select
           defaultValue={expense.category}
           onChange={(e) => onChange({ category: e.target.value })}
           className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
         >
           {EXPENSE_CATEGORIES.map(category => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>{t(`financial.categories.${category}`)}</option>
           ))}
         </select>
       </div>
       <div>
-        <label className="text-secondary-light text-sm">Amount (€/month)</label>
+        <label className="text-secondary-light text-sm">{t('cards.expenses.amount')}</label>
         <input
           type="number"
           defaultValue={expense.amount / 100}
           onChange={(e) => onChange({ amount: parseFloat(e.target.value) * 100 })}
           className="w-full px-3 py-2 bg-background-secondary text-white rounded-lg mt-1 border border-glass-light focus:border-primary focus:outline-none transition-colors"
-          placeholder="e.g., 800"
+          placeholder={t('cards.expenses.amountPlaceholder')}
           step="0.01"
         />
       </div>
@@ -95,13 +97,13 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
           onClick={onSave}
           className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white rounded-lg text-sm transition-colors"
         >
-          Save
+          {t('common.save')}
         </button>
         <button
           onClick={onCancel}
           className="px-3 py-1.5 bg-secondary hover:bg-secondary-hover text-white rounded-lg text-sm transition-colors"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
       </div>
     </div>
@@ -115,7 +117,7 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
     <div className="bg-white/[0.03] backdrop-blur-2xl rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:bg-white/[0.05]">
       <h4 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
         <span className="text-financial-danger">💸</span>
-        Monthly Expenses
+        {t('cards.expenses.title')}
       </h4>
       <div className="space-y-2">
         {expenses.map((expense) => (

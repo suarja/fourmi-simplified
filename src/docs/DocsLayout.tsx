@@ -1,17 +1,19 @@
 import { Routes, Route, Link, useLocation } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { DocsHome } from "./DocsHome";
 import { AgentDocs } from "./pages/AgentDocs";
 import { FinancialDocs } from "./pages/FinancialDocs";
 import { ImplementationDocs } from "./pages/ImplementationDocs";
 
 export function DocsLayout() {
+  const { t } = useTranslation();
   const location = useLocation();
   
   const navigation = [
-    { path: "/docs", label: "Overview", exact: true },
-    { path: "/docs/agents", label: "Agents", exact: false },
-    { path: "/docs/financial", label: "Financial", exact: false },
-    { path: "/docs/implementation", label: "Implementation", exact: false },
+    { path: "/docs", label: t('docs.navigation.overview'), exact: true },
+    { path: "/docs/agents", label: t('docs.navigation.agents'), exact: false },
+    { path: "/docs/financial", label: t('docs.navigation.financial'), exact: false },
+    { path: "/docs/implementation", label: t('docs.navigation.implementation'), exact: false },
   ];
   
   const isActive = (path: string, exact: boolean) => {
@@ -30,7 +32,7 @@ export function DocsLayout() {
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-financial">
               <span className="text-white font-bold text-sm">F</span>
             </div>
-            <h2 className="text-xl font-semibold text-white">Fourmi Docs</h2>
+            <h2 className="text-xl font-semibold text-white">{t('docs.layout.title')}</h2>
           </Link>
         </div>
         <Link 
@@ -40,7 +42,7 @@ export function DocsLayout() {
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to App
+          {t('navigation.backToApp')}
         </Link>
       </header>
 

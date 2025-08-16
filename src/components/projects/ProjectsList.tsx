@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "convex/react";
+import { useTranslation } from 'react-i18next';
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 
@@ -9,6 +10,7 @@ interface ProjectsListProps {
 }
 
 export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsListProps) {
+  const { t } = useTranslation();
   const projects = useQuery(api.projects.listProjects, { profileId });
   const setActiveProject = useMutation(api.conversations.setActiveProjectByThread);
 
@@ -52,8 +54,8 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
       <div className="sticky top-0 bg-background-primary/95 backdrop-blur-2xl border-b border-white/10 p-6 z-10">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">Projects</h2>
-            <p className="text-white/60">Your financial analysis projects</p>
+            <h2 className="text-2xl font-bold text-white">{t('projects.title')}</h2>
+            <p className="text-white/60">{t('projects.subtitle')}</p>
           </div>
           {onBack && (
             <button
@@ -63,7 +65,7 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              Back
+              {t('common.back')}
             </button>
           )}
         </div>
@@ -78,16 +80,16 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
         ) : projects.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📊</div>
-            <h3 className="text-xl font-semibold text-white mb-2">No Projects Yet</h3>
+            <h3 className="text-xl font-semibold text-white mb-2">{t('projects.noProjectsTitle')}</h3>
             <p className="text-white/60 mb-6">
-              Start a conversation about debt consolidation, budget planning, or financial goals to create your first project.
+              {t('projects.noProjectsSubtitle')}
             </p>
             {onBack && (
               <button
                 onClick={onBack}
                 className="px-6 py-3 bg-primary hover:bg-primary-light text-white rounded-lg transition-colors"
               >
-                Start Chatting
+                {t('projects.startChatting')}
               </button>
             )}
           </div>
@@ -122,7 +124,7 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
                   </div>
                   
                   <div className="text-right text-sm text-white/60">
-                    <div>Created</div>
+                    <div>{t('projects.created')}</div>
                     <div>{new Date(project.created).toLocaleDateString()}</div>
                   </div>
                 </div>
@@ -135,19 +137,19 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
                         <div className="text-white font-semibold">
                           ${(project.results.totalCurrentDebt / 100).toFixed(0)}
                         </div>
-                        <div className="text-white/60">Total Debt</div>
+                        <div className="text-white/60">{t('financial.totalDebt')}</div>
                       </div>
                       <div className="text-center">
                         <div className="text-white font-semibold">
                           {project.results.consolidationComparison?.filter((opt: any) => opt.eligible).length || 0}
                         </div>
-                        <div className="text-white/60">Options</div>
+                        <div className="text-white/60">{t('projects.options')}</div>
                       </div>
                       <div className="text-center">
                         <div className="text-green-400 font-semibold">
                           ${Math.max(...(project.results.consolidationComparison?.map((opt: any) => opt.totalSavings) || [0])) / 100}
                         </div>
-                        <div className="text-white/60">Max Savings</div>
+                        <div className="text-white/60">{t('projects.maxSavings')}</div>
                       </div>
                     </div>
                   </div>

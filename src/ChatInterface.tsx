@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useAction } from "convex/react";
+import { useTranslation } from "react-i18next";
 import { api } from "../convex/_generated/api";
 import { Id } from "../convex/_generated/dataModel";
 import { toast } from "sonner";
@@ -22,6 +23,7 @@ interface ChatInterfaceProps {
 }
 
 export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreated }: ChatInterfaceProps) {
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -126,7 +128,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
       const errorMessage: Message = {
         _id: `error-${Date.now()}`,
         type: "assistant",
-        content: "Sorry, I encountered an error processing your message. Please try again or use voice recording or file upload!",
+        content: t('errors.processingMessage'),
         timestamp: Date.now(),
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -168,12 +170,12 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
       <div className="m-4 p-4 bg-white/5 backdrop-blur-2xl rounded-2xl">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
           <span className="text-2xl">🐜</span>
-          {threadTitle || "Chat with Fourmi"}
+          {threadTitle || t('chat.defaultTitle')}
         </h3>
         <p className="text-sm text-white/60 mt-1">
           {threadId ? 
-            "Continue your conversation with Fourmi" : 
-            "Tell me about your finances using text, voice, or files"
+            t('chat.continueConversation') : 
+            t('chat.startConversation')
           }
         </p>
       </div>
@@ -184,7 +186,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="text-4xl mb-4">💬</div>
-              <p className="text-gray-400">Start the conversation!</p>
+              <p className="text-gray-400">{t('chat.startPrompt')}</p>
             </div>
           </div>
         ) : (
@@ -212,7 +214,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
                 <div className={`text-xs font-medium mb-1 ${
                   messageType === "user" ? "text-blue-400" : "text-green-400"
                 }`}>
-                  {messageType === "user" ? "You" : "Fourmi"}
+                  {messageType === "user" ? t('chat.you') : "Fourmi"}
                 </div>
                 
                 {/* Message Content */}
@@ -233,9 +235,9 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
                         // Could add toast notification here
                       }}
                       className="mt-2 text-xs text-gray-400 hover:text-gray-300 transition-colors"
-                      title="Copy message"
+                      title={t('chat.copyMessage')}
                     >
-                      📋 Copy
+                      📋 {t('common.copy')}
                     </button>
                   )}
                 </div>
@@ -270,7 +272,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
               <div className="rounded-2xl rounded-bl-md px-4 py-3 bg-glass-dark/50 backdrop-blur-sm text-gray-100 border border-glass-light/30 shadow-sm">
                 <div className="flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
-                  <span>Analyzing your message...</span>
+                  <span>{t('chat.analyzing')}</span>
                 </div>
               </div>
             </div>
@@ -287,7 +289,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Tell me about your finances..."
+            placeholder={t('chat.placeholder')}
             className="flex-1 min-w-0 px-4 py-3 rounded-xl bg-black/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all text-sm sm:text-base"
             disabled={isProcessing}
           />
@@ -314,7 +316,7 @@ export function ChatInterface({ profileId, threadId, threadTitle, onThreadCreate
               disabled={!input.trim() || isProcessing}
               className="px-4 sm:px-6 py-3 rounded-lg bg-primary text-white font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base whitespace-nowrap"
             >
-              {isProcessing ? "..." : "Send"}
+              {isProcessing ? "..." : t('chat.send')}
             </button>
           </div>
         </form>
