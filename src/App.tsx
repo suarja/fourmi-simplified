@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { SignInForm } from "./SignInForm";
@@ -6,44 +7,55 @@ import { UserProfileDropdown } from "./components/UserProfileDropdown";
 import { BillingPage } from "./components/BillingPage";
 import { Toaster } from "sonner";
 import { FinancialCopilot } from "./FinancialCopilot";
+import { DocsLayout } from "./docs/DocsLayout";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<"main" | "billing">("main");
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/billing" element={<BillingPage onBack={() => window.history.back()} />} />
+        <Route path="/docs/*" element={<DocsLayout />} />
+      </Routes>
+      <Toaster theme="dark" />
+    </Router>
+  );
+}
+
+// Extract the main layout to preserve existing functionality
+function MainLayout() {
+  const navigate = useNavigate();
 
   const handleBillingClick = () => {
-    setCurrentPage("billing");
+    navigate("/billing");
   };
-
-  const handleBackToMain = () => {
-    setCurrentPage("main");
-  };
-
-  if (currentPage === "billing") {
-    return (
-      <>
-        <BillingPage onBack={handleBackToMain} />
-        <Toaster theme="dark" />
-      </>
-    );
-  }
 
   return (
     <div className="min-h-screen gradient-bg text-white">
       <header className="fixed top-4 left-4 right-4 z-[100] bg-white/[0.03] backdrop-blur-2xl h-14 flex justify-between items-center rounded-2xl px-6 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-financial">
-            <span className="text-white font-bold text-sm">F</span>
-          </div>
-          <h2 className="text-xl font-semibold text-white">Fourmi Financial</h2>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-financial">
+              <span className="text-white font-bold text-sm">F</span>
+            </div>
+            <h2 className="text-xl font-semibold text-white">Fourmi Financial</h2>
+          </Link>
         </div>
-        <Authenticated>
-          <UserProfileDropdown onBillingClick={handleBillingClick} />
-        </Authenticated>
+        <div className="flex items-center gap-4">
+          <Authenticated>
+            <Link 
+              to="/docs" 
+              className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm"
+            >
+              📚 Docs
+            </Link>
+            <UserProfileDropdown onBillingClick={handleBillingClick} />
+          </Authenticated>
+        </div>
       </header>
       <main className="flex-1 pt-20">
         <Content />
       </main>
-      <Toaster theme="dark" />
     </div>
   );
 }
