@@ -1,0 +1,50 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Bash(npm run *)",
+      "Bash(git *)",
+      "Bash(pnpm *)",
+      "Bash(gh *)",
+      "Bash(cd *)",
+      "Bash(ls *)",
+      "Bash(node *)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/context-analyzer.js"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /Users/suarja/App/2025/fourmi/.claude/song/finish.mp3"
+          }
+   
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /Users/suarja/App/2025/fourmi/.claude/song/need-human.mp3"
+          }
+        ]
+      }
+    ]
+  }
+}
