@@ -1,27 +1,24 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useSchematicEvents } from "@schematichq/schematic-react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const SchematicCtx = createContext({});
 
 export const SchematicContext: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { identify } = useSchematicEvents();
-  const {
-    userId,
-    isLoaded,
-    isSignedIn
-  }= useAuth()
+
+  const {isLoaded, isSignedIn, user}= useUser()
 
   useEffect(() => {
-    if (!isLoaded || !userId || !isSignedIn) return
+    if (!isLoaded || !user || !isSignedIn) return
     identify({
       company: {
-        keys: { id: userId },
+        keys: { id: user.id, email: (user.primaryEmailAddress?.emailAddress) || "" },
       },
-      keys: {"id": userId},
+      keys: {"id": user.id},
       traits: {"authenticated": isSignedIn}
     });
-  }, [identify, isLoaded, userId, isSignedIn]);
+  }, [identify, isLoaded, user, isSignedIn]);
 
   return (
     <SchematicCtx.Provider value={{}}>

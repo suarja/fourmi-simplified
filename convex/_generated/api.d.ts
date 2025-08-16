@@ -12,6 +12,8 @@ import type * as agents_finance from "../agents/finance.js";
 import type * as agents_financialTools from "../agents/financialTools.js";
 import type * as agents_title from "../agents/title.js";
 import type * as ai from "../ai.js";
+import type * as api_handlers_getAccessToken from "../api/handlers/getAccessToken.js";
+import type * as api_schematic from "../api/schematic.js";
 import type * as auth from "../auth.js";
 import type * as domain_agents from "../domain/agents.js";
 import type * as domain_facts from "../domain/facts.js";
@@ -25,6 +27,7 @@ import type * as lib_validation from "../lib/validation.js";
 import type * as playground from "../playground.js";
 import type * as profiles from "../profiles.js";
 import type * as router from "../router.js";
+import type * as schematic from "../schematic.js";
 import type * as threads from "../threads.js";
 
 import type {
@@ -46,6 +49,8 @@ declare const fullApi: ApiFromModules<{
   "agents/financialTools": typeof agents_financialTools;
   "agents/title": typeof agents_title;
   ai: typeof ai;
+  "api/handlers/getAccessToken": typeof api_handlers_getAccessToken;
+  "api/schematic": typeof api_schematic;
   auth: typeof auth;
   "domain/agents": typeof domain_agents;
   "domain/facts": typeof domain_facts;
@@ -59,6 +64,7 @@ declare const fullApi: ApiFromModules<{
   playground: typeof playground;
   profiles: typeof profiles;
   router: typeof router;
+  schematic: typeof schematic;
   threads: typeof threads;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

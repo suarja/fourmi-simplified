@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useQuery, useAction } from "convex/react";
+import { useAction, useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { toast } from "sonner";
-import { useSchematicFlag,  } from "@schematichq/schematic-react";
+import { useSchematicFlag } from "@schematichq/schematic-react";
+import { get } from "http";
 
 interface ConversationSidebarProps {
   profileId: string;
@@ -25,6 +26,8 @@ export function ConversationSidebar({
 
   const isFeatureEnabled = useSchematicFlag("basic_kpis");
   console.log("basic_kpis", isFeatureEnabled)
+
+  const getAccessToken = useAction(api.schematic.getAccessToken)
   
   // Use action to get thread data
   const listUserThreads = useAction(api.threads.listUserThreads);
@@ -78,6 +81,7 @@ export function ConversationSidebar({
     }
   };
 
+
   return (
     <div className="h-full flex flex-col">
       <div className="p-5 flex-1 overflow-y-auto">
@@ -95,6 +99,14 @@ export function ConversationSidebar({
               </svg>
               New Chat
             </button>
+
+            <button onClick={async()=> {
+             const token= await getAccessToken()
+             console.log({token})
+            }}>
+              ask token
+            </button>
+
 
             {/* Threads List */}
             <div className="space-y-2">
@@ -145,7 +157,7 @@ export function ConversationSidebar({
                           </svg>
                         )}
                       </button>
-                    </div>
+                              </div>
                     );
                   })
               ) : (
@@ -154,6 +166,7 @@ export function ConversationSidebar({
                   <div className="text-4xl mb-2">💬</div>
                   <p className="text-sm">No conversations yet</p>
                   <p className="text-xs mt-1">Start a new chat to begin</p>
+                  
                 </div>
               )}
             </div>
