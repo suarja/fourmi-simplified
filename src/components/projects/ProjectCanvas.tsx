@@ -87,7 +87,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
 
         {/* Consolidation Options */}
         <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Consolidation Options</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.consolidationOptions')}</h3>
           
           {eligibleOptions.length > 0 ? (
             <div className="space-y-4">
@@ -109,32 +109,32 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                         ? 'bg-green-500/20 text-green-400' 
                         : 'bg-red-500/20 text-red-400'
                     }`}>
-                      {option.eligible ? 'Eligible' : 'Not Eligible'}
+                      {option.eligible ? t('projects.canvas.eligible') : t('projects.canvas.notEligible')}
                     </span>
                   </div>
                   
                   {option.eligible && (
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <div className="text-white/60">Monthly Payment</div>
+                        <div className="text-white/60">{t('projects.canvas.monthlyPayment')}</div>
                         <div className="text-white font-semibold">
                           ${(option.newMonthlyPayment / 100).toFixed(2)}
                         </div>
                       </div>
                       <div>
-                        <div className="text-white/60">Total Interest</div>
+                        <div className="text-white/60">{t('projects.canvas.totalInterest')}</div>
                         <div className="text-white font-semibold">
                           ${(option.totalInterest / 100).toFixed(2)}
                         </div>
                       </div>
                       <div>
-                        <div className="text-white/60">Months Saved</div>
+                        <div className="text-white/60">{t('projects.canvas.monthsSaved')}</div>
                         <div className="text-white font-semibold">
                           {option.monthsSaved}
                         </div>
                       </div>
                       <div>
-                        <div className="text-white/60">Total Savings</div>
+                        <div className="text-white/60">{t('projects.canvas.totalSavings')}</div>
                         <div className={`font-semibold ${
                           option.totalSavings > 0 ? 'text-green-400' : 'text-red-400'
                         }`}>
@@ -148,7 +148,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
             </div>
           ) : (
             <div className="text-center py-4">
-              <p className="text-white/60">No eligible consolidation options found</p>
+              <p className="text-white/60">{t('projects.canvas.noEligibleOptions')}</p>
             </div>
           )}
         </div>
@@ -156,12 +156,12 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Recommendation */}
         {results.recommendation && (
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-blue-400 mb-3">Recommendation</h3>
+            <h3 className="text-lg font-semibold text-blue-400 mb-3">{t('projects.canvas.recommendation')}</h3>
             <p className="text-white/80 mb-4">{results.recommendation}</p>
             
             {results.nextSteps && results.nextSteps.length > 0 && (
               <div>
-                <h4 className="text-blue-400 font-semibold mb-2">Next Steps:</h4>
+                <h4 className="text-blue-400 font-semibold mb-2">{t('projects.canvas.nextSteps')}</h4>
                 <ul className="space-y-1">
                   {results.nextSteps.map((step: string, index: number) => (
                     <li key={index} className="text-white/70 text-sm flex items-start">
@@ -178,7 +178,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Warnings */}
         {results.warnings && results.warnings.length > 0 && (
           <div className="bg-orange-500/10 border border-orange-500/30 rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-orange-400 mb-3">Important Considerations</h3>
+            <h3 className="text-lg font-semibold text-orange-400 mb-3">{t('projects.canvas.importantConsiderations')}</h3>
             <ul className="space-y-1">
               {results.warnings.map((warning: string, index: number) => (
                 <li key={index} className="text-white/70 text-sm flex items-start">
@@ -197,7 +197,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
     if (!project.inputs) {
       return (
         <div className="text-center py-8">
-          <p className="text-white/60">No input data available</p>
+          <p className="text-white/60">{t('projects.canvas.noInputData')}</p>
         </div>
       );
     }
@@ -209,7 +209,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Existing Debts */}
         {inputs.existingDebts && (
           <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Current Debts</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.currentDebts')}</h3>
             <div className="space-y-3">
               {inputs.existingDebts.map((debt: any, index: number) => (
                 <div key={index} className="border border-white/10 rounded-lg p-4">
@@ -217,7 +217,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                     <div>
                       <h4 className="font-semibold text-white">{debt.name}</h4>
                       <p className="text-white/60 text-sm">
-                        Balance: ${(debt.balance / 100).toFixed(2)}
+                        {t('projects.canvas.balance')} ${(debt.balance / 100).toFixed(2)}
                       </p>
                     </div>
                     <div className="text-right">
@@ -225,7 +225,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                         ${(debt.monthlyPayment / 100).toFixed(2)}/mo
                       </div>
                       <div className="text-white/60 text-sm">
-                        {(debt.interestRate * 100).toFixed(2)}% APR
+                        {(debt.interestRate * 100).toFixed(2)}% {t('projects.canvas.apr')}
                       </div>
                     </div>
                   </div>
@@ -238,7 +238,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Consolidation Options */}
         {inputs.consolidationOptions && (
           <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Analyzed Options</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.analyzedOptions')}</h3>
             <div className="space-y-3">
               {inputs.consolidationOptions.map((option: any, index: number) => (
                 <div key={index} className="border border-white/10 rounded-lg p-4">
@@ -252,7 +252,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                       </div>
                       {option.fees > 0 && (
                         <div className="text-white/60 text-sm">
-                          Fees: ${(option.fees / 100).toFixed(2)}
+                          {t('projects.canvas.fees')} ${(option.fees / 100).toFixed(2)}
                         </div>
                       )}
                     </div>
@@ -265,17 +265,17 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
 
         {/* Financial Context */}
         <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Financial Context</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.financialContext')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-white/60">Monthly Income</div>
+              <div className="text-white/60">{t('projects.canvas.monthlyIncome')}</div>
               <div className="text-white font-semibold">
                 ${(inputs.monthlyIncome / 100).toFixed(2)}
               </div>
             </div>
             {inputs.creditScore && (
               <div>
-                <div className="text-white/60">Credit Score</div>
+                <div className="text-white/60">{t('projects.canvas.creditScore')}</div>
                 <div className="text-white font-semibold">
                   {inputs.creditScore}
                 </div>
@@ -291,32 +291,32 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
     return (
       <div className="space-y-6">
         <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Project Information</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.projectInformation')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <div className="text-white/60">Created</div>
+              <div className="text-white/60">{t('projects.canvas.created')}</div>
               <div className="text-white">
                 {new Date(project.created).toLocaleString()}
               </div>
             </div>
             <div>
-              <div className="text-white/60">Last Updated</div>
+              <div className="text-white/60">{t('projects.canvas.lastUpdated')}</div>
               <div className="text-white">
                 {new Date(project.updated).toLocaleString()}
               </div>
             </div>
             <div>
-              <div className="text-white/60">Status</div>
+              <div className="text-white/60">{t('projects.canvas.status')}</div>
               <div className="text-white capitalize">{project.status}</div>
             </div>
             <div>
-              <div className="text-white/60">State</div>
+              <div className="text-white/60">{t('projects.canvas.state')}</div>
               <div className={`font-semibold ${
                 project.state === 'FRESH' ? 'text-green-400' :
                 project.state === 'STALE' ? 'text-orange-400' :
                 'text-blue-400'
               }`}>
-                {project.state}
+                {t(`projects.states.${project.state}`)}
               </div>
             </div>
           </div>
@@ -325,25 +325,25 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
         {/* Quick Summary */}
         {project.results && (
           <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Quick Summary</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.quickSummary')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-xl font-bold text-blue-400">
                   {project.results.consolidationComparison?.filter((opt: any) => opt.eligible).length || 0}
                 </div>
-                <div className="text-white/60 text-sm">Eligible Options</div>
+                <div className="text-white/60 text-sm">{t('projects.canvas.eligibleOptions')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-green-400">
                   ${Math.max(...(project.results.consolidationComparison?.map((opt: any) => opt.totalSavings) || [0])) / 100}
                 </div>
-                <div className="text-white/60 text-sm">Max Potential Savings</div>
+                <div className="text-white/60 text-sm">{t('projects.canvas.maxPotentialSavings')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-purple-400">
                   ${(project.results.totalCurrentDebt / 100).toFixed(0)}
                 </div>
-                <div className="text-white/60 text-sm">Total Debt</div>
+                <div className="text-white/60 text-sm">{t('projects.canvas.totalDebt')}</div>
               </div>
             </div>
           </div>
@@ -398,7 +398,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                 <button
                   onClick={() => setIsEditing(true)}
                   className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center gap-2"
-                  title="Edit project name"
+                  title={t('projects.canvas.editProjectName')}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -408,7 +408,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
                 <button
                   onClick={handleDelete}
                   className="px-3 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors flex items-center gap-2"
-                  title="Delete project"
+                  title={t('projects.canvas.deleteProject')}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

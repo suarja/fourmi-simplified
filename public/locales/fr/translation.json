@@ -11,7 +11,8 @@
     "confirm": "Confirmer",
     "reject": "Rejeter",
     "close": "Fermer",
-    "copy": "Copier"
+    "copy": "Copier",
+    "getStarted": "Commencer"
   },
   "auth": {
     "signIn": "Se connecter",
@@ -255,7 +256,46 @@
     "totalInterest": "Intérêts totaux",
     "overview": "Aperçu",
     "inputs": "Données",
-    "results": "Résultats"
+    "results": "Résultats",
+    "canvas": {
+      "currentDebtSummary": "Résumé de la dette actuelle",
+      "totalDebt": "Dette totale",
+      "monthlyPayment": "Mensualité",
+      "totalInterest": "Intérêts totaux",
+      "consolidationOptions": "Options de rachat de crédit",
+      "eligible": "Éligible",
+      "notEligible": "Non éligible",
+      "monthsSaved": "Mois économisés",
+      "totalSavings": "Économies totales",
+      "noEligibleOptions": "Aucune option de rachat de crédit éligible trouvée",
+      "recommendation": "Recommandation",
+      "nextSteps": "Prochaines étapes :",
+      "importantConsiderations": "Considérations importantes",
+      "noInputData": "Aucune donnée d'entrée disponible",
+      "currentDebts": "Dettes actuelles",
+      "balance": "Solde :",
+      "apr": "TAP",
+      "analyzedOptions": "Options analysées",
+      "fees": "Frais :",
+      "financialContext": "Contexte financier",
+      "monthlyIncome": "Revenus mensuels",
+      "creditScore": "Score de crédit",
+      "projectInformation": "Informations du projet",
+      "created": "Créé",
+      "lastUpdated": "Dernière mise à jour",
+      "status": "Statut",
+      "state": "État",
+      "quickSummary": "Résumé rapide",
+      "eligibleOptions": "Options éligibles",
+      "maxPotentialSavings": "Économies potentielles max",
+      "editProjectName": "Modifier le nom du projet",
+      "deleteProject": "Supprimer le projet"
+    },
+    "states": {
+      "FRESH": "Récent",
+      "STALE": "Obsolète",
+      "NEEDS_DATA": "Données requises"
+    }
   },
   "docs": {
     "layout": {

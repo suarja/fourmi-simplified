@@ -11,7 +11,8 @@
     "confirm": "Confirm",
     "reject": "Reject",
     "close": "Close",
-    "copy": "Copy"
+    "copy": "Copy",
+    "getStarted": "Get Started"
   },
   "auth": {
     "signIn": "Sign In",

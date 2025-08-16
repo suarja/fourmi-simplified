@@ -43,7 +43,7 @@ export function ExpensesCard({ expenses }: ExpensesCardProps) {
       <div className="flex justify-between items-center">
         <div>
           <span className="text-white">{expense.label}</span>
-          <span className="text-secondary-light text-sm ml-2">({expense.category})</span>
+          <span className="text-secondary-light text-sm ml-2">({t(`financial.categories.${expense.category}`)})</span>
         </div>
         <span className="text-financial-danger font-semibold">
           {formatCurrency(expense.amount / 100)}

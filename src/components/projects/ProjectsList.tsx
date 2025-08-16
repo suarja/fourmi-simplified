@@ -114,7 +114,7 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
                       
                       <div className="flex flex-wrap gap-2">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${getStateColor(project.state)}`}>
-                          {project.state}
+                          {t(`projects.states.${project.state}`)}
                         </span>
                         <span className="px-2 py-1 rounded text-xs font-medium text-white/60 bg-white/10">
                           {project.status}

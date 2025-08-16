@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 interface OnboardingGuideProps {
   onClose: () => void;
 }
 
 export function OnboardingGuide({ onClose }: OnboardingGuideProps) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -182,7 +184,7 @@ export function OnboardingGuide({ onClose }: OnboardingGuideProps) {
               onClick={nextStep}
               className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             >
-              {currentStep === steps.length - 1 ? "Get Started" : "Next"}
+              {currentStep === steps.length - 1 ? t('common.getStarted') : t('common.next')}
             </button>
           </div>
         </div>

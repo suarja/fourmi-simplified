@@ -211,13 +211,13 @@ export function PendingFactsCard({ facts, profileId }: {
                           onChange={(e) => setEditForm({...editForm, category: e.target.value})}
                           className="w-full px-2 py-1 bg-gray-700 text-white rounded mt-1"
                         >
-                          <option value="Housing">Housing</option>
-                          <option value="Food">Food</option>
-                          <option value="Transport">Transport</option>
-                          <option value="Utilities">Utilities</option>
-                          <option value="Entertainment">Entertainment</option>
-                          <option value="Healthcare">Healthcare</option>
-                          <option value="Other">Other</option>
+                          <option value="Housing">{t('financial.categories.Housing')}</option>
+                          <option value="Food">{t('financial.categories.Food')}</option>
+                          <option value="Transport">{t('financial.categories.Transport')}</option>
+                          <option value="Utilities">{t('financial.categories.Utilities')}</option>
+                          <option value="Entertainment">{t('financial.categories.Entertainment')}</option>
+                          <option value="Healthcare">{t('financial.categories.Healthcare')}</option>
+                          <option value="Other">{t('financial.categories.Other')}</option>
                         </select>
                       </div>
                       <div>
