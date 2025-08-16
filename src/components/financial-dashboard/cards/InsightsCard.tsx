@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { FinancialData } from "../shared/types";
+import { EducationalInsights, StructuredInsights } from "../../educational/EducationalInsights";
 
 interface InsightsCardProps {
   profileId: Id<"profiles">;
@@ -16,6 +17,7 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
   const existingInsights = useQuery(api.insights.getLatestInsights, { profileId });
   
   const [insights, setInsights] = useState<string>("");
+  const [structuredInsights, setStructuredInsights] = useState<StructuredInsights | null>(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [hasGeneratedInsights, setHasGeneratedInsights] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -52,6 +54,20 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
     }
   };
 
+  // Helper function to parse insights content
+  const parseInsightsContent = (content: string) => {
+    try {
+      const parsed = JSON.parse(content);
+      // Check if it has the structure of our StructuredInsights
+      if (parsed && typeof parsed === 'object' && parsed.summary && parsed.financialHealth) {
+        return parsed as StructuredInsights;
+      }
+    } catch (error) {
+      // Not JSON or invalid structure, treat as plain text
+    }
+    return null;
+  };
+
   // Load existing insights from database
   useEffect(() => {
     if (existingInsights) {
@@ -62,6 +78,10 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
         timestamp: existingInsights.createdAt,
         expiresAt: existingInsights.expiresAt,
       });
+
+      // Try to parse as structured insights
+      const parsed = parseInsightsContent(existingInsights.content);
+      setStructuredInsights(parsed);
     }
   }, [existingInsights]);
 
@@ -111,9 +131,36 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
         </div>
       ) : insights ? (
         <div>
-          <div className="text-gray-300 whitespace-pre-line leading-relaxed mb-4">{insights}</div>
+          {/* Display structured insights if available, otherwise format plain text */}
+          {structuredInsights ? (
+            <EducationalInsights insights={structuredInsights} />
+          ) : (
+            <div className="text-gray-300 leading-relaxed mb-4">
+              {insights.split('\n').map((line, index) => {
+                // Simple markdown-style formatting
+                if (line.startsWith('# ')) {
+                  return <h3 key={index} className="text-xl font-bold text-white mt-6 mb-3">{line.substring(2)}</h3>;
+                } else if (line.startsWith('## ')) {
+                  return <h4 key={index} className="text-lg font-semibold text-white mt-4 mb-2">{line.substring(3)}</h4>;
+                } else if (line.startsWith('### ')) {
+                  return <h5 key={index} className="text-base font-medium text-white mt-3 mb-2">{line.substring(4)}</h5>;
+                } else if (line.startsWith('- ')) {
+                  return <li key={index} className="ml-4 mb-1">{line.substring(2)}</li>;
+                } else if (line.startsWith('* ')) {
+                  return <li key={index} className="ml-4 mb-1">{line.substring(2)}</li>;
+                } else if (line.trim() === '') {
+                  return <br key={index} />;
+                } else if (line.startsWith('**') && line.endsWith('**')) {
+                  return <p key={index} className="font-semibold mb-2">{line.slice(2, -2)}</p>;
+                } else {
+                  return <p key={index} className="mb-2">{line}</p>;
+                }
+              })}
+            </div>
+          )}
+          
           {insightMetadata && (
-            <div className="text-xs text-white/40 border-t border-white/10 pt-3">
+            <div className="text-xs text-white/40 border-t border-white/10 pt-3 mt-6">
               {insightMetadata.cached ? "📋 Retrieved from cache" : "✨ Freshly generated"} • 
               Created {new Date(insightMetadata.timestamp).toLocaleDateString()} at {new Date(insightMetadata.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               {insightMetadata.expiresAt && (
