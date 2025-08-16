@@ -152,7 +152,14 @@ export function FinancialCopilot() {
             <div className="h-full overflow-y-auto">
               <ProjectCanvas 
                 project={displayProject} 
-                onBack={() => setMobileView('projects')} 
+                onBack={() => {
+                  setManuallySelectedProject(null);
+                  setMobileView('projects');
+                }}
+                onGoToDashboard={() => {
+                  setManuallySelectedProject(null);
+                  setMobileView('dashboard');
+                }}
               />
             </div>
           )}
@@ -245,42 +252,9 @@ export function FinancialCopilot() {
               />
             </div>
             <div className="w-80 flex flex-col">
-              {/* Navigation Header */}
-              <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
-                {viewMode === 'project' && displayProject ? (
-                  // Project-specific header
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setViewMode('projects')}
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                      </button>
-                      <div>
-                        <h3 className="text-white font-semibold text-sm">{displayProject?.name}</h3>
-                        <p className="text-white/60 text-xs">{displayProject?.type?.replace('_', ' ')}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => setViewMode('dashboard')}
-                        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
-                      >
-                        Dashboard
-                      </button>
-                      <button
-                        onClick={() => setViewMode('projects')}
-                        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
-                      >
-                        Projects
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  // General navigation tabs
+              {/* Navigation Header - only show when NOT in project mode */}
+              {viewMode !== 'project' && (
+                <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
                   <div className="flex space-x-1 bg-white/5 p-1 rounded-lg">
                     <button
                       onClick={() => setViewMode('dashboard')}
@@ -303,8 +277,8 @@ export function FinancialCopilot() {
                       Projects
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
               
               {/* Content Area */}
               <div className="flex-1 overflow-hidden">
@@ -318,7 +292,14 @@ export function FinancialCopilot() {
                 ) : displayProject ? (
                   <ProjectCanvas 
                     project={displayProject} 
-                    onBack={() => setViewMode('projects')} 
+                    onBack={() => {
+                      setManuallySelectedProject(null);
+                      setViewMode('projects');
+                    }}
+                    onGoToDashboard={() => {
+                      setManuallySelectedProject(null);
+                      setViewMode('dashboard');
+                    }}
                   />
                 ) : (
                   <FinancialDashboard profileId={profile._id} />
@@ -344,42 +325,9 @@ export function FinancialCopilot() {
             {/* Financial Dashboard / Projects / Project Canvas */}
             <Panel defaultSize={70} minSize={50} maxSize={70}>
               <div className="h-full flex flex-col">
-                {/* Navigation Header */}
-                <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
-                  {viewMode === 'project' && displayProject ? (
-                    // Project-specific header
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => setViewMode('projects')}
-                          className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                        >
-                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                          </svg>
-                        </button>
-                        <div>
-                          <h3 className="text-white font-semibold">{displayProject?.name}</h3>
-                          <p className="text-white/60 text-sm">{displayProject?.type?.replace('_', ' ')}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => setViewMode('dashboard')}
-                          className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
-                        >
-                          Dashboard
-                        </button>
-                        <button
-                          onClick={() => setViewMode('projects')}
-                          className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
-                        >
-                          All Projects
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    // General navigation tabs
+                {/* Navigation Header - only show when NOT in project mode */}
+                {viewMode !== 'project' && (
+                  <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
                     <div className="flex space-x-1 bg-white/5 p-1 rounded-lg">
                       <button
                         onClick={() => setViewMode('dashboard')}
@@ -402,8 +350,8 @@ export function FinancialCopilot() {
                         Projects
                       </button>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
                 
                 {/* Content Area */}
                 <div className="flex-1 overflow-hidden">
@@ -417,7 +365,14 @@ export function FinancialCopilot() {
                   ) : displayProject ? (
                     <ProjectCanvas 
                       project={displayProject} 
-                      onBack={() => setViewMode('projects')} 
+                      onBack={() => {
+                        setManuallySelectedProject(null);
+                        setViewMode('projects');
+                      }}
+                      onGoToDashboard={() => {
+                        setManuallySelectedProject(null);
+                        setViewMode('dashboard');
+                      }}
                     />
                   ) : (
                     <FinancialDashboard profileId={profile._id} />

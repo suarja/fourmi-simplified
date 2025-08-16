@@ -7,9 +7,10 @@ interface ProjectCanvasProps {
   onBack: () => void;
   onEdit?: (project: any) => void;
   onDelete?: (projectId: string) => void;
+  onGoToDashboard?: () => void;
 }
 
-export function ProjectCanvas({ project, onBack, onEdit, onDelete }: ProjectCanvasProps) {
+export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboard }: ProjectCanvasProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'inputs' | 'results'>('overview');
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(project.name);
@@ -414,15 +415,25 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete }: ProjectCanv
                 </button>
               </>
             )}
-            <button
-              onClick={onBack}
-              className="px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-white rounded-lg transition-colors flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to Dashboard
-            </button>
+            <div className="flex items-center gap-2">
+              {onGoToDashboard && (
+                <button
+                  onClick={onGoToDashboard}
+                  className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm"
+                >
+                  Dashboard
+                </button>
+              )}
+              <button
+                onClick={onBack}
+                className="px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-white rounded-lg transition-colors flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Projects
+              </button>
+            </div>
           </div>
         </div>
 
