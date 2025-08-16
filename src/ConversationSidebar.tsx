@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useAction } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { toast } from "sonner";
-import { useSchematicFlag } from "@schematichq/schematic-react";
 
 interface ConversationSidebarProps {
   profileId: string;
@@ -23,8 +22,7 @@ export function ConversationSidebar({
   const [threads, setThreads] = useState<any[]>([]);
   const [loadingThreads, setLoadingThreads] = useState(true);
 
-  const isFeatureEnabled = useSchematicFlag("basic_kpis");
-  console.log("basic_kpis", isFeatureEnabled)
+ 
   
   // Use action to get thread data
   const listUserThreads = useAction(api.threads.listUserThreads);

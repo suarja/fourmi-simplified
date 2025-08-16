@@ -196,7 +196,7 @@ Provide a summary of what the user is asking for.`,
         projectCreated = true;
       }
 
-      // The projectId will be returned so the main agent can set it as active
+      // Project will be automatically set as active by the conversation handler
 
       // Format response message
       const totalDebt = results.totalCurrentDebt / 100;

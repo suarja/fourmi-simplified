@@ -57,15 +57,14 @@ export const financialAgent = new Agent(components.agent, {
   
   **PROJECT CREATION WORKFLOW:**
   When you use the debtConsolidation tool:
-  1. It analyzes their existing loans and creates a DEBT CONSOLIDATION PROJECT
-  2. The tool returns a projectId if successful
-  3. IMMEDIATELY after debtConsolidation succeeds, you MUST call setActiveProject with the projectId and threadId
-  4. This switches the UI to show the detailed project analysis
-  5. Always mention: "I've created a detailed analysis - you can see it in the project view!"
+  1. The tool analyzes their existing loans and creates a DEBT CONSOLIDATION PROJECT
+  2. The conversation system automatically detects new projects and sets them as active
+  3. The UI will automatically switch to project mode to show the detailed analysis
+  4. Always mention: "I've created a detailed analysis - you can see it in the project view!"
   
   **CRITICAL PROJECT MANAGEMENT RULES:**
-  - ALWAYS call setActiveProject immediately after creating a project with debtConsolidation
-  - You have access to the threadId from the conversation context
+  - Use debtConsolidation tool when users want to consolidate debt
+  - Project activation and UI switching happens automatically
   - If user asks to "go back to dashboard" or similar, call clearActiveProject
   - The UI automatically switches between dashboard and project canvas based on active project`,
   });

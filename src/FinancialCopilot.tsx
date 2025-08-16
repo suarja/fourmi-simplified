@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { Id } from "../convex/_generated/dataModel";
 import { ProfileSetup } from "./ProfileSetup";
 import { ChatInterface } from "./ChatInterface";
 import { FinancialDashboard } from "./components/financial-dashboard/FinancialDashboard";
@@ -8,6 +9,8 @@ import { ConversationSidebar } from "./ConversationSidebar";
 import { MobileNavigation } from "./MobileNavigation";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProjectCanvas } from "./components/projects/ProjectCanvas";
+import { ProjectsList } from "./components/projects/ProjectsList";
+import { RightPanelNavigation } from "./components/RightPanelNavigation";
 
 export function FinancialCopilot() {
   const profile = useQuery(api.profiles.getUserProfile);
@@ -18,19 +21,22 @@ export function FinancialCopilot() {
   const [currentThreadId, setCurrentThreadId] = useState<string | null>(null);
   const [currentThreadTitle, setCurrentThreadTitle] = useState<string>("");
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
-  const [mobileView, setMobileView] = useState<'chat' | 'dashboard' | 'history' | 'project'>('chat');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileView, setMobileView] = useState<'chat' | 'dashboard' | 'projects' | 'history' | 'project'>('chat');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   
-  // Project view state
-  const [viewMode, setViewMode] = useState<'dashboard' | 'project'>('dashboard');
+  // Project view state - expanded to include projects list
+  const [viewMode, setViewMode] = useState<'dashboard' | 'projects' | 'project'>('dashboard');
   
   // Get active project for current thread
   const activeProject = useQuery(
-    api.conversations.getActiveProjectByThread,
+    api.threadProjects.getActiveProjectByThread,
     currentThreadId ? { threadId: currentThreadId } : "skip"
   );
+
+  // Mutation to set active project
+  const setActiveProject = useMutation(api.threadProjects.setActiveProjectByThread);
 
   // Auto-switch to project mode when active project is available
   useEffect(() => {
@@ -41,13 +47,16 @@ export function FinancialCopilot() {
         setMobileView('project');
       }
     } else {
-      setViewMode('dashboard');
+      // Only switch back to dashboard if we're currently in project mode
+      if (viewMode === 'project') {
+        setViewMode('dashboard');
+      }
       // Switch back to dashboard on mobile if no active project
       if (isMobile && mobileView === 'project') {
         setMobileView('dashboard');
       }
     }
-  }, [activeProject, isMobile, mobileView]);
+  }, [activeProject, isMobile, mobileView, viewMode]);
 
   // Detect screen size
   useEffect(() => {
@@ -105,6 +114,32 @@ export function FinancialCopilot() {
     // Could also clear active project if needed
   };
 
+  const handleProjectSelect = async (projectId: Id<"projects">) => {
+    // Set this project as active for the current thread
+    if (currentThreadId) {
+      try {
+        await setActiveProject({
+          threadId: currentThreadId,
+          projectId,
+        });
+        
+        // Switch to project view
+        setViewMode('project');
+        if (isMobile) {
+          setMobileView('project');
+        }
+      } catch (error) {
+        console.error("Error setting active project:", error);
+      }
+    } else {
+      // If no current thread, we could create one or just show the project
+      setViewMode('project');
+      if (isMobile) {
+        setMobileView('project');
+      }
+    }
+  };
+
   // Mobile Layout
   if (isMobile) {
     return (
@@ -123,11 +158,20 @@ export function FinancialCopilot() {
               <FinancialDashboard profileId={profile._id} />
             </div>
           )}
+          {mobileView === 'projects' && (
+            <div className="h-full overflow-y-auto">
+              <ProjectsList 
+                profileId={profile._id}
+                onProjectSelect={handleProjectSelect}
+                onBack={() => setMobileView('chat')}
+              />
+            </div>
+          )}
           {mobileView === 'project' && activeProject && (
             <div className="h-full overflow-y-auto">
               <ProjectCanvas 
                 project={activeProject} 
-                onBack={() => setMobileView('dashboard')} 
+                onBack={() => setMobileView('projects')} 
               />
             </div>
           )}
@@ -171,17 +215,13 @@ export function FinancialCopilot() {
             currentThreadId={currentThreadId}
             onThreadSelect={(threadId, title) => {
               handleThreadSelect(threadId, title);
-              // Auto-collapse on tablet, stay open on desktop
-              if (isTablet) {
-                setSidebarCollapsed(true);
-              }
+              // Auto-collapse sidebar after selection
+              setSidebarCollapsed(true);
             }}
             onNewConversation={() => {
               handleNewConversation();
-              // Auto-collapse on tablet, stay open on desktop
-              if (isTablet) {
-                setSidebarCollapsed(true);
-              }
+              // Auto-collapse sidebar after new conversation
+              setSidebarCollapsed(true);
             }}
             refreshTrigger={refreshTrigger}
           />
@@ -223,17 +263,86 @@ export function FinancialCopilot() {
                 onThreadCreated={handleThreadCreated}
               />
             </div>
-            <div className="w-80">
-              {viewMode === 'dashboard' ? (
-                <FinancialDashboard profileId={profile._id} />
-              ) : activeProject ? (
-                <ProjectCanvas 
-                  project={activeProject} 
-                  onBack={handleBackToDashboard} 
-                />
-              ) : (
-                <FinancialDashboard profileId={profile._id} />
-              )}
+            <div className="w-80 flex flex-col">
+              {/* Navigation Header */}
+              <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
+                {viewMode === 'project' && activeProject ? (
+                  // Project-specific header
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => setViewMode('projects')}
+                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                      >
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                      </button>
+                      <div>
+                        <h3 className="text-white font-semibold text-sm">{activeProject.name}</h3>
+                        <p className="text-white/60 text-xs">{activeProject.type.replace('_', ' ')}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => setViewMode('dashboard')}
+                        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                      >
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={() => setViewMode('projects')}
+                        className="px-2 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                      >
+                        Projects
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // General navigation tabs
+                  <div className="flex space-x-1 bg-white/5 p-1 rounded-lg">
+                    <button
+                      onClick={() => setViewMode('dashboard')}
+                      className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                        viewMode === 'dashboard'
+                          ? 'bg-primary text-white shadow-lg'
+                          : 'text-white/60 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => setViewMode('projects')}
+                      className={`flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                        viewMode === 'projects'
+                          ? 'bg-primary text-white shadow-lg'
+                          : 'text-white/60 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      Projects
+                    </button>
+                  </div>
+                )}
+              </div>
+              
+              {/* Content Area */}
+              <div className="flex-1 overflow-hidden">
+                {viewMode === 'dashboard' ? (
+                  <FinancialDashboard profileId={profile._id} />
+                ) : viewMode === 'projects' ? (
+                  <ProjectsList 
+                    profileId={profile._id}
+                    onProjectSelect={handleProjectSelect}
+                  />
+                ) : activeProject ? (
+                  <ProjectCanvas 
+                    project={activeProject} 
+                    onBack={() => setViewMode('projects')} 
+                  />
+                ) : (
+                  <FinancialDashboard profileId={profile._id} />
+                )}
+              </div>
             </div>
           </div>
         ) : (
@@ -251,18 +360,89 @@ export function FinancialCopilot() {
             
             <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
             
-            {/* Financial Dashboard / Project Canvas */}
+            {/* Financial Dashboard / Projects / Project Canvas */}
             <Panel defaultSize={70} minSize={50} maxSize={70}>
-              {viewMode === 'dashboard' ? (
-                <FinancialDashboard profileId={profile._id} />
-              ) : activeProject ? (
-                <ProjectCanvas 
-                  project={activeProject} 
-                  onBack={handleBackToDashboard} 
-                />
-              ) : (
-                <FinancialDashboard profileId={profile._id} />
-              )}
+              <div className="h-full flex flex-col">
+                {/* Navigation Header */}
+                <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
+                  {viewMode === 'project' && activeProject ? (
+                    // Project-specific header
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => setViewMode('projects')}
+                          className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                        >
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                          </svg>
+                        </button>
+                        <div>
+                          <h3 className="text-white font-semibold">{activeProject.name}</h3>
+                          <p className="text-white/60 text-sm">{activeProject.type.replace('_', ' ')}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setViewMode('dashboard')}
+                          className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                        >
+                          Dashboard
+                        </button>
+                        <button
+                          onClick={() => setViewMode('projects')}
+                          className="px-3 py-1 text-xs bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                        >
+                          All Projects
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    // General navigation tabs
+                    <div className="flex space-x-1 bg-white/5 p-1 rounded-lg">
+                      <button
+                        onClick={() => setViewMode('dashboard')}
+                        className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                          viewMode === 'dashboard'
+                            ? 'bg-primary text-white shadow-lg'
+                            : 'text-white/60 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        Dashboard
+                      </button>
+                      <button
+                        onClick={() => setViewMode('projects')}
+                        className={`flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                          viewMode === 'projects'
+                            ? 'bg-primary text-white shadow-lg'
+                            : 'text-white/60 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        Projects
+                      </button>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Content Area */}
+                <div className="flex-1 overflow-hidden">
+                  {viewMode === 'dashboard' ? (
+                    <FinancialDashboard profileId={profile._id} />
+                  ) : viewMode === 'projects' ? (
+                    <ProjectsList 
+                      profileId={profile._id}
+                      onProjectSelect={handleProjectSelect}
+                    />
+                  ) : activeProject ? (
+                    <ProjectCanvas 
+                      project={activeProject} 
+                      onBack={() => setViewMode('projects')} 
+                    />
+                  ) : (
+                    <FinancialDashboard profileId={profile._id} />
+                  )}
+                </div>
+              </div>
             </Panel>
           </PanelGroup>
         )}

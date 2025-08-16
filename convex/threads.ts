@@ -1,6 +1,6 @@
 "use node";
 
-import { action, query } from "./_generated/server";
+import { action, query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "./lib/auth";
 import { components } from "./_generated/api";
@@ -246,3 +246,4 @@ Title:`,
     }
   },
 });
+

@@ -101,6 +101,9 @@ export const continueFinancialConversation = action({
       ],
     });
 
+    // TODO: Re-implement auto-detection when thread metadata is working
+    // For now, skip auto-detection to prevent crashes
+
     return {
       response: response.text,
       profileId: profileId, // Include for frontend reference
