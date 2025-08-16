@@ -193,6 +193,297 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
     );
   };
 
+  const renderDebtPayoffResults = () => {
+    if (!project.results) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-white/60">{t('projects.noResultsAvailable')}</p>
+        </div>
+      );
+    }
+
+    const results = project.results;
+    const strategies = results.strategies || [];
+
+    return (
+      <div className="space-y-6">
+        {/* Summary */}
+        <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.payoffSummary')}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-400">
+                ${(results.summary?.totalDebt / 100).toFixed(2)}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.totalDebt')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-400">
+                ${(results.summary?.currentMonthlyPayment / 100).toFixed(2)}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.currentPayment')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400">
+                ${(results.summary?.maxInterestSavings / 100).toFixed(2)}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.maxSavings')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">
+                {results.summary?.maxTimeSavings || 0}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.monthsSaved')}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Strategy Comparison */}
+        <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.payoffStrategies')}</h3>
+          
+          {strategies.length > 0 ? (
+            <div className="space-y-4">
+              {strategies.map((strategy: any, index: number) => (
+                <div 
+                  key={index}
+                  className={`border rounded-lg p-4 ${
+                    strategy.strategyName === results.recommendedStrategy
+                      ? 'border-green-500/30 bg-green-500/5' 
+                      : 'border-white/10 bg-white/5'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-semibold text-white">{strategy.strategyName}</h4>
+                      <p className="text-white/70 text-sm">{strategy.description}</p>
+                    </div>
+                    {strategy.strategyName === results.recommendedStrategy && (
+                      <span className="px-2 py-1 rounded text-xs bg-green-500/20 text-green-400">
+                        {t('projects.canvas.recommended')}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mt-4">
+                    <div>
+                      <div className="text-white/60">{t('projects.canvas.totalMonths')}</div>
+                      <div className="text-white font-semibold">{strategy.totalMonths}</div>
+                    </div>
+                    <div>
+                      <div className="text-white/60">{t('projects.canvas.totalInterest')}</div>
+                      <div className="text-white font-semibold">
+                        ${(strategy.totalInterest / 100).toFixed(2)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-white/60">{t('projects.canvas.monthlyPayment')}</div>
+                      <div className="text-white font-semibold">
+                        ${(strategy.monthlyPayment / 100).toFixed(2)}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-white/60">{t('projects.canvas.interestSaved')}</div>
+                      <div className={`font-semibold ${
+                        strategy.interestSaved > 0 ? 'text-green-400' : 'text-white'
+                      }`}>
+                        ${(strategy.interestSaved / 100).toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-white/60">{t('projects.canvas.noStrategiesAvailable')}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Recommendation */}
+        {results.recommendation && (
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-blue-400 mb-3">{t('projects.canvas.recommendation')}</h3>
+            <p className="text-white/80 mb-4">{results.recommendation}</p>
+            
+            {results.nextSteps && results.nextSteps.length > 0 && (
+              <div>
+                <h4 className="text-blue-400 font-semibold mb-2">{t('projects.canvas.nextSteps')}</h4>
+                <ul className="space-y-1">
+                  {results.nextSteps.map((step: string, index: number) => (
+                    <li key={index} className="text-white/70 text-sm flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      {step}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderRentVsBuyResults = () => {
+    if (!project.results) {
+      return (
+        <div className="text-center py-8">
+          <p className="text-white/60">{t('projects.noResultsAvailable')}</p>
+        </div>
+      );
+    }
+
+    const results = project.results;
+    const { buyScenario, rentScenario, comparison } = results;
+
+    return (
+      <div className="space-y-6">
+        {/* Quick Comparison */}
+        <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.quickComparison')}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className={`text-2xl font-bold ${comparison.buyingIsBetter ? 'text-green-400' : 'text-red-400'}`}>
+                {comparison.buyingIsBetter ? t('projects.canvas.buyBetter') : t('projects.canvas.rentBetter')}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.recommendation')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-400">
+                ${Math.abs(comparison.costDifference / 100).toFixed(2)}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.costDifference')}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">
+                {comparison.breakEvenYears.toFixed(1)}
+              </div>
+              <div className="text-white/60 text-sm">{t('projects.canvas.breakEvenYears')}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Buy Scenario */}
+        <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.buyScenario')}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <div className="text-white/60">{t('projects.canvas.monthlyPayment')}</div>
+              <div className="text-white font-semibold">
+                ${(buyScenario.monthlyPayment / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.totalCost')}</div>
+              <div className="text-white font-semibold">
+                ${(buyScenario.totalCost / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.finalEquity')}</div>
+              <div className="text-green-400 font-semibold">
+                ${(buyScenario.equity / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.netCost')}</div>
+              <div className="text-white font-semibold">
+                ${(buyScenario.netCost / 100).toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Rent Scenario */}
+        <div className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-4">{t('projects.canvas.rentScenario')}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <div className="text-white/60">{t('projects.canvas.averageRent')}</div>
+              <div className="text-white font-semibold">
+                ${(rentScenario.averageMonthlyRent / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.totalRentPaid')}</div>
+              <div className="text-white font-semibold">
+                ${(rentScenario.totalRentPaid / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.investmentValue')}</div>
+              <div className="text-green-400 font-semibold">
+                ${(rentScenario.downPaymentInvested / 100).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/60">{t('projects.canvas.totalCost')}</div>
+              <div className="text-white font-semibold">
+                ${(rentScenario.totalCost / 100).toFixed(2)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recommendation */}
+        {results.recommendation && (
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-blue-400 mb-3">{t('projects.canvas.recommendation')}</h3>
+            <p className="text-white/80 mb-4">{results.recommendation}</p>
+            
+            {results.nextSteps && results.nextSteps.length > 0 && (
+              <div>
+                <h4 className="text-blue-400 font-semibold mb-2">{t('projects.canvas.nextSteps')}</h4>
+                <ul className="space-y-1">
+                  {results.nextSteps.map((step: string, index: number) => (
+                    <li key={index} className="text-white/70 text-sm flex items-start">
+                      <span className="text-blue-400 mr-2">•</span>
+                      {step}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Assumptions */}
+        {results.assumptions && results.assumptions.length > 0 && (
+          <div className="bg-gray-500/10 border border-gray-500/30 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-gray-400 mb-3">{t('projects.canvas.assumptions')}</h3>
+            <ul className="space-y-1">
+              {results.assumptions.map((assumption: string, index: number) => (
+                <li key={index} className="text-white/70 text-sm flex items-start">
+                  <span className="text-gray-400 mr-2">•</span>
+                  {assumption}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderResults = () => {
+    switch (project.type) {
+      case 'debt_consolidation':
+        return renderDebtConsolidationResults();
+      case 'debt_payoff_strategy':
+        return renderDebtPayoffResults();
+      case 'rent_vs_buy':
+        return renderRentVsBuyResults();
+      default:
+        return (
+          <div className="text-center py-8">
+            <p className="text-white/60">Results view not implemented for {project.type}</p>
+          </div>
+        );
+    }
+  };
+
   const renderInputs = () => {
     if (!project.inputs) {
       return (
@@ -465,7 +756,7 @@ export function ProjectCanvas({ project, onBack, onEdit, onDelete, onGoToDashboa
       <div className="p-6">
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'inputs' && renderInputs()}
-        {activeTab === 'results' && renderDebtConsolidationResults()}
+        {activeTab === 'results' && renderResults()}
       </div>
     </div>
   );

@@ -106,6 +106,39 @@ export function ImplementationDocs() {
               <div className="text-xs text-white/50 mt-1">{t('docs.implementation.location')}: <code>convex/schematic.ts</code>, <code>src/components/BillingPage.tsx</code></div>
             </div>
           </div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <div>
+              <h3 className="text-white font-medium">Fact Validation System</h3>
+              <p className="text-white/70 text-sm">Complete human-in-the-loop validation with sophisticated UI for reviewing AI extractions</p>
+              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.location')}: <code>src/components/financial-dashboard/PendingFactsCard.tsx</code></div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <div>
+              <h3 className="text-white font-medium">Debt Consolidation Analysis</h3>
+              <p className="text-white/70 text-sm">Complete project system with debt consolidation calculations and comparison analysis</p>
+              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.location')}: <code>convex/lib/debtConsolidation.ts</code>, <code>src/components/projects/ProjectCanvas.tsx</code></div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mt-1">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <div>
+              <h3 className="text-white font-medium">Project Management System</h3>
+              <p className="text-white/70 text-sm">Complete infrastructure for financial analysis projects with real-time updates and chat integration</p>
+              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.location')}: <code>convex/projects.ts</code>, <code>src/components/projects/</code></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -121,9 +154,9 @@ export function ImplementationDocs() {
               <span className="text-white text-sm">⚡</span>
             </div>
             <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.inProgress.features.validation.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.inProgress.features.validation.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.inProgress.features.validation.status')}</div>
+              <h3 className="text-white font-medium">Debt Payoff Strategy Analysis</h3>
+              <p className="text-white/70 text-sm">Implementation of debt avalanche vs snowball strategy analysis (calculation library complete, UI integration in progress)</p>
+              <div className="text-xs text-white/50 mt-1">Backend: convex/lib/debtPayoffStrategy.ts | UI: ProjectCanvas integration needed</div>
             </div>
           </div>
 
@@ -132,9 +165,9 @@ export function ImplementationDocs() {
               <span className="text-white text-sm">⚡</span>
             </div>
             <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.inProgress.features.editDelete.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.inProgress.features.editDelete.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.inProgress.features.editDelete.status')}</div>
+              <h3 className="text-white font-medium">Rent vs Buy Analysis</h3>
+              <p className="text-white/70 text-sm">Complete property analysis comparing rental costs vs home ownership (calculation library complete, UI integration in progress)</p>
+              <div className="text-xs text-white/50 mt-1">Backend: convex/lib/rentVsBuy.ts | UI: ProjectCanvas integration needed</div>
             </div>
           </div>
 
@@ -143,20 +176,9 @@ export function ImplementationDocs() {
               <span className="text-white text-sm">⚡</span>
             </div>
             <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.inProgress.features.logic.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.inProgress.features.logic.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.inProgress.features.logic.status')}</div>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center mt-1">
-              <span className="text-white text-sm">⚡</span>
-            </div>
-            <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.inProgress.features.router.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.inProgress.features.router.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.inProgress.features.router.status')}</div>
+              <h3 className="text-white font-medium">Agent Tools Enhancement</h3>
+              <p className="text-white/70 text-sm">Integration of new project types with AI agent suggestions and automated project creation</p>
+              <div className="text-xs text-white/50 mt-1">Status: Financial agent tools need to suggest debt payoff and rent vs buy projects</div>
             </div>
           </div>
         </div>
@@ -174,9 +196,9 @@ export function ImplementationDocs() {
               <span className="text-white text-sm">◯</span>
             </div>
             <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.todo.features.realEstate.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.todo.features.realEstate.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.todo.features.realEstate.status')}</div>
+              <h3 className="text-white font-medium">Advanced Project Comparisons (PREMIUM Tier)</h3>
+              <p className="text-white/70 text-sm">Side-by-side project comparison dashboard with multiple scenario analysis</p>
+              <div className="text-xs text-white/50 mt-1">Requires: Enhanced ProjectCanvas + comparison engine</div>
             </div>
           </div>
 
@@ -185,9 +207,20 @@ export function ImplementationDocs() {
               <span className="text-white text-sm">◯</span>
             </div>
             <div>
-              <h3 className="text-white font-medium">{t('docs.implementation.todo.features.simulations.title')}</h3>
-              <p className="text-white/70 text-sm">{t('docs.implementation.todo.features.simulations.description')}</p>
-              <div className="text-xs text-white/50 mt-1">{t('docs.implementation.todo.features.simulations.requirements')}</div>
+              <h3 className="text-white font-medium">Project Export Functionality</h3>
+              <p className="text-white/70 text-sm">PDF and Excel export capabilities for professional use</p>
+              <div className="text-xs text-white/50 mt-1">Dependencies: Report generation library + styling</div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center mt-1">
+              <span className="text-white text-sm">◯</span>
+            </div>
+            <div>
+              <h3 className="text-white font-medium">Market Data Integration</h3>
+              <p className="text-white/70 text-sm">Real estate market data API integration for more accurate rent vs buy analysis</p>
+              <div className="text-xs text-white/50 mt-1">Candidates: Zillow API, RentSpree API, or hardcoded regional averages</div>
             </div>
           </div>
 
