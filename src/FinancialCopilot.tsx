@@ -191,7 +191,7 @@ export function FinancialCopilot() {
           // Desktop: Resizable panels
           <PanelGroup direction="horizontal" className="h-full">
             {/* Chat Interface */}
-            <Panel defaultSize={60} minSize={40}>
+            <Panel defaultSize={40} minSize={20}>
               <ChatInterface 
                 profileId={profile._id} 
                 threadId={currentThreadId}
@@ -203,7 +203,7 @@ export function FinancialCopilot() {
             <PanelResizeHandle className="w-1 bg-gray-700 hover:bg-gray-600 transition-colors" />
             
             {/* Financial Dashboard */}
-            <Panel defaultSize={40} minSize={30} maxSize={60}>
+            <Panel defaultSize={70} minSize={50} maxSize={70}>
               <FinancialDashboard profileId={profile._id} />
             </Panel>
           </PanelGroup>
