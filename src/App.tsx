@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { useTranslation } from "react-i18next";
 import { api } from "../convex/_generated/api";
 import { SignInForm } from "./SignInForm";
 import { UserProfileDropdown } from "./components/UserProfileDropdown";
@@ -8,6 +9,7 @@ import { BillingPage } from "./components/BillingPage";
 import { Toaster } from "sonner";
 import { FinancialCopilot } from "./FinancialCopilot";
 import { DocsLayout } from "./docs/DocsLayout";
+import { LanguageSwitcher } from "./components/LanguageSwitcher";
 
 export default function App() {
   return (
@@ -25,6 +27,7 @@ export default function App() {
 // Extract the main layout to preserve existing functionality
 function MainLayout() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleBillingClick = () => {
     navigate("/billing");
@@ -42,12 +45,13 @@ function MainLayout() {
           </Link>
         </div>
         <div className="flex items-center gap-4">
+          <LanguageSwitcher />
           <Authenticated>
             <Link 
               to="/docs" 
               className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm"
             >
-              📚 Docs
+              {t('navigation.docs')}
             </Link>
             <UserProfileDropdown onBillingClick={handleBillingClick} />
           </Authenticated>
@@ -62,6 +66,7 @@ function MainLayout() {
 
 function Content() {
   const loggedInUser = useQuery(api.auth.loggedInUser);
+  const { t } = useTranslation();
 
   if (loggedInUser === undefined) {
     return (
@@ -81,10 +86,10 @@ function Content() {
           <div className="w-full max-w-md mx-auto text-center">
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-white mb-4">
-                Your Financial Copilot
+                {t('mission.title')}
               </h1>
               <p className="text-xl text-secondary-light">
-                Chat-first budgeting to escape debt traps
+                {t('auth.subtitle')}
               </p>
             </div>
             <SignInForm />

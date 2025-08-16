@@ -1,0 +1,105 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel", 
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "confirm": "Confirm",
+    "reject": "Reject",
+    "close": "Close"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "welcome": "Welcome to Fourmi",
+    "subtitle": "Chat-first budgeting to escape debt traps"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "projects": "Projects", 
+    "docs": "📚 Docs",
+    "billing": "Billing",
+    "backToDashboard": "Back to Dashboard",
+    "backToProjects": "Back to Projects",
+    "backToApp": "Back to App"
+  },
+  "financial": {
+    "income": "Income",
+    "expenses": "Expenses",
+    "loans": "Loans",
+    "balance": "Balance",
+    "monthlyIncome": "Monthly Income",
+    "monthlyExpenses": "Monthly Expenses",
+    "monthlyLoanPayments": "Monthly Loan Payments",
+    "monthlyBalance": "Monthly Balance",
+    "totalDebt": "Total Debt",
+    "categories": {
+      "Housing": "Housing",
+      "Food": "Food", 
+      "Transport": "Transport",
+      "Utilities": "Utilities",
+      "Entertainment": "Entertainment",
+      "Healthcare": "Healthcare",
+      "Other": "Other"
+    },
+    "loanTypes": {
+      "credit_card": "Credit Card",
+      "personal": "Personal Loan",
+      "mortgage": "Mortgage",
+      "auto": "Auto Loan"
+    }
+  },
+  "dashboard": {
+    "title": "Financial Dashboard",
+    "noData": "No financial data yet. Start by telling me about your income and expenses!",
+    "pendingFacts": "Pending Facts",
+    "confirmToSave": "Confirm to save to your profile",
+    "addIncome": "Add Income",
+    "addExpense": "Add Expense", 
+    "addLoan": "Add Loan",
+    "dragToReorder": "Drag to reorder"
+  },
+  "projects": {
+    "title": "Financial Projects",
+    "debtConsolidation": "Debt Consolidation",
+    "rentVsBuy": "Rent vs Buy Analysis",
+    "payoffStrategy": "Debt Payoff Strategy",
+    "createProject": "Create Project",
+    "noProjects": "No projects yet. Ask me about debt consolidation or rent vs buy analysis!"
+  },
+  "chat": {
+    "placeholder": "Tell me about your income, expenses, or financial goals...",
+    "send": "Send",
+    "recording": "Recording...",
+    "uploadFile": "Upload File",
+    "processing": "Processing...",
+    "tryAgain": "Try again",
+    "suggestions": {
+      "income": "I earn 3000€ per month",
+      "expenses": "My rent is 800€ and groceries cost 300€",
+      "loans": "I have a car loan of 250€/month"
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please check your connection.",
+    "uploadFailed": "File upload failed. Please try again.",
+    "invalidAmount": "Please enter a valid amount",
+    "required": "This field is required"
+  },
+  "success": {
+    "saved": "Saved successfully",
+    "updated": "Updated successfully",
+    "deleted": "Deleted successfully",
+    "confirmed": "Confirmed successfully"
+  },
+  "mission": {
+    "title": "Your Financial Copilot",
+    "subtitle": "Fighting consumer debt traps with accessible financial tools",
+    "description": "We're helping households escape debt traps created by $4B+ annual credit company marketing with empowering, accessible tools."
+  }
+}

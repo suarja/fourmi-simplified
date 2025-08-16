@@ -1,0 +1,105 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "confirm": "Confirmer",
+    "reject": "Rejeter",
+    "close": "Fermer"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "welcome": "Bienvenue sur Fourmi",
+    "subtitle": "Budget conversationnel pour échapper aux pièges de l'endettement"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "projects": "Projets",
+    "docs": "📚 Documentation",
+    "billing": "Facturation",
+    "backToDashboard": "Retour au tableau de bord",
+    "backToProjects": "Retour aux projets",
+    "backToApp": "Retour à l'app"
+  },
+  "financial": {
+    "income": "Revenus",
+    "expenses": "Dépenses",
+    "loans": "Crédits",
+    "balance": "Solde",
+    "monthlyIncome": "Revenus mensuels",
+    "monthlyExpenses": "Dépenses mensuelles",
+    "monthlyLoanPayments": "Mensualités de crédit",
+    "monthlyBalance": "Solde mensuel",
+    "totalDebt": "Dette totale",
+    "categories": {
+      "Housing": "Logement",
+      "Food": "Alimentation",
+      "Transport": "Transport",
+      "Utilities": "Services publics",
+      "Entertainment": "Loisirs",
+      "Healthcare": "Santé",
+      "Other": "Autres"
+    },
+    "loanTypes": {
+      "credit_card": "Carte de crédit",
+      "personal": "Prêt personnel",
+      "mortgage": "Crédit immobilier",
+      "auto": "Crédit auto"
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord financier",
+    "noData": "Aucune donnée financière pour l'instant. Commencez par me parler de vos revenus et dépenses !",
+    "pendingFacts": "Éléments en attente",
+    "confirmToSave": "Confirmez pour enregistrer dans votre profil",
+    "addIncome": "Ajouter un revenu",
+    "addExpense": "Ajouter une dépense",
+    "addLoan": "Ajouter un crédit",
+    "dragToReorder": "Glissez pour réorganiser"
+  },
+  "projects": {
+    "title": "Projets financiers",
+    "debtConsolidation": "Rachat de crédit",
+    "rentVsBuy": "Location vs achat",
+    "payoffStrategy": "Stratégie de remboursement",
+    "createProject": "Créer un projet",
+    "noProjects": "Aucun projet pour l'instant. Demandez-moi des conseils sur le rachat de crédit ou l'analyse location vs achat !"
+  },
+  "chat": {
+    "placeholder": "Parlez-moi de vos revenus, dépenses ou objectifs financiers...",
+    "send": "Envoyer",
+    "recording": "Enregistrement...",
+    "uploadFile": "Télécharger un fichier",
+    "processing": "Traitement...",
+    "tryAgain": "Réessayer",
+    "suggestions": {
+      "income": "Je gagne 3000€ par mois",
+      "expenses": "Mon loyer est de 800€ et les courses coûtent 300€",
+      "loans": "J'ai un crédit auto de 250€/mois"
+    }
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite. Veuillez réessayer.",
+    "networkError": "Erreur réseau. Vérifiez votre connexion.",
+    "uploadFailed": "Échec du téléchargement. Veuillez réessayer.",
+    "invalidAmount": "Veuillez saisir un montant valide",
+    "required": "Ce champ est requis"
+  },
+  "success": {
+    "saved": "Enregistré avec succès",
+    "updated": "Mis à jour avec succès",
+    "deleted": "Supprimé avec succès",
+    "confirmed": "Confirmé avec succès"
+  },
+  "mission": {
+    "title": "Votre copilote financier",
+    "subtitle": "Lutter contre les pièges de l'endettement avec des outils financiers accessibles",
+    "description": "Nous aidons les ménages à échapper aux pièges de l'endettement créés par plus de 4 milliards d'euros de marketing des sociétés de crédit grâce à des outils accessibles et responsabilisants."
+  }
+}

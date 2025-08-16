@@ -25,14 +25,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Vite + React** - Fast development with HMR
 - **TypeScript** - Type safety throughout
 - **Convex** - Real-time backend, database, file storage
-- **Convex Auth** - Authentication (currently anonymous)
+- **Clerk Authentication** - User authentication and management
 - **Tailwind CSS** - Styling with dark theme
 - **AI SDK** - OpenAI integration for fact extraction
 
-### Planned Additions
-- **Schematic** - Feature flags and subscription billing
+### Fully Integrated
+- **Schematic** - ✅ Complete billing system with subscription management
+- **Clerk** - ✅ User authentication and profile management
+- **i18next** - ✅ Internationalization with French/English support
 - **ShadCN/ui** - Component library (partially implemented)
-- **Vitest** - Testing framework (to be added)
+- **Vitest** - Testing framework (config ready, tests to be written)
 
 ### MCP Server Integration
 - **ShadCN/ui MCP** - Access to component library via `mcp__shadcn-ui__*` tools
@@ -49,13 +51,14 @@ convex/
 ├── profiles.ts        # Profile management functions
 ├── conversations.ts   # Chat conversation handling
 ├── ai.ts             # AI integration (fact extraction, advice)
-├── lib/              # Business logic layer (to be created)
+├── lib/              # Business logic layer ✅ IMPLEMENTED
 │   ├── validation.ts # Input validation, duplicate checks
-│   ├── financial.ts  # Financial calculations
-│   └── extraction.ts # Fact extraction logic
-└── domain/           # Domain logic (to be created)
+│   ├── debtConsolidation.ts # Debt consolidation calculations
+│   └── financial.ts  # Financial calculations
+└── domain/           # Domain logic ✅ IMPLEMENTED
     ├── facts.ts      # Fact validation system
-    └── transactions.ts # Income/expense management
+    ├── agents.ts     # Agent definitions and exports
+    └── projects.ts   # Project management types
 ```
 
 ### Key Patterns
@@ -204,25 +207,29 @@ export function validateInterestRate(rate: number): boolean {
 ## Current Implementation Status
 
 ### ✅ Completed
-- Basic profile creation and management
-- Income, expense, and loan tracking
-- AI-powered fact extraction from chat
-- CSV file upload processing
-- Real-time financial dashboard
-- Monthly balance calculations
+- ✅ User authentication and profile management (Clerk integration)
+- ✅ Income, expense, and loan tracking with full CRUD operations
+- ✅ AI-powered fact extraction with pending validation system
+- ✅ CSV file upload processing
+- ✅ Real-time financial dashboard with drag-and-drop components
+- ✅ Monthly balance calculations and financial summaries
+- ✅ **Schematic billing system** - Complete subscription management
+- ✅ Convex Agents with specialized financial tools
+- ✅ Project system with debt consolidation analysis
+- ✅ Thread-to-project linking for chat-to-canvas switching
+- ✅ Duplicate prevention for financial entries
+- ✅ React Router implementation with documentation system
+- ✅ **Internationalization (French/English)** - Language switcher and translation system
 
 ### 🚧 In Progress
-- Fact validation system (pending facts → user confirms → save)
-- Duplicate prevention for financial entries
-- Edit/delete functionality for mistakes
-- Business logic organization
+- Comprehensive fact validation UI (backend complete, UI refinements)
+- Complete ShadCN/ui component migration
 
 ### 📋 TODO
-- Add Schematic for payment tiers
+- Write comprehensive test suite (Vitest config ready)
 - Implement real estate projects (PAID tier)
-- Create simulations and comparisons (PREMIUM tier)
-- Add comprehensive testing with Vitest
-- Deploy to production
+- Create multiple simulations and comparisons (PREMIUM tier)
+- Deploy to production with CI/CD pipeline
 
 ## Key Business Logic
 
@@ -260,10 +267,10 @@ function calculateMonthlyPayment(
 ## Common Pitfalls to Avoid
 
 ### Current Issues to Fix
-- ❌ No duplicate prevention (same income added multiple times)
-- ❌ No fact validation UI (AI saves directly without confirmation)
-- ❌ No edit/delete functionality (users can't fix mistakes)
-- ❌ No data validation (can add negative amounts)
+- ❌ No comprehensive test coverage (config ready, tests to be written)
+- ❌ Incomplete ShadCN/ui migration (some components still custom)
+- ❌ No production deployment pipeline
+- ❌ Component strings need full translation extraction (basic implementation done)
 
 ### Best Practices
 - ✅ Store money in cents (avoid floating point errors)
