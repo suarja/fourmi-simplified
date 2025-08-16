@@ -1,12 +1,47 @@
 import { useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 interface ProjectCanvasProps {
   project: any; // Will properly type this later
   onBack: () => void;
+  onEdit?: (project: any) => void;
+  onDelete?: (projectId: string) => void;
 }
 
-export function ProjectCanvas({ project, onBack }: ProjectCanvasProps) {
+export function ProjectCanvas({ project, onBack, onEdit, onDelete }: ProjectCanvasProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'inputs' | 'results'>('overview');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(project.name);
+  
+  const updateProject = useMutation(api.projects.updateProject);
+  const deleteProject = useMutation(api.projects.deleteProject);
+  
+  const handleSaveEdit = async () => {
+    try {
+      await updateProject({
+        projectId: project._id,
+        updates: { name: editedName }
+      });
+      setIsEditing(false);
+      // Optionally call onEdit callback
+      onEdit?.(project);
+    } catch (error) {
+      console.error("Error updating project:", error);
+    }
+  };
+  
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
+      try {
+        await deleteProject({ projectId: project._id });
+        onDelete?.(project._id);
+        onBack(); // Return to previous view
+      } catch (error) {
+        console.error("Error deleting project:", error);
+      }
+    }
+  };
 
   const renderDebtConsolidationResults = () => {
     if (!project.results) {
@@ -319,21 +354,76 @@ export function ProjectCanvas({ project, onBack }: ProjectCanvasProps) {
       {/* Header */}
       <div className="sticky top-0 bg-background-primary/95 backdrop-blur-2xl border-b border-white/10 p-6 z-10">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-white">{project.name}</h2>
-            <p className="text-white/60">
-              {project.type.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
-            </p>
+          <div className="flex-1">
+            {isEditing ? (
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  className="text-2xl font-bold text-white bg-white/10 rounded-lg px-3 py-1 border border-white/20 focus:border-white/40 focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  onClick={handleSaveEdit}
+                  className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditedName(project.name);
+                  }}
+                  className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-2xl font-bold text-white">{project.name}</h2>
+                <p className="text-white/60">
+                  {project.type.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                </p>
+              </div>
+            )}
           </div>
-          <button
-            onClick={onBack}
-            className="px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-white rounded-lg transition-colors flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Dashboard
-          </button>
+          <div className="flex items-center gap-2">
+            {!isEditing && (
+              <>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors flex items-center gap-2"
+                  title="Edit project name"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="px-3 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors flex items-center gap-2"
+                  title="Delete project"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Delete
+                </button>
+              </>
+            )}
+            <button
+              onClick={onBack}
+              className="px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-white rounded-lg transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Back to Dashboard
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}

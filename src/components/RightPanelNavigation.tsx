@@ -26,8 +26,8 @@ export function RightPanelNavigation({
               </svg>
             </button>
             <div>
-              <h3 className="text-white font-semibold">{activeProject.name}</h3>
-              <p className="text-white/60 text-sm">{activeProject.type.replace('_', ' ')}</p>
+              <h3 className="text-white font-semibold">{activeProject?.name}</h3>
+              <p className="text-white/60 text-sm">{activeProject?.type?.replace('_', ' ')}</p>
             </div>
           </div>
           <div className="flex gap-2">

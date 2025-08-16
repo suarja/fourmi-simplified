@@ -33,7 +33,6 @@ import type * as profiles from "../profiles.js";
 import type * as projects from "../projects.js";
 import type * as router from "../router.js";
 import type * as schematic from "../schematic.js";
-import type * as threadProjects from "../threadProjects.js";
 import type * as threads from "../threads.js";
 
 import type {
@@ -76,7 +75,6 @@ declare const fullApi: ApiFromModules<{
   projects: typeof projects;
   router: typeof router;
   schematic: typeof schematic;
-  threadProjects: typeof threadProjects;
   threads: typeof threads;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

@@ -101,8 +101,28 @@ export const continueFinancialConversation = action({
       ],
     });
 
-    // TODO: Re-implement auto-detection when thread metadata is working
-    // For now, skip auto-detection to prevent crashes
+    // Auto-detection: If response mentions a project was created, set it as active
+    try {
+      // Check if any projects were created recently (within last 10 seconds)
+      const recentProjects = await ctx.runQuery(api.projects.getRecentProjects, {
+        profileId: profileId,
+        maxAgeSeconds: 10,
+      });
+      
+      if (recentProjects.length > 0) {
+        // Set the most recent project as active
+        const latestProject = recentProjects[0];
+        await ctx.runMutation(api.conversations.setActiveProjectByThread, {
+          threadId,
+          projectId: latestProject._id,
+        });
+        
+        console.log(`🚀 Auto-activated project: ${latestProject.name} (${latestProject._id})`);
+      }
+    } catch (error) {
+      console.error("Error in auto-detection:", error);
+      // Don't fail the entire request if auto-detection fails
+    }
 
     return {
       response: response.text,

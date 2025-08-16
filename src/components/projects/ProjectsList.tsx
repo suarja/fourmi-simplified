@@ -4,7 +4,7 @@ import { Id } from "../../../convex/_generated/dataModel";
 
 interface ProjectsListProps {
   profileId: Id<"profiles">;
-  onProjectSelect: (projectId: Id<"projects">) => void;
+  onProjectSelect: (projectId: Id<"projects">, projectData?: any) => void;
   onBack?: () => void;
 }
 
@@ -12,8 +12,8 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
   const projects = useQuery(api.projects.listProjects, { profileId });
   const setActiveProject = useMutation(api.conversations.setActiveProjectByThread);
 
-  const handleProjectClick = async (projectId: Id<"projects">) => {
-    onProjectSelect(projectId);
+  const handleProjectClick = async (project: any) => {
+    onProjectSelect(project._id, project);
   };
 
   const getProjectIcon = (type: string) => {
@@ -96,7 +96,7 @@ export function ProjectsList({ profileId, onProjectSelect, onBack }: ProjectsLis
             {projects.map((project) => (
               <div
                 key={project._id}
-                onClick={() => handleProjectClick(project._id)}
+                onClick={() => handleProjectClick(project)}
                 className="bg-white/5 backdrop-blur-2xl rounded-2xl p-6 hover:bg-white/10 transition-all cursor-pointer border border-white/10 hover:border-white/20"
               >
                 <div className="flex items-start justify-between">

@@ -58,7 +58,7 @@ export const financialAgent = new Agent(components.agent, {
   **PROJECT CREATION WORKFLOW:**
   When you use the debtConsolidation tool:
   1. The tool analyzes their existing loans and creates a DEBT CONSOLIDATION PROJECT
-  2. The conversation system automatically detects new projects and sets them as active
+  2. If the tool returns success=true and projectId, IMMEDIATELY call setActiveProject with the projectId and current threadId
   3. The UI will automatically switch to project mode to show the detailed analysis
   4. Always mention: "I've created a detailed analysis - you can see it in the project view!"
   

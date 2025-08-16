@@ -47,6 +47,26 @@ export const getProjectsByType = query({
   },
 });
 
+// Query to get recently created projects (for auto-activation)
+export const getRecentProjects = query({
+  args: { 
+    profileId: v.id("profiles"),
+    maxAgeSeconds: v.number()
+  },
+  handler: async (ctx, { profileId, maxAgeSeconds }) => {
+    const cutoffTime = Date.now() - (maxAgeSeconds * 1000);
+    
+    const projects = await ctx.db
+      .query("projects")
+      .withIndex("by_profile", (q) => q.eq("profileId", profileId))
+      .filter((q) => q.gte(q.field("created"), cutoffTime))
+      .order("desc")
+      .collect();
+    
+    return projects;
+  },
+});
+
 // Mutation to create a new project
 export const createProject = mutation({
   args: {

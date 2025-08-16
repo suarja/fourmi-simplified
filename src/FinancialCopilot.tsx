@@ -11,6 +11,8 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProjectCanvas } from "./components/projects/ProjectCanvas";
 import { ProjectsList } from "./components/projects/ProjectsList";
 import { RightPanelNavigation } from "./components/RightPanelNavigation";
+import { useViewMode } from "./hooks/useViewMode";
+import { useResponsive } from "./hooks/useResponsive";
 
 export function FinancialCopilot() {
   const profile = useQuery(api.profiles.getUserProfile);
@@ -22,57 +24,31 @@ export function FinancialCopilot() {
   const [currentThreadTitle, setCurrentThreadTitle] = useState<string>("");
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [mobileView, setMobileView] = useState<'chat' | 'dashboard' | 'projects' | 'history' | 'project'>('chat');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
+  const [manuallySelectedProject, setManuallySelectedProject] = useState<any>(null);
   
-  // Project view state - expanded to include projects list
-  const [viewMode, setViewMode] = useState<'dashboard' | 'projects' | 'project'>('dashboard');
+  // Responsive state management
+  const { isMobile, isTablet, sidebarCollapsed, setSidebarCollapsed } = useResponsive();
   
   // Get active project for current thread
   const activeProject = useQuery(
-    api.threadProjects.getActiveProjectByThread,
+    api.conversations.getActiveProjectByThread,
     currentThreadId ? { threadId: currentThreadId } : "skip"
   );
 
   // Mutation to set active project
-  const setActiveProject = useMutation(api.threadProjects.setActiveProjectByThread);
+  const setActiveProject = useMutation(api.conversations.setActiveProjectByThread);
 
-  // Auto-switch to project mode when active project is available
-  useEffect(() => {
-    if (activeProject) {
-      setViewMode('project');
-      // Also switch mobile view if on mobile
-      if (isMobile) {
-        setMobileView('project');
-      }
-    } else {
-      // Only switch back to dashboard if we're currently in project mode
-      if (viewMode === 'project') {
-        setViewMode('dashboard');
-      }
-      // Switch back to dashboard on mobile if no active project
-      if (isMobile && mobileView === 'project') {
-        setMobileView('dashboard');
-      }
-    }
-  }, [activeProject, isMobile, mobileView, viewMode]);
+  // Determine which project to show (thread-linked or manually selected)
+  const displayProject = activeProject || manuallySelectedProject;
 
-  // Detect screen size
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-      // Auto-collapse sidebar on smaller screens, but allow manual control on larger screens
-      if (window.innerWidth < 768) {
-        setSidebarCollapsed(true);
-      }
-    };
+  // View mode management
+  const { viewMode, setViewMode } = useViewMode({ 
+    activeProject: displayProject, 
+    isMobile, 
+    mobileView, 
+    setMobileView 
+  });
 
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
 
   if (profile === undefined) {
     return (
@@ -99,6 +75,8 @@ export function FinancialCopilot() {
     console.log("Thread selected:", { threadId, title });
     setCurrentThreadId(threadId);
     setCurrentThreadTitle(title || "");
+    // Clear manually selected project when switching threads
+    setManuallySelectedProject(null);
   };
 
   const handleThreadCreated = (threadId: string, title: string) => {
@@ -111,32 +89,35 @@ export function FinancialCopilot() {
 
   const handleBackToDashboard = () => {
     setViewMode('dashboard');
-    // Could also clear active project if needed
+    // Clear manually selected project when returning to dashboard
+    setManuallySelectedProject(null);
   };
 
-  const handleProjectSelect = async (projectId: Id<"projects">) => {
-    // Set this project as active for the current thread
-    if (currentThreadId) {
-      try {
-        await setActiveProject({
-          threadId: currentThreadId,
-          projectId,
-        });
-        
-        // Switch to project view
-        setViewMode('project');
-        if (isMobile) {
-          setMobileView('project');
-        }
-      } catch (error) {
-        console.error("Error setting active project:", error);
-      }
+  const handleProjectSelect = (projectId: Id<"projects">, projectData?: any) => {
+    // Set manually selected project for immediate display
+    if (projectData) {
+      setManuallySelectedProject(projectData);
     } else {
-      // If no current thread, we could create one or just show the project
-      setViewMode('project');
-      if (isMobile) {
-        setMobileView('project');
-      }
+      // If project data not provided, we'll need to query it
+      // For now, just set the ID and let the component handle loading
+      setManuallySelectedProject({ _id: projectId, loading: true });
+    }
+    
+    // Also try to link to current thread if available
+    if (currentThreadId) {
+      setActiveProject({
+        threadId: currentThreadId,
+        projectId,
+      }).catch(error => {
+        console.error("Error setting active project for thread:", error);
+        // Continue anyway - we can still show the project
+      });
+    }
+    
+    // Switch to project view
+    setViewMode('project');
+    if (isMobile) {
+      setMobileView('project');
     }
   };
 
@@ -167,10 +148,10 @@ export function FinancialCopilot() {
               />
             </div>
           )}
-          {mobileView === 'project' && activeProject && (
+          {mobileView === 'project' && displayProject && (
             <div className="h-full overflow-y-auto">
               <ProjectCanvas 
-                project={activeProject} 
+                project={displayProject} 
                 onBack={() => setMobileView('projects')} 
               />
             </div>
@@ -266,7 +247,7 @@ export function FinancialCopilot() {
             <div className="w-80 flex flex-col">
               {/* Navigation Header */}
               <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
-                {viewMode === 'project' && activeProject ? (
+                {viewMode === 'project' && displayProject ? (
                   // Project-specific header
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -279,8 +260,8 @@ export function FinancialCopilot() {
                         </svg>
                       </button>
                       <div>
-                        <h3 className="text-white font-semibold text-sm">{activeProject.name}</h3>
-                        <p className="text-white/60 text-xs">{activeProject.type.replace('_', ' ')}</p>
+                        <h3 className="text-white font-semibold text-sm">{displayProject?.name}</h3>
+                        <p className="text-white/60 text-xs">{displayProject?.type?.replace('_', ' ')}</p>
                       </div>
                     </div>
                     <div className="flex gap-1">
@@ -334,9 +315,9 @@ export function FinancialCopilot() {
                     profileId={profile._id}
                     onProjectSelect={handleProjectSelect}
                   />
-                ) : activeProject ? (
+                ) : displayProject ? (
                   <ProjectCanvas 
-                    project={activeProject} 
+                    project={displayProject} 
                     onBack={() => setViewMode('projects')} 
                   />
                 ) : (
@@ -365,7 +346,7 @@ export function FinancialCopilot() {
               <div className="h-full flex flex-col">
                 {/* Navigation Header */}
                 <div className="bg-white/5 backdrop-blur-2xl border-b border-white/10 p-4">
-                  {viewMode === 'project' && activeProject ? (
+                  {viewMode === 'project' && displayProject ? (
                     // Project-specific header
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -378,8 +359,8 @@ export function FinancialCopilot() {
                           </svg>
                         </button>
                         <div>
-                          <h3 className="text-white font-semibold">{activeProject.name}</h3>
-                          <p className="text-white/60 text-sm">{activeProject.type.replace('_', ' ')}</p>
+                          <h3 className="text-white font-semibold">{displayProject?.name}</h3>
+                          <p className="text-white/60 text-sm">{displayProject?.type?.replace('_', ' ')}</p>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -433,9 +414,9 @@ export function FinancialCopilot() {
                       profileId={profile._id}
                       onProjectSelect={handleProjectSelect}
                     />
-                  ) : activeProject ? (
+                  ) : displayProject ? (
                     <ProjectCanvas 
-                      project={activeProject} 
+                      project={displayProject} 
                       onBack={() => setViewMode('projects')} 
                     />
                   ) : (
