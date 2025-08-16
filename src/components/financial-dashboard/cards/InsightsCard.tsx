@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAction, useQuery } from "convex/react";
 import { useTranslation } from 'react-i18next';
+import ReactMarkdown from 'react-markdown';
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { FinancialData } from "../shared/types";
@@ -131,31 +132,23 @@ export function InsightsCard({ profileId, financialData }: InsightsCardProps) {
         </div>
       ) : insights ? (
         <div>
-          {/* Display structured insights if available, otherwise format plain text */}
+          {/* Display structured insights if available, otherwise use react-markdown */}
           {structuredInsights ? (
             <EducationalInsights insights={structuredInsights} />
           ) : (
-            <div className="text-gray-300 leading-relaxed mb-4">
-              {insights.split('\n').map((line, index) => {
-                // Simple markdown-style formatting
-                if (line.startsWith('# ')) {
-                  return <h3 key={index} className="text-xl font-bold text-white mt-6 mb-3">{line.substring(2)}</h3>;
-                } else if (line.startsWith('## ')) {
-                  return <h4 key={index} className="text-lg font-semibold text-white mt-4 mb-2">{line.substring(3)}</h4>;
-                } else if (line.startsWith('### ')) {
-                  return <h5 key={index} className="text-base font-medium text-white mt-3 mb-2">{line.substring(4)}</h5>;
-                } else if (line.startsWith('- ')) {
-                  return <li key={index} className="ml-4 mb-1">{line.substring(2)}</li>;
-                } else if (line.startsWith('* ')) {
-                  return <li key={index} className="ml-4 mb-1">{line.substring(2)}</li>;
-                } else if (line.trim() === '') {
-                  return <br key={index} />;
-                } else if (line.startsWith('**') && line.endsWith('**')) {
-                  return <p key={index} className="font-semibold mb-2">{line.slice(2, -2)}</p>;
-                } else {
-                  return <p key={index} className="mb-2">{line}</p>;
-                }
-              })}
+            <div className="text-gray-300 leading-relaxed mb-4 max-h-80 overflow-y-auto pr-2 insights-scroll
+                            [&_h1]:text-xl [&_h1]:font-bold [&_h1]:text-white [&_h1]:mt-4 [&_h1]:mb-2
+                            [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-white [&_h2]:mt-3 [&_h2]:mb-2
+                            [&_h3]:text-base [&_h3]:font-medium [&_h3]:text-white [&_h3]:mt-2 [&_h3]:mb-1
+                            [&_p]:mb-2 [&_p]:text-sm
+                            [&_ul]:ml-4 [&_ul]:mb-2 [&_li]:text-sm [&_li]:mb-1 [&_li]:list-disc
+                            [&_ol]:ml-4 [&_ol]:mb-2 [&_ol>li]:text-sm [&_ol>li]:mb-1 [&_ol>li]:list-decimal
+                            [&_strong]:text-white [&_strong]:font-semibold
+                            [&_em]:text-gray-200 [&_em]:italic
+                            [&_code]:bg-white/10 [&_code]:px-1 [&_code]:rounded [&_code]:text-xs">
+              <ReactMarkdown>
+                {insights}
+              </ReactMarkdown>
             </div>
           )}
           
