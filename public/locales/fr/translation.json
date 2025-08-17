@@ -142,6 +142,13 @@
     "you": "Vous",
     "copyMessage": "Copier le message",
     "analyzing": "Analyse de votre message...",
+    "tooltips": {
+      "deleteConversation": "Supprimer la conversation",
+      "deleteItem": "Supprimer l'élément",
+      "stopRecording": "Arrêter l'enregistrement",
+      "startRecording": "Commencer l'enregistrement vocal",
+      "uploadCsv": "Télécharger un fichier CSV (les fichiers Excel doivent d'abord être enregistrés au format CSV)"
+    },
     "suggestions": {
       "income": "Je gagne 3000€ par mois",
       "expenses": "Mon loyer est de 800€ et les courses coûtent 300€",
@@ -154,13 +161,31 @@
     "uploadFailed": "Échec du téléchargement. Veuillez réessayer.",
     "invalidAmount": "Veuillez saisir un montant valide",
     "required": "Ce champ est requis",
-    "processingMessage": "Désolé, j'ai rencontré une erreur en traitant votre message. Veuillez réessayer ou utiliser l'enregistrement vocal ou le téléchargement de fichier !"
+    "processingMessage": "Désolé, j'ai rencontré une erreur en traitant votre message. Veuillez réessayer ou utiliser l'enregistrement vocal ou le téléchargement de fichier !",
+    "deleteConversationFailed": "Échec de la suppression de la conversation",
+    "createProfileFailed": "Échec de la création du profil",
+    "saveChangesFailed": "Échec de l'enregistrement des modifications",
+    "deleteItemFailed": "Échec de la suppression de l'élément",
+    "uploadCsvRequired": "Veuillez télécharger un fichier CSV. Les fichiers Excel doivent d'abord être enregistrés au format CSV.",
+    "excelFileDetected": "Fichier Excel détecté",
+    "processFileFailed": "Échec du traitement du fichier",
+    "microphoneAccess": "Impossible d'accéder au microphone. Vérifiez les autorisations.",
+    "speechUnderstood": "Impossible de comprendre l'audio. Veuillez réessayer.",
+    "speechProcessingFailed": "Échec du traitement de la parole. Veuillez essayer de taper à la place."
   },
   "success": {
     "saved": "Enregistré avec succès",
     "updated": "Mis à jour avec succès",
     "deleted": "Supprimé avec succès",
-    "confirmed": "Confirmé avec succès"
+    "confirmed": "Confirmé avec succès",
+    "conversationDeleted": "Conversation supprimée",
+    "profileCreated": "Profil créé avec succès ! Commençons à construire votre budget.",
+    "changesSaved": "Modifications enregistrées avec succès",
+    "itemDeleted": "Élément supprimé avec succès",
+    "fileProcessed": "{{fileName}} traité avec succès",
+    "recordingStarted": "Enregistrement démarré. Parlez maintenant !",
+    "speechProcessing": "Traitement de la parole...",
+    "speechConverted": "Parole convertie en texte !"
   },
   "mission": {
     "title": "Votre copilote financier",
@@ -170,7 +195,26 @@
   "profile": {
     "billingSubscription": "Facturation et abonnement",
     "testToken": "Tester le jeton",
-    "helpSupport": "Aide et support"
+    "helpSupport": "Aide et support",
+    "setup": {
+      "title": "Créez votre profil financier",
+      "subtitle": "C'est la base pour des conseils budgétaires personnalisés",
+      "profileName": "Nom du profil",
+      "profileNamePlaceholder": "ex. Mon budget, Finances familiales",
+      "profileType": "Type de profil",
+      "solo": "Solo",
+      "soloDescription": "Budget individuel",
+      "couple": "Couple",
+      "coupleDescription": "Finances partagées",
+      "nextSteps": "Prochaines étapes :",
+      "nextStep1": "Partagez vos revenus et dépenses via le chat",
+      "nextStep2": "Téléchargez des fichiers CSV/Excel avec vos données financières",
+      "nextStep3": "Utilisez l'enregistrement vocal pour une saisie mains libres",
+      "nextStep4": "Obtenez des insights et conseils en temps réel",
+      "creating": "Création du profil...",
+      "createButton": "Créer le profil et commencer à discuter",
+      "showOnboardingAgain": "Afficher le guide d'intégration à nouveau"
+    }
   },
   "cards": {
     "balance": {
@@ -289,7 +333,29 @@
       "eligibleOptions": "Options éligibles",
       "maxPotentialSavings": "Économies potentielles max",
       "editProjectName": "Modifier le nom du projet",
-      "deleteProject": "Supprimer le projet"
+      "deleteProject": "Supprimer le projet",
+      "payoffSummary": "Résumé de remboursement de dette",
+      "currentPayment": "Paiement actuel",
+      "maxSavings": "Économies max",
+      "payoffStrategies": "Stratégies de remboursement",
+      "recommended": "Recommandé",
+      "totalMonths": "Mois totaux",
+      "interestSaved": "Intérêts économisés",
+      "noStrategiesAvailable": "Aucune stratégie disponible",
+      "quickComparison": "Comparaison rapide",
+      "costDifference": "Différence de coût",
+      "breakEvenYears": "Années de seuil de rentabilité",
+      "buyScenario": "Scénario d'achat",
+      "rentScenario": "Scénario de location",
+      "buyBetter": "Acheter",
+      "rentBetter": "Louer",
+      "finalEquity": "Équité finale",
+      "netCost": "Coût net",
+      "averageRent": "Loyer moyen",
+      "totalRentPaid": "Total loyer payé",
+      "investmentValue": "Valeur d'investissement",
+      "totalCost": "Coût total",
+      "assumptions": "Hypothèses"
     },
     "states": {
       "FRESH": "Récent",

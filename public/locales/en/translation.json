@@ -89,6 +89,13 @@
     "you": "You",
     "copyMessage": "Copy message",
     "analyzing": "Analyzing your message...",
+    "tooltips": {
+      "deleteConversation": "Delete conversation",
+      "deleteItem": "Delete item",
+      "stopRecording": "Stop recording",
+      "startRecording": "Start voice recording",
+      "uploadCsv": "Upload CSV file (Excel files need to be saved as CSV first)"
+    },
     "suggestions": {
       "income": "I earn 3000€ per month",
       "expenses": "My rent is 800€ and groceries cost 300€",
@@ -101,13 +108,31 @@
     "uploadFailed": "File upload failed. Please try again.",
     "invalidAmount": "Please enter a valid amount",
     "required": "This field is required",
-    "processingMessage": "Sorry, I encountered an error processing your message. Please try again or use voice recording or file upload!"
+    "processingMessage": "Sorry, I encountered an error processing your message. Please try again or use voice recording or file upload!",
+    "deleteConversationFailed": "Failed to delete conversation",
+    "createProfileFailed": "Failed to create profile",
+    "saveChangesFailed": "Failed to save changes",
+    "deleteItemFailed": "Failed to delete item",
+    "uploadCsvRequired": "Please upload a CSV file. Excel files need to be saved as CSV first.",
+    "excelFileDetected": "Excel file detected",
+    "processFileFailed": "Failed to process file",
+    "microphoneAccess": "Could not access microphone. Please check permissions.",
+    "speechUnderstood": "Could not understand the audio. Please try again.",
+    "speechProcessingFailed": "Failed to process speech. Please try typing instead."
   },
   "success": {
     "saved": "Saved successfully",
     "updated": "Updated successfully",
     "deleted": "Deleted successfully",
-    "confirmed": "Confirmed successfully"
+    "confirmed": "Confirmed successfully",
+    "conversationDeleted": "Conversation deleted",
+    "profileCreated": "Profile created successfully! Let's start building your budget.",
+    "changesSaved": "Changes saved successfully",
+    "itemDeleted": "Item deleted successfully",
+    "fileProcessed": "Successfully processed {{fileName}}",
+    "recordingStarted": "Recording started. Speak now!",
+    "speechProcessing": "Processing speech...",
+    "speechConverted": "Speech converted to text!"
   },
   "mission": {
     "title": "Your Financial Copilot",
@@ -117,7 +142,26 @@
   "profile": {
     "billingSubscription": "Billing & Subscription",
     "testToken": "Test Token",
-    "helpSupport": "Help & Support"
+    "helpSupport": "Help & Support",
+    "setup": {
+      "title": "Create Your Financial Profile",
+      "subtitle": "This is the foundation for personalized budgeting advice",
+      "profileName": "Profile Name",
+      "profileNamePlaceholder": "e.g., My Budget, Family Finances",
+      "profileType": "Profile Type",
+      "solo": "Solo",
+      "soloDescription": "Individual budget",
+      "couple": "Couple",
+      "coupleDescription": "Shared finances",
+      "nextSteps": "Next Steps:",
+      "nextStep1": "Share your income and expenses through chat",
+      "nextStep2": "Upload CSV/Excel files with financial data",
+      "nextStep3": "Use voice recording for hands-free input",
+      "nextStep4": "Get real-time insights and advice",
+      "creating": "Creating Profile...",
+      "createButton": "Create Profile & Start Chatting",
+      "showOnboardingAgain": "Show onboarding guide again"
+    }
   },
   "cards": {
     "balance": {
