@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay /Users/suarja/App/2025/fourmi/.claude/song/finish.mp3"
+            "command": "afplay /Users/jasonsuarez/App/2025/fourmi-simplified/.claude/song/finish.mp3"
           }
    
         ]
@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay /Users/suarja/App/2025/fourmi/.claude/song/need-human.mp3"
+            "command": "afplay /Users/jasonsuarez/App/2025/fourmi-simplified/.claude/song/need-human.mp3"
           }
         ]
       }
